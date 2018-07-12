@@ -61,5 +61,6 @@ set(THIRD_PARTY_LIBS
         ${PCL_LIBRARIES}
         )
 
-add_executable(slam_learn main.cpp)
+include_directories("basic" "tracking")
+add_executable(slam_learn main.cpp basic/common_include.h basic/Camera.cpp basic/Camera.h basic/Frame.cpp basic/Frame.h basic/MapPoint.cpp basic/MapPoint.h)
 target_link_libraries(slam_learn ${THIRD_PARTY_LIBS})
