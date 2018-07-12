@@ -8,3 +8,6 @@ install_manifest.txt
 #build文件
 cmake-build-*/
 bin/
+
+#数据集
+dataset/
