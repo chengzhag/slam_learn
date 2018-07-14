@@ -1,0 +1,9 @@
+[STFLEngine]
+Overview\settings=raw
+
+[default_views]
+default_match_view=LineMatchView
+
+[overview]
+imgsize=100
+imgzoom=85

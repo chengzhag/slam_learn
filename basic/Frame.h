@@ -20,8 +20,6 @@ namespace sky {
         Camera::Ptr camera;     // Pinhole RGBD Camera model
         int cols, rows;
 
-        Frame();
-
         Frame(const Camera::Ptr &camera, const Mat &image) :
                 camera(camera), cols(image.cols), rows(image.rows) {}
 

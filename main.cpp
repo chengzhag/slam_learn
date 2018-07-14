@@ -5,9 +5,13 @@
 #include <boost/range/adaptor/transformed.hpp>
 #include <boost/filesystem.hpp>
 
-#include "opencv2/opencv.hpp"
+#include <opencv2/opencv.hpp>
+#include <opencv2/features2d/features2d.hpp>
+
+#include "SLAM.h"
 
 using namespace cv;
+using namespace sky;
 
 int main() {
     string imagesFolder("dataset/data_odometry_gray/dataset/sequences/00/image_0");
@@ -41,11 +45,26 @@ int main() {
         sort(imagesDir.begin(), imagesDir.end());
     }
 
+    Camera::Ptr camera = Camera::Ptr(new Camera(
+            718.856, 718.856, 607.1928, 185.2157
+    ));
+    VO vo(camera,
+          DescriptorMatcher::create("BruteForce"),
+          ORB::create()
+    );
+
     for (auto &imageDir:imagesDir) {
         Mat image = imread(imageDir);
-        imshow("frames", image);
-        waitKey(1);
+#ifdef DEBUG
+        cout << endl << "==============Adding image: " + imageDir << "==============" << endl;
+#endif
+#ifdef CVVISUAL_DEBUGMODE
+        cvv::showImage(image, CVVISUAL_LOCATION, "Adding image: " + imageDir, "");
+#endif
+        vo.step(image);
     }
+
+
 
     return 0;
 }

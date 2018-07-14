@@ -5,10 +5,6 @@
 #include "Frame.h"
 
 namespace sky {
-    Frame::Frame()
-            : camera(nullptr) {
-
-    }
 
     Frame::~Frame() {
 
