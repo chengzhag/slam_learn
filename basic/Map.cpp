@@ -20,9 +20,9 @@
 
 namespace sky {
 
-    void Map::addFrame(Frame::Ptr frame) {
+    void Map::addFrame(KeyFrame::Ptr frame) {
         if (frame)
-            frames.push_back(frame);
+            keyFrames.push_back(frame);
     }
 
     void Map::addMapPoint(MapPoint::Ptr mapPoint) {
@@ -34,7 +34,7 @@ namespace sky {
     void Map::visInCloudViewer() {
 #ifdef DEBUG
         cout << "Visualizing Point Could..." << endl;
-        cout << "\t " << frames.size() << " frames" << endl;
+        cout << "\t " << keyFrames.size() << " keyFrames" << endl;
         cout << "\t " << mapPoints.size() << " mapPoints" << endl;
 #endif
 #ifdef CLOUDVIEWER_DEBUG
@@ -56,7 +56,7 @@ namespace sky {
         viewer.addCoordinateSystem(1.0);
 
         int indexFrame = 0;
-        for (auto &frame:frames) {
+        for (auto &frame:keyFrames) {
             Eigen::Matrix4f camPose;
             auto T_c_w = frame->Tcw.inverse().matrix();
             for (int i = 0; i < camPose.rows(); ++i)

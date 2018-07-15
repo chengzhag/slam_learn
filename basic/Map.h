@@ -7,7 +7,7 @@
 
 
 #include "MapPoint.h"
-#include "Frame.h"
+#include "KeyFrame.h"
 
 namespace sky {
 
@@ -15,11 +15,11 @@ namespace sky {
     public:
         typedef shared_ptr<Map> Ptr;
         list<MapPoint::Ptr> mapPoints;        // all landmarks
-        list<Frame::Ptr> frames;         // all key-frames
+        list<KeyFrame::Ptr> keyFrames;         // all key-keyFrames
 
         Map() {}
 
-        void addFrame(Frame::Ptr frame);
+        void addFrame(KeyFrame::Ptr frame);
 
         void addMapPoint(MapPoint::Ptr mapPoint);
 

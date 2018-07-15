@@ -48,20 +48,20 @@ namespace sky {
 
         Map::Ptr triangulate() {
             Map::Ptr map(new Map);
-            map->addFrame(keyFrame1->frame);
-            map->addFrame(keyFrame2->frame);
+            map->addFrame(keyFrame1);
+            map->addFrame(keyFrame2);
 
             vector<Point2f> matchPointsNorm1, matchPointsNorm2;
             matchPointsNorm1.reserve(matches.size());
             matchPointsNorm2.reserve(matches.size());
             for (auto &match:matches) {
                 matchPointsNorm1.push_back(
-                        keyFrame1->frame->camera->pixel2normal(keyFrame1->keyPoints[match.queryIdx].pt));
+                        keyFrame1->camera->pixel2normal(keyFrame1->keyPoints[match.queryIdx].pt));
                 matchPointsNorm2.push_back(
-                        keyFrame2->frame->camera->pixel2normal(keyFrame2->keyPoints[match.trainIdx].pt));
+                        keyFrame2->camera->pixel2normal(keyFrame2->keyPoints[match.trainIdx].pt));
             }
             Mat points4D;
-            triangulatePoints(keyFrame1->frame->getTcw34MatCV(CV_32F), keyFrame2->frame->getTcw34MatCV(CV_32F),
+            triangulatePoints(keyFrame1->getTcw34MatCV(CV_32F), keyFrame2->getTcw34MatCV(CV_32F),
                               matchPointsNorm1, matchPointsNorm2, points4D);
 
             //转换齐次坐标点，保存到Map，并做局部BA
@@ -122,8 +122,8 @@ namespace sky {
 
             Mat essentialMatrix;
             essentialMatrix = findEssentialMat(matchPoints1, matchPoints2,
-                                               keyFrame2->frame->camera->getFocalLength(),
-                                               keyFrame2->frame->camera->getPrincipalPoint(),
+                                               keyFrame2->camera->getFocalLength(),
+                                               keyFrame2->camera->getPrincipalPoint(),
                                                RANSAC, 0.999, 1.0, inlierMask);
 #ifdef DEBUG
             int nPointsFindEssentialMat = countNonZero(inlierMask);
@@ -153,10 +153,10 @@ namespace sky {
             //解frame2的R、t并计算se3
             Mat R, t;
             recoverPose(essentialMatrix, matchPoints1, matchPoints2,
-                        keyFrame2->frame->camera->getKMatxCV(), R, t, inlierMask);
+                        keyFrame2->camera->getKMatxCV(), R, t, inlierMask);
             Eigen::Matrix3d eigenR2;
             cv2eigen(R, eigenR2);
-            keyFrame2->frame->Tcw = SE3(
+            keyFrame2->Tcw = SE3(
                     eigenR2,
                     Vector3d(t.at<double>(0, 0), t.at<double>(1, 0), t.at<double>(2, 0))
             );
@@ -167,9 +167,9 @@ namespace sky {
                  << "% of " << matchPoints1.size() << " points are used" << endl;
 /*        cout << "2D-2D frame2 R: " << R.size << endl << R << endl;
         cout << "2D-2D frame2 t: " << t.size << endl << t << endl;
-        cout << "2D-2D frame2 SE3: " << endl << keyFrame2->frame->Tcw << endl;
-        cout << "2D-2D frame2 Tcw: " << endl << keyFrame2->frame->getTcwMatCV() << endl << endl;
-        cout << "2D-2D frame2 ProjMat: " << endl << keyFrame2->frame->getTcw34MatCV() << endl << endl;*/
+        cout << "2D-2D frame2 SE3: " << endl << keyFrame2->Tcw << endl;
+        cout << "2D-2D frame2 Tcw: " << endl << keyFrame2->getTcwMatCV() << endl << endl;
+        cout << "2D-2D frame2 ProjMat: " << endl << keyFrame2->getTcw34MatCV() << endl << endl;*/
 #endif
         }
 
@@ -203,7 +203,7 @@ namespace sky {
                     mapPoint->descriptor = descriptor;
                     //加入观测帧
                     mapPoint->addObervedFrame(
-                            keyFrame2->frame, keyFrame2->getKeyPointCoor(iMapPoint2));
+                            keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
                     //记录当前帧加入地图的mapPoint和特征点下标
                     keyFrame2->addMapPoint(iMapPoint2, mapPoint);
 
@@ -248,8 +248,8 @@ namespace sky {
             if (i < 5)
                 cout << mapPoint->pos << endl << endl;
 #endif*/
-                    mapPoint->addObervedFrame(keyFrame1->frame, keyFrame1->getKeyPointCoor(iMapPoint1));
-                    mapPoint->addObervedFrame(keyFrame2->frame, keyFrame2->getKeyPointCoor(iMapPoint2));
+                    mapPoint->addObervedFrame(keyFrame1, keyFrame1->getKeyPointCoor(iMapPoint1));
+                    mapPoint->addObervedFrame(keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
                     map->addMapPoint(mapPoint);
                 }
 

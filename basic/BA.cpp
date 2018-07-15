@@ -15,7 +15,7 @@ namespace sky {
             mapPointsPos[mapPoints] = mapPoints->getPosMatx13<double>();
         }
         //加载frameExtrinsics和cameraIntrinsics
-        for (auto &frame:map->frames) {
+        for (auto &frame:map->keyFrames) {
             auto angleAxis = frame->getAngleAxisWcMatxCV<double>();
             auto t = frame->Tcw.translation();
             frameExtrinsics[frame] = Matx23d(angleAxis(0), angleAxis(1), angleAxis(2),
@@ -34,7 +34,7 @@ namespace sky {
             }
             cout << "..." << endl;*/
 
-        cout << "\t" << frameExtrinsics.size() << " frames" << endl;
+        cout << "\t" << frameExtrinsics.size() << " keyFrames" << endl;
 /*            i = 0;
             for (auto &frame:frameExtrinsics) {
                 cout << frame.second << endl;
@@ -66,7 +66,7 @@ namespace sky {
         for (auto &frameExtrinsic:frameExtrinsics)
             problem.AddParameterBlock(frameExtrinsic.second.val, 6);
         if (hasMode(Mode_Fix_First_Frame))
-            problem.SetParameterBlockConstant(frameExtrinsics[map->frames.front()].val);
+            problem.SetParameterBlockConstant(frameExtrinsics[map->keyFrames.front()].val);
 
 #ifdef DEBUG
         cout << "\tloading cameraIntrinsics..." << endl;

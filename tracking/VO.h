@@ -31,8 +31,7 @@ namespace sky {
 #ifdef DEBUG
                     cout << endl << "==============solving 2D-2D==============" << endl;
 #endif
-                    Frame::Ptr frame(new Frame(camera, image));
-                    if (initializer->step(KeyFrame::Ptr(new KeyFrame(frame, image, feature2D)))) {
+                    if (initializer->step(KeyFrame::Ptr(new KeyFrame(camera, image, feature2D)))) {
                         initializer->initialMap->visInCloudViewer();
                         //TODO:保存初始化的地图
 
