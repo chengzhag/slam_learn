@@ -33,9 +33,9 @@ namespace sky {
 
     void Map::visInCloudViewer() {
 #ifdef DEBUG
-        cout << "Visualizing Point Could..." << endl;
-        cout << "\t " << keyFrames.size() << " keyFrames" << endl;
-        cout << "\t " << mapPoints.size() << " mapPoints" << endl;
+        cout << "Map: Visualizing Point Could..." << endl;
+        cout << "\t" << keyFrames.size() << " keyFrames" << endl;
+        cout << "\t" << mapPoints.size() << " mapPoints" << endl;
 #endif
 #ifdef CLOUDVIEWER_DEBUG
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);

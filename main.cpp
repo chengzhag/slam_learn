@@ -48,9 +48,11 @@ int main() {
     Camera::Ptr camera = Camera::Ptr(new Camera(
             718.856, 718.856, 607.1928, 185.2157
     ));
+    LocalMap::Ptr localMap(new LocalMap);
     VO vo(camera,
           DescriptorMatcher::create("BruteForce"),
-          ORB::create()
+          ORB::create(),
+          localMap
     );
 
     for (auto &imageDir:imagesDir) {
@@ -63,6 +65,7 @@ int main() {
 #endif
         vo.step(image);
         if(vo.getState()==1){
+            localMap->map->visInCloudViewer();
             break;
         }
     }

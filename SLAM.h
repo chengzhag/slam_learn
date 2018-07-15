@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include "BA.h"
 #include "VO.h"
+#include "LocalMap.h"
 
 namespace sky{
 

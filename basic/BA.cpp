@@ -8,7 +8,7 @@ namespace sky {
 
     void BA::loadMap() {
 #ifdef DEBUG
-        cout << "BA::loadMap: " << endl;
+        cout << "BA: loadMap... " << endl;
 #endif
         //加载mapPointsPos
         for (auto &mapPoints:map->mapPoints) {
@@ -56,7 +56,7 @@ namespace sky {
 
     void BA::bundleAdjustment() {
 #ifdef DEBUG
-        cout << "BA::bundleAdjustment: " << endl;
+        cout << "BA: bundleAdjustment... " << endl;
 #endif
         ceres::Problem problem;
 
@@ -109,10 +109,10 @@ namespace sky {
         ceres::Solve(ceres_config_options, &problem, &summary);
 
         if (!summary.IsSolutionUsable()) {
-            std::cout << "Bundle Adjustment failed." << std::endl;
+            std::cout << "BA: Bundle Adjustment failed." << std::endl;
         } else {
             // Display statistics about the minimization
-            std::cout << "Bundle Adjustment statistics (approximated RMSE):\n"
+            std::cout << "BA: Bundle Adjustment statistics (approximated RMSE):\n"
                       << "    #views: " << frameExtrinsics.size() << "\n"
                       << "    #residuals: " << summary.num_residuals << "\n"
                       << "    Initial RMSE: " << std::sqrt(summary.initial_cost / summary.num_residuals) << "\n"
@@ -154,7 +154,7 @@ namespace sky {
     }
 
     void BA::operator()(Map::Ptr &map, ModeSet modeSet) {
-        this->map = map;
+        this->map = map;KeyFrame:
         this->modeSet = modeSet;
         loadMap();
         bundleAdjustment();

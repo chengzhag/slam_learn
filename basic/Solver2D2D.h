@@ -79,7 +79,7 @@ namespace sky {
 
         void match() {
 #ifdef DEBUG
-            cout << "matching keypoints: " << endl;
+            cout << "Solver2D2D: matching keypoints... " << endl;
 #endif
 
             matcher->match(keyFrame1->descriptors, keyFrame2->descriptors, matches, noArray());
@@ -120,6 +120,7 @@ namespace sky {
                 matchPoints2.push_back(keyFrame2->keyPoints[match.trainIdx].pt);
             }
 
+            cout << "Solver2D2D: findEssentialMat... \n\t";
             Mat essentialMatrix;
             essentialMatrix = findEssentialMat(matchPoints1, matchPoints2,
                                                keyFrame2->camera->getFocalLength(),
@@ -127,7 +128,7 @@ namespace sky {
                                                RANSAC, 0.999, 1.0, inlierMask);
 #ifdef DEBUG
             int nPointsFindEssentialMat = countNonZero(inlierMask);
-            cout << "findEssentialMat: \n\t" << nPointsFindEssentialMat << " valid points, " <<
+            cout << nPointsFindEssentialMat << " valid points, " <<
                  (float) nPointsFindEssentialMat * 100 / matchPoints1.size()
                  << "% of " << matchPoints1.size() << " points are used" << endl;
 #endif
@@ -151,6 +152,7 @@ namespace sky {
 #endif
 
             //解frame2的R、t并计算se3
+            cout << "Solver2D2D: recoverPose... \n\t";
             Mat R, t;
             recoverPose(essentialMatrix, matchPoints1, matchPoints2,
                         keyFrame2->camera->getKMatxCV(), R, t, inlierMask);
@@ -162,7 +164,7 @@ namespace sky {
             );
 #ifdef DEBUG
             int nPointsRecoverPose = countNonZero(inlierMask);
-            cout << "recoverPose: \n\t" << nPointsRecoverPose << " valid points, " <<
+            cout << nPointsRecoverPose << " valid points, " <<
                  (float) nPointsRecoverPose * 100 / matchPoints1.size()
                  << "% of " << matchPoints1.size() << " points are used" << endl;
 /*        cout << "2D-2D frame2 R: " << R.size << endl << R << endl;
@@ -176,7 +178,7 @@ namespace sky {
         Map::Ptr convAndAddMappoints(Map::Ptr map, const Mat &inlierMask,
                                      const Mat &points4D, const vector<DMatch> &matches) {
 #ifdef DEBUG
-            cout << "convAndAddMappoints: " << endl;
+            cout << "Solver2D2D: convAndAddMappoints... " << endl;
 #endif
 
 #ifdef DEBUG

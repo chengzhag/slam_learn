@@ -38,7 +38,7 @@ namespace sky {
         bool step(KeyFrame::Ptr keyFrame) {
             if (frameInterval == -1) {
 #ifdef DEBUG
-                cout << "Initialization already ready!" << endl;
+                cout << "Initializer: Initialization already ready!" << endl;
 #endif
                 return true;
             }
@@ -50,11 +50,11 @@ namespace sky {
                     frameInterval = 0;
                     keyFrame1 = keyFrame;
 #ifdef DEBUG
-                    cout << "Initializing keyFrame1 reseted, push another frame..." << endl;
+                    cout << "Initializer: Initializing keyFrame1 reseted, push another frame..." << endl;
 #endif
                 } else if (frameInterval < minFrameInterval) {
 #ifdef DEBUG
-                    cout << "FrameInterval not enough, push another frame..." << endl;
+                    cout << "Initializer: FrameInterval not enough, push another frame..." << endl;
 #endif
                 } else {
                     Solver2D2D solver2D2D(matcher);
@@ -65,12 +65,12 @@ namespace sky {
                             keyFrame2 = keyFrame;
                             frameInterval = -1;
 #ifdef DEBUG
-                            cout << "Initialization ready!" << endl;
+                            cout << "Initializer: Initialization ready!" << endl;
 #endif
                             return true;
                         } else {
 #ifdef DEBUG
-                            cout << "MapPointNum not enough, push another frame..." << endl;
+                            cout << "Initializer: MapPointNum not enough, push another frame..." << endl;
 #endif
                             return false;
                         }

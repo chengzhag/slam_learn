@@ -5,7 +5,9 @@
 #ifndef SLAM_LEARN_VO_H
 #define SLAM_LEARN_VO_H
 
+#include "common_include.h"
 #include "Initializer.h"
+#include "LocalMap.h"
 
 namespace sky {
 
@@ -19,8 +21,9 @@ namespace sky {
 
         VO(const Camera::Ptr camera,
            const cv::Ptr<DescriptorMatcher> &matcher,
-           cv::Ptr<cv::Feature2D> feature2D) :
-                camera(camera), matcher(matcher), feature2D(feature2D) {
+           cv::Ptr<cv::Feature2D> feature2D,
+           LocalMap::Ptr localMap) :
+                camera(camera), matcher(matcher), feature2D(feature2D), localMap(localMap) {
             initializer = Initializer::Ptr(new Initializer(matcher));
         }
 
@@ -28,19 +31,15 @@ namespace sky {
             switch (state) {
                 //初始化状态
                 case 0: {
-#ifdef DEBUG
-                    cout << endl << "==============solving 2D-2D==============" << endl;
-#endif
                     if (initializer->step(KeyFrame::Ptr(new KeyFrame(camera, image, feature2D)))) {
-                        initializer->initialMap->visInCloudViewer();
-                        //TODO:保存初始化的地图
-
+                        //保存初始化的地图
+                        localMap->map = initializer->initialMap;
                         state = 1;
                         initializer = nullptr;
                     }
                     break;
                 }
-                //追踪状态
+                    //追踪状态
                 case 1: {
 
                     break;
@@ -48,7 +47,7 @@ namespace sky {
             }
         }
 
-        int getState(){
+        int getState() {
             return state;
         }
 
@@ -56,6 +55,8 @@ namespace sky {
         Initializer::Ptr initializer;
         cv::Ptr<cv::Feature2D> feature2D;
         int state = 0;
+
+        LocalMap::Ptr localMap;
     };
 
 }

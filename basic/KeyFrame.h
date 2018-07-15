@@ -26,9 +26,8 @@ namespace sky {
 
         KeyFrame(const Camera::Ptr &camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D) :
                 Frame(camera, image), image(image) {
-            //TODO:将特征检测移出构造函数
 #ifdef DEBUG
-            cout << "detectAndCompute features: " << endl;
+            cout << "KeyFrame: detectAndCompute features... " << endl;
 #endif
             feature2D->detectAndCompute(image, noArray(), keyPoints, descriptors);
 #ifdef DEBUG
