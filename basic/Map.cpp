@@ -5,7 +5,9 @@
 #include "Map.h"
 
 #include "Map.h"
+
 #ifdef CLOUDVIEWER_DEBUG
+
 #include <pcl/common/common_headers.h>
 #include <pcl/visualization/cloud_viewer.h>
 #include <pcl/common/common_headers.h>
@@ -13,6 +15,7 @@
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 #include <pcl/visualization/pcl_visualizer.h>
+
 #endif
 
 namespace sky {
@@ -27,9 +30,14 @@ namespace sky {
             mapPoints.push_back(mapPoint);
     }
 
-#ifdef CLOUDVIEWER_DEBUG
-    void Map::visInCloudViewer() {
 
+    void Map::visInCloudViewer() {
+#ifdef DEBUG
+        cout << "Visualizing Point Could..." << endl;
+        cout << "\t " << frames.size() << " frames" << endl;
+        cout << "\t " << mapPoints.size() << " mapPoints" << endl;
+#endif
+#ifdef CLOUDVIEWER_DEBUG
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
         for (auto point:mapPoints) {
             pcl::PointXYZRGB pointXYZ(point->rgb[0], point->rgb[1], point->rgb[2]);
@@ -56,12 +64,12 @@ namespace sky {
                     camPose(i, j) = T_c_w(i, j);
             viewer.addCoordinateSystem(1.0, Eigen::Affine3f(camPose), "cam" + to_string(indexFrame++));
         }
-        viewer.initCameraParameters ();
-        while (!viewer.wasStopped ()) {
+        viewer.initCameraParameters();
+        while (!viewer.wasStopped()) {
             viewer.spin();
         }
-
-    }
 #endif
+    }
+
 
 }

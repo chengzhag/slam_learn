@@ -33,6 +33,9 @@ namespace sky {
 #endif
                     Frame::Ptr frame(new Frame(camera, image));
                     if (initializer->step(KeyFrame::Ptr(new KeyFrame(frame, image, feature2D)))) {
+                        initializer->initialMap->visInCloudViewer();
+                        //TODO:保存初始化的地图
+
                         state = 1;
                         initializer = nullptr;
                     }
@@ -44,6 +47,10 @@ namespace sky {
                     break;
                 }
             }
+        }
+
+        int getState(){
+            return state;
         }
 
     protected:

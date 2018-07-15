@@ -62,6 +62,9 @@ int main() {
         cvv::showImage(image, CVVISUAL_LOCATION, "Adding image: " + imageDir, "");
 #endif
         vo.step(image);
+        if(vo.getState()==1){
+            break;
+        }
     }
 
 
