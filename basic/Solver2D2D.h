@@ -24,13 +24,18 @@ namespace sky {
         vector<DMatch> matches;
         Mat inlierMask;
 
-        Solver2D2D(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2, cv::Ptr<DescriptorMatcher> matcher,
+        Solver2D2D(cv::Ptr<DescriptorMatcher> matcher,
                    double disThresRatio = 5, double disThresMin = 200) :
-                keyFrame1(keyFrame1), keyFrame2(keyFrame2), matcher(matcher),
-                disThresRatio(disThresRatio), disThresMin(disThresMin) {
+                matcher(matcher),
+                disThresRatio(disThresRatio), disThresMin(disThresMin) {}
+
+        void solve(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2){
+            this->keyFrame1=keyFrame1;
+            this->keyFrame2=keyFrame2;
+
             match();
             filtMatches();
-            solve();
+            solvePose();
         }
 
         double getInlierRatio() {
@@ -108,7 +113,7 @@ namespace sky {
 #endif
         }
 
-        void solve() {
+        void solvePose() {
             vector<Point2f> matchPoints1, matchPoints2;
             for (auto match:matches) {
                 matchPoints1.push_back(keyFrame1->keyPoints[match.queryIdx].pt);

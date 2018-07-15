@@ -57,11 +57,12 @@ namespace sky {
                     cout << "FrameInterval not enough, push another frame..." << endl;
 #endif
                 } else {
-                    Solver2D2D solver2D2D(keyFrame1, keyFrame, matcher);
+                    Solver2D2D solver2D2D(matcher);
+                    solver2D2D.solve(keyFrame1,keyFrame);
                     if (solver2D2D.getInlierRatio() > inlierThresRatio) {
-                        keyFrame2 = keyFrame;
                         initialMap = solver2D2D.triangulate();
                         if (initialMap->mapPoints.size() >= minMapPointNum) {
+                            keyFrame2 = keyFrame;
                             frameInterval = -1;
 #ifdef DEBUG
                             cout << "Initialization ready!" << endl;
