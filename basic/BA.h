@@ -13,12 +13,38 @@
 #include "Frame.h"
 #include "common_include.h"
 #include <unordered_map>
+#include <unordered_set>
 
 namespace sky {
 
     using namespace std;
 
     class BA {
+
+    public:
+        typedef enum mode {
+            Mode_Fix_First_Frame,
+            Mode_Fix_Points,
+            Mode_Fix_Intrinsic
+        } Mode;
+
+        typedef unordered_set<int, std::hash<int>> ModeSet;
+
+    protected:
+
+        ModeSet modeSet;
+
+    public:
+        BA();
+
+        void operator()(Map::Ptr &map,
+                        ModeSet modeSet = {Mode_Fix_First_Frame, Mode_Fix_Intrinsic});
+
+    protected:
+
+        bool hasMode(Mode mode){
+            return modeSet.find(mode) != modeSet.end();
+        }
 
         class ReprojectCost {
             cv::Point2d observation;
@@ -72,12 +98,6 @@ namespace sky {
         void writeMap();
 
         void clear();
-
-    public:
-
-        BA();
-
-        void operator()(Map::Ptr &map);
 
 
     };

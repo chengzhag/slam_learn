@@ -4,7 +4,7 @@
 
 #include "BA.h"
 
-namespace sky{
+namespace sky {
 
     void BA::loadMap() {
 #ifdef DEBUG
@@ -65,19 +65,28 @@ namespace sky{
 #endif
         for (auto &frameExtrinsic:frameExtrinsics)
             problem.AddParameterBlock(frameExtrinsic.second.val, 6);
-        problem.SetParameterBlockConstant(frameExtrinsics[map->frames.front()].val);
+        if (hasMode(Mode_Fix_First_Frame))
+            problem.SetParameterBlockConstant(frameExtrinsics[map->frames.front()].val);
 
 #ifdef DEBUG
         cout << "\tloading cameraIntrinsics..." << endl;
 #endif
-        for (auto &cameraIntrinsic:cameraIntrinsics)
+        for (auto &cameraIntrinsic:cameraIntrinsics) {
             problem.AddParameterBlock(cameraIntrinsic.second.val, 4);
+            if(hasMode(Mode_Fix_Intrinsic))
+                problem.SetParameterBlockConstant(cameraIntrinsic.second.val);
+        }
 
 #ifdef DEBUG
         cout << "\tloading mapPointsPos..." << endl;
 #endif
         ceres::LossFunction *lossFunction = new ceres::HuberLoss(4);
         for (auto &mapPointPos:mapPointsPos) {
+
+            problem.AddParameterBlock(mapPointPos.second.val, 3);
+            if(hasMode(Mode_Fix_Points))
+                problem.SetParameterBlockConstant(mapPointPos.second.val);
+
             for (auto &observedFrame:mapPointPos.first->observedFrames) {
                 ceres::CostFunction *costFunction =
                         new ceres::AutoDiffCostFunction<ReprojectCost, 2, 4, 6, 3>(
@@ -144,8 +153,9 @@ namespace sky{
         ceres_config_options.sparse_linear_algebra_library_type = ceres::EIGEN_SPARSE;
     }
 
-    void BA::operator()(Map::Ptr &map) {
+    void BA::operator()(Map::Ptr &map, ModeSet modeSet) {
         this->map = map;
+        this->modeSet = modeSet;
         loadMap();
         bundleAdjustment();
         writeMap();

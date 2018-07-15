@@ -15,8 +15,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d03b25aa-01f9-4cb3-b1c6-c95429c4b77e" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/basic/BA.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/basic/BA.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic/BA.h" beforeDir="false" afterPath="$PROJECT_DIR$/basic/BA.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic/Solver2D2D.h" beforeDir="false" afterPath="$PROJECT_DIR$/basic/Solver2D2D.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tracking/Initializer.h" beforeDir="false" afterPath="$PROJECT_DIR$/tracking/Initializer.h" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/cmake-build-debugwithcvv/" />
@@ -53,11 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Initializer.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Initializer.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tracking/Initializer.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="60" column="58" selection-start-line="60" selection-start-column="58" selection-end-line="60" selection-end-column="58" />
+            <state relative-caret-position="175">
+              <caret line="62" column="54" selection-start-line="62" selection-start-column="54" selection-end-line="62" selection-end-column="54" />
               <folding>
                 <element signature="e#113#140#0" expanded="true" />
               </folding>
@@ -68,8 +69,8 @@
       <file leaf-file-name="Solver2D2D.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/basic/Solver2D2D.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="39" selection-start-line="39" selection-end-line="39" />
+            <state relative-caret-position="250">
+              <caret line="70" column="90" selection-start-line="70" selection-start-column="90" selection-end-line="70" selection-end-column="90" />
               <folding>
                 <element signature="e#111#138#0" expanded="true" />
               </folding>
@@ -77,23 +78,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MapPoint.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/basic/MapPoint.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
-              <caret line="51" column="16" selection-start-line="51" selection-start-column="16" selection-end-line="51" selection-end-column="16" />
-              <folding>
-                <element signature="e#108#135#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BA.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BA.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/basic/BA.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="141" column="34" selection-start-line="141" selection-start-column="34" selection-end-line="141" selection-end-column="34" />
+            <state relative-caret-position="263">
+              <caret line="81" column="6" lean-forward="true" selection-start-line="81" selection-start-column="6" selection-end-line="81" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -101,10 +90,11 @@
       <file leaf-file-name="BA.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/basic/BA.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="79" column="39" selection-start-line="79" selection-start-column="39" selection-end-line="79" selection-end-column="39" />
+            <state relative-caret-position="150">
+              <caret line="42" column="14" selection-start-line="42" selection-start-column="14" selection-end-line="42" selection-end-column="14" />
               <folding>
                 <element signature="e#96#120#0" expanded="true" />
+                <element signature="e#685#1921#1" />
               </folding>
             </state>
           </provider>
@@ -145,8 +135,6 @@
         <option value="$PROJECT_DIR$/basic/MapPoint.h" />
         <option value="$PROJECT_DIR$/basic/MapPoint.cpp" />
         <option value="$PROJECT_DIR$/basic/Map.h" />
-        <option value="$PROJECT_DIR$/basic/BA.cpp" />
-        <option value="$PROJECT_DIR$/basic/BA.h" />
         <option value="$PROJECT_DIR$/basic/Camera.cpp" />
         <option value="$PROJECT_DIR$/basic/Camera.h" />
         <option value="$PROJECT_DIR$/SLAM.cpp" />
@@ -162,8 +150,10 @@
         <option value="$PROJECT_DIR$/basic/Map.cpp" />
         <option value="$PROJECT_DIR$/tracking/VO.h" />
         <option value="$PROJECT_DIR$/main.cpp" />
-        <option value="$PROJECT_DIR$/basic/Solver2D2D.h" />
         <option value="$PROJECT_DIR$/tracking/Initializer.h" />
+        <option value="$PROJECT_DIR$/basic/BA.cpp" />
+        <option value="$PROJECT_DIR$/basic/Solver2D2D.h" />
+        <option value="$PROJECT_DIR$/basic/BA.h" />
       </list>
     </option>
   </component>
@@ -257,7 +247,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25015000" />
+    <option name="totallyTimeSpent" value="28113000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1851" height="931" extended-state="6" />
@@ -303,7 +293,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="14" />
+      <option name="time" value="17" />
     </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
@@ -321,36 +311,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/basic/Map.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="25" selection-start-line="17" selection-start-column="25" selection-end-line="17" selection-end-column="25" />
-          <folding>
-            <element signature="e#98#119#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="56" column="34" selection-start-line="56" selection-start-column="34" selection-end-line="56" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/Frame.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="15" column="10" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
-          <folding>
-            <element signature="e#102#129#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/basic/KeyFrame.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
@@ -367,6 +327,7 @@
           <caret line="77" column="26" selection-start-line="77" selection-start-column="26" selection-end-line="77" selection-end-column="26" />
           <folding>
             <element signature="e#96#120#0" expanded="true" />
+            <element signature="e#685#1921#1" />
           </folding>
         </state>
       </provider>
@@ -551,13 +512,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/basic/BA.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="141" column="34" selection-start-line="141" selection-start-column="34" selection-end-line="141" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="358">
@@ -689,36 +643,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/basic/BA.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="79" column="39" selection-start-line="79" selection-start-column="39" selection-end-line="79" selection-end-column="39" />
-          <folding>
-            <element signature="e#96#120#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/MapPoint.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="51" column="16" selection-start-line="51" selection-start-column="16" selection-end-line="51" selection-end-column="16" />
-          <folding>
-            <element signature="e#108#135#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/Solver2D2D.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="39" selection-start-line="39" selection-end-line="39" />
-          <folding>
-            <element signature="e#111#138#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="299">
@@ -736,13 +660,72 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../../git/opencv/modules/core/include/opencv2/core/mat.inl.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="147" selection-start-line="147" selection-end-line="147" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../git/opencv/modules/features2d/src/matchers.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="572" selection-start-line="572" selection-end-line="572" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/5/bits/unordered_set.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="83">
+          <caret line="92" column="10" selection-start-line="92" selection-start-column="10" selection-end-line="92" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tracking/Initializer.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="60" column="58" selection-start-line="60" selection-start-column="58" selection-end-line="60" selection-end-column="58" />
+        <state relative-caret-position="175">
+          <caret line="62" column="54" selection-start-line="62" selection-start-column="54" selection-end-line="62" selection-end-column="54" />
           <folding>
             <element signature="e#113#140#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/MapPoint.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-104">
+          <caret line="20" column="48" selection-start-line="20" selection-start-column="48" selection-end-line="20" selection-end-column="48" />
+          <folding>
+            <element signature="e#108#135#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/Solver2D2D.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="70" column="90" selection-start-line="70" selection-start-column="90" selection-end-line="70" selection-end-column="90" />
+          <folding>
+            <element signature="e#111#138#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/BA.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="42" column="14" selection-start-line="42" selection-start-column="14" selection-end-line="42" selection-end-column="14" />
+          <folding>
+            <element signature="e#96#120#0" expanded="true" />
+            <element signature="e#685#1921#1" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/BA.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="81" column="6" lean-forward="true" selection-start-line="81" selection-start-column="6" selection-end-line="81" selection-end-column="6" />
         </state>
       </provider>
     </entry>

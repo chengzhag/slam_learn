@@ -29,9 +29,9 @@ namespace sky {
                 matcher(matcher),
                 disThresRatio(disThresRatio), disThresMin(disThresMin) {}
 
-        void solve(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2){
-            this->keyFrame1=keyFrame1;
-            this->keyFrame2=keyFrame2;
+        void solve(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2) {
+            this->keyFrame1 = keyFrame1;
+            this->keyFrame2 = keyFrame2;
 
             match();
             filtMatches();
@@ -68,7 +68,7 @@ namespace sky {
             convAndAddMappoints(map, inlierMask, points4D, matches);
 
             BA ba;
-            ba(map);
+            ba(map, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
             return map;
         }
 
