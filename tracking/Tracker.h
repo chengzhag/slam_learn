@@ -25,7 +25,6 @@ namespace sky {
 
         void step(KeyFrame::Ptr frame){
             solver3D2D.solve(localMap->map,frame);
-            //TODO:三角化
             //判断是否插入关键帧
             if(true){
                 localMap->addFrame(frame);

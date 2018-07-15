@@ -48,9 +48,10 @@ int main() {
     Camera::Ptr camera = Camera::Ptr(new Camera(
             718.856, 718.856, 607.1928, 185.2157
     ));
-    LocalMap::Ptr localMap(new LocalMap);
+    auto matcher = DescriptorMatcher::create("BruteForce");
+    LocalMap::Ptr localMap(new LocalMap(matcher));
     VO vo(camera,
-          DescriptorMatcher::create("BruteForce"),
+          matcher,
           ORB::create(2000),
           localMap
     );
@@ -64,12 +65,11 @@ int main() {
         cvv::showImage(image, CVVISUAL_LOCATION, "Adding image: " + imageDir, "");
 #endif
         vo.step(image);
-        if(vo.getState()==1){
+        if (vo.getState() == 1) {
             localMap->map->visInCloudViewer();
             //break;
         }
     }
-
 
 
     return 0;

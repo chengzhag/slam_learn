@@ -19,7 +19,7 @@ namespace sky {
 
     using namespace cv;
 
-    class Solver3D2D : public Matcher {
+    class Solver3D2D : protected Matcher {
     private:
 
     public:
@@ -49,6 +49,7 @@ namespace sky {
                     mapLastFrame->addMapPoint(point);
                 }
             }
+            //TODO:随机选取一定数量的地图点
 #ifdef DEBUG
             cout << "\t" << points3D.size() << " 3D points found" << endl;
 #endif
