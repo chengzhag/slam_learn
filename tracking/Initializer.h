@@ -20,22 +20,23 @@ namespace sky {
     using namespace cv;
 
     class Initializer {
+    protected:
+        Solver2D2D solver2D2D;
     public:
         typedef shared_ptr<Initializer> Ptr;
         KeyFrame::Ptr keyFrame1, keyFrame2;
         Map::Ptr initialMap;
-        cv::Ptr<DescriptorMatcher> matcher;
 
         Initializer(cv::Ptr<DescriptorMatcher> matcher,
                     double inlierThresRatio = 0.35, int maxFrameInterval = 5, int minFrameInterval = 2,
                     int minMapPointNum = 50) :
-                matcher(matcher),
+                solver2D2D(matcher),
                 inlierThresRatio(inlierThresRatio),
                 maxFrameInterval(maxFrameInterval),
                 minFrameInterval(minFrameInterval),
                 minMapPointNum(minMapPointNum) {}
 
-        bool step(KeyFrame::Ptr keyFrame) {
+        bool step(KeyFrame::Ptr frame) {
             if (frameInterval == -1) {
 #ifdef DEBUG
                 cout << "Initializer: Initialization already ready!" << endl;
@@ -43,12 +44,12 @@ namespace sky {
                 return true;
             }
             if (!keyFrame1) {
-                keyFrame1 = keyFrame;
+                keyFrame1 = frame;
             } else {
                 ++frameInterval;
                 if (frameInterval > maxFrameInterval) {
                     frameInterval = 0;
-                    keyFrame1 = keyFrame;
+                    keyFrame1 = frame;
 #ifdef DEBUG
                     cout << "Initializer: Initializing keyFrame1 reseted, push another frame..." << endl;
 #endif
@@ -57,12 +58,11 @@ namespace sky {
                     cout << "Initializer: FrameInterval not enough, push another frame..." << endl;
 #endif
                 } else {
-                    Solver2D2D solver2D2D(matcher);
-                    solver2D2D.solve(keyFrame1,keyFrame);
+                    solver2D2D.solve(keyFrame1, frame);
                     if (solver2D2D.getInlierRatio() > inlierThresRatio) {
                         initialMap = solver2D2D.triangulate();
                         if (initialMap->mapPoints.size() >= minMapPointNum) {
-                            keyFrame2 = keyFrame;
+                            keyFrame2 = frame;
                             frameInterval = -1;
 #ifdef DEBUG
                             cout << "Initializer: Initialization ready!" << endl;

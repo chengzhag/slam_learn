@@ -13,37 +13,35 @@
 #include "BA.h"
 #include "KeyFrame.h"
 #include <algorithm>
+#include "Matcher.h"
 
 namespace sky {
 
     using namespace cv;
 
-    class Solver2D2D {
+    class Solver2D2D : public Matcher {
+
+    private:
+        KeyFrame::Ptr keyFrame1, keyFrame2;
+
     public:
         typedef shared_ptr<Solver2D2D> Ptr;
-        vector<DMatch> matches;
         Mat inlierMask;
 
         Solver2D2D(cv::Ptr<DescriptorMatcher> matcher,
                    double disThresRatio = 5, double disThresMin = 200) :
-                matcher(matcher),
-                disThresRatio(disThresRatio), disThresMin(disThresMin) {}
+                Matcher(matcher, disThresRatio, disThresMin) {}
 
         void solve(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2) {
             this->keyFrame1 = keyFrame1;
             this->keyFrame2 = keyFrame2;
 
-            match();
-            filtMatches();
+            match(keyFrame1->descriptors,keyFrame2->descriptors);
             solvePose();
         }
 
         double getInlierRatio() {
             return (double) countNonZero(inlierMask) / matches.size();
-        }
-
-        size_t getMatchesNum() {
-            return matches.size();
         }
 
         Map::Ptr triangulate() {
@@ -72,46 +70,8 @@ namespace sky {
             return map;
         }
 
+
     private:
-        KeyFrame::Ptr keyFrame1, keyFrame2;
-        cv::Ptr<DescriptorMatcher> matcher;
-        double disThresRatio, disThresMin;
-
-        void match() {
-#ifdef DEBUG
-            cout << "Solver2D2D: matching keypoints... " << endl;
-#endif
-
-            matcher->match(keyFrame1->descriptors, keyFrame2->descriptors, matches, noArray());
-#ifdef DEBUG
-            cout << "\tfound " << matches.size() << " keypoints matched with last frame" << endl;
-#endif
-
-/*#ifdef CVVISUAL_DEBUGMODE
-            cvv::debugDMatch(keyFrame1->image, keyFrame1->keyPoints, keyFrame2->image, keyFrame2->keyPoints, matches,
-                             CVVISUAL_LOCATION,
-                             "2D-2D points matching");
-#endif*/
-        }
-
-        void filtMatches() {
-            auto minMaxDis = minmax_element(
-                    matches.begin(), matches.end(),
-                    [](const DMatch &m1, const DMatch &m2) {
-                        return m1.distance < m2.distance;
-                    });
-            auto minDis = minMaxDis.first->distance;
-            auto maxDis = minMaxDis.second->distance;
-            vector<DMatch> goodMatches;
-            for (auto match:matches) {
-                if (match.distance <= max(disThresRatio * minDis, disThresMin))
-                    goodMatches.push_back(match);
-            }
-            matches = goodMatches;
-#ifdef DEBUG
-            cout << "\tfound " << matches.size() << " good matches" << endl;
-#endif
-        }
 
         void solvePose() {
             vector<Point2f> matchPoints1, matchPoints2;

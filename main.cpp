@@ -51,7 +51,7 @@ int main() {
     LocalMap::Ptr localMap(new LocalMap);
     VO vo(camera,
           DescriptorMatcher::create("BruteForce"),
-          ORB::create(),
+          ORB::create(2000),
           localMap
     );
 
@@ -66,7 +66,7 @@ int main() {
         vo.step(image);
         if(vo.getState()==1){
             localMap->map->visInCloudViewer();
-            break;
+            //break;
         }
     }
 

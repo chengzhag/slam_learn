@@ -20,7 +20,10 @@ namespace sky {
 
         LocalMap() {}
 
-
+        void addFrame(KeyFrame::Ptr frame){
+            map->addFrame(frame);
+            //三角化
+        }
     };
 
 }
