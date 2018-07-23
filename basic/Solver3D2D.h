@@ -7,16 +7,10 @@
 
 #include "common_include.h"
 #include "Map.h"
-#include "KeyFrame.h"
 #include <opencv2/opencv.hpp>
-#include <opencv2/cvv.hpp>
-#include "BA.h"
-#include <algorithm>
 #include "Matcher.h"
 
 namespace sky {
-
-    using namespace cv;
 
     class Solver3D2D : protected Matcher {
     private:
@@ -26,10 +20,10 @@ namespace sky {
     public:
         typedef shared_ptr<Solver3D2D> Ptr;
         Mat descriptorsMap;
-        vector<Point3f> points3D;
+        vector<cv::Point3f> points3D;
         KeyFrame::Ptr keyFrame2;
 
-        Solver3D2D(cv::Ptr<DescriptorMatcher> matcher,
+        Solver3D2D(cv::Ptr<cv::DescriptorMatcher> matcher,
                    double disThresRatio = 5, double disThresMin = 200,
                    int max3Dnum = 200, int min3Dnum = 20, double maxPointDis = 20) :
                 Matcher(matcher, disThresRatio, disThresMin),

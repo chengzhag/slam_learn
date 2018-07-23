@@ -3,11 +3,14 @@
 //
 
 #include "Triangulater.h"
+#include <opencv2/cvv.hpp>
+#include "BA.h"
+#include <algorithm>
 
 namespace sky {
 
     Map::Ptr
-    Triangulater::triangulate(KeyFrame::Ptr keyFrame1, KeyFrame::Ptr keyFrame2, vector<DMatch> &matches,
+    Triangulater::triangulate(KeyFrame::Ptr keyFrame1, KeyFrame::Ptr keyFrame2, vector<cv::DMatch> &matches,
                               Mat &inlierMask) {
 #ifdef DEBUG
         cout << "Triangulater: triangulatePoints... " << endl;
@@ -19,7 +22,7 @@ namespace sky {
         map->addFrame(keyFrame1);
         map->addFrame(keyFrame2);
 
-        vector<Point2f> matchPointsNorm1, matchPointsNorm2;
+        vector<cv::Point2f> matchPointsNorm1, matchPointsNorm2;
         matchPointsNorm1.reserve(matches.size());
         matchPointsNorm2.reserve(matches.size());
         for (auto &match:matches) {
@@ -39,7 +42,7 @@ namespace sky {
     }
 
     void Triangulater::convAndAddMappoints(Map::Ptr map, const Mat &inlierMask,
-                             const Mat &points4D, const vector<DMatch> &matches) {
+                             const Mat &points4D, const vector<cv::DMatch> &matches) {
 #ifdef DEBUG
         cout << "Triangulater: convAndAddMappoints... " << endl;
 #endif
@@ -79,14 +82,14 @@ namespace sky {
 
                 //向地图增加点
                 //获取颜色
-                Vec3b rgb;
+                cv::Vec3b rgb;
                 if (keyFrame2->image.type() == CV_8UC3) {
-                    rgb = keyFrame2->image.at<Vec3b>(keyFrame2->getKeyPointCoor(iMapPoint2));
+                    rgb = keyFrame2->image.at<cv::Vec3b>(keyFrame2->getKeyPointCoor(iMapPoint2));
                     swap(rgb[0], rgb[2]);
                 } else if (keyFrame2->image.type() == CV_8UC1) {
                     cvtColor(keyFrame2->image.at<uint8_t>(keyFrame2->getKeyPointCoor(iMapPoint2)),
                              rgb,
-                             COLOR_GRAY2RGB);
+                             cv::COLOR_GRAY2RGB);
                 }
 
 

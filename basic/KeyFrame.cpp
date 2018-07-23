@@ -3,6 +3,8 @@
 //
 
 #include "KeyFrame.h"
+#include <opencv2/cvv.hpp>
+#include <opencv2/core/eigen.hpp>
 
 namespace sky {
 

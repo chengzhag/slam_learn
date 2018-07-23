@@ -7,26 +7,20 @@
 
 #include "common_include.h"
 #include "Map.h"
-#include "KeyFrame.h"
 #include <opencv2/opencv.hpp>
-#include <opencv2/cvv.hpp>
-#include "KeyFrame.h"
-#include <algorithm>
 
 namespace sky {
-
-    using namespace cv;
 
     class Matcher {
 
     protected:
-        cv::Ptr<DescriptorMatcher> matcher;
+        cv::Ptr<cv::DescriptorMatcher> matcher;
         double disThresRatio, disThresMin;
-        vector<DMatch> matches;
+        vector<cv::DMatch> matches;
 
     public:
 
-        Matcher(cv::Ptr<DescriptorMatcher> matcher,
+        Matcher(cv::Ptr<cv::DescriptorMatcher> matcher,
                 double disThresRatio, double disThresMin) :
                 matcher(matcher),
                 disThresRatio(disThresRatio), disThresMin(disThresMin) {}

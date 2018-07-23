@@ -3,6 +3,9 @@
 //
 
 #include "Solver2D2D.h"
+#include <opencv2/cvv.hpp>
+#include <opencv2/core/eigen.hpp>
+#include "BA.h"
 
 namespace sky {
 
@@ -26,7 +29,7 @@ namespace sky {
     }
 
     void Solver2D2D::solvePose(bool saveResult) {
-        vector<Point2f> matchPoints1, matchPoints2;
+        vector<cv::Point2f> matchPoints1, matchPoints2;
         for (auto match:matches) {
             matchPoints1.push_back(keyFrame1->getKeyPointCoor(match.queryIdx));
             matchPoints2.push_back(keyFrame2->getKeyPointCoor(match.trainIdx));
@@ -37,7 +40,7 @@ namespace sky {
         essentialMatrix = findEssentialMat(matchPoints1, matchPoints2,
                                            keyFrame2->camera->getFocalLength(),
                                            keyFrame2->camera->getPrincipalPoint(),
-                                           RANSAC, 0.999, 1.0, inlierMask);
+                                           cv::RANSAC, 0.999, 1.0, inlierMask);
 #ifdef DEBUG
         int nPointsFindEssentialMat = countNonZero(inlierMask);
         cout << nPointsFindEssentialMat << " valid points, " <<

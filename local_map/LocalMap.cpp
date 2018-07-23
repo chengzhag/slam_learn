@@ -3,6 +3,7 @@
 //
 
 #include "LocalMap.h"
+#include "BA.h"
 
 namespace sky {
 

@@ -10,8 +10,6 @@
 
 namespace sky {
 
-    using namespace cv;
-
     class LocalMap {
     protected:
         Solver2D2D solver2D2D;
@@ -19,7 +17,7 @@ namespace sky {
         Map::Ptr map;
         typedef shared_ptr<LocalMap> Ptr;
 
-        LocalMap(const cv::Ptr<DescriptorMatcher> matcher) :
+        LocalMap(const cv::Ptr<cv::DescriptorMatcher> matcher) :
                 solver2D2D(matcher) {}
                 
         void addFrame(KeyFrame::Ptr frame);

@@ -10,8 +10,6 @@
 
 namespace sky {
 
-    using namespace cv;
-
     class Camera {
     public:
         typedef shared_ptr<Camera> Ptr;
@@ -21,7 +19,7 @@ namespace sky {
                 fx(fx), fy(fy), cx(cx), cy(cy) {}
 
         template<typename T>
-        void setIntrinsic(Matx<T, 1, 4> intrinsic) {
+        void setIntrinsic(cv::Matx<T, 1, 4> intrinsic) {
             fx=intrinsic(0);
             fy=intrinsic(1);
             cx=intrinsic(2);
@@ -42,7 +40,7 @@ namespace sky {
 
         Vector2d world2pixel(const Vector3d &p_w, const SE3 &T_c_w);
 
-        Point2f pixel2normal(const Point2d &p) const;
+        cv::Point2f pixel2normal(const cv::Point2d &p) const;
 
         //获取参数
         float getFocalLength();

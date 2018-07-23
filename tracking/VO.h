@@ -12,8 +12,6 @@
 
 namespace sky {
 
-    using namespace cv;
-
     class VO {
 
     protected:
@@ -27,11 +25,11 @@ namespace sky {
 
     public:
         typedef shared_ptr<VO> Ptr;
-        cv::Ptr<DescriptorMatcher> matcher;
+        cv::Ptr<cv::DescriptorMatcher> matcher;
         Camera::Ptr camera;
 
         VO(Camera::Ptr camera,
-           cv::Ptr<DescriptorMatcher> matcher,
+           cv::Ptr<cv::DescriptorMatcher> matcher,
            cv::Ptr<cv::Feature2D> feature2D,
            LocalMap::Ptr localMap) :
                 camera(camera), matcher(matcher), feature2D(feature2D),

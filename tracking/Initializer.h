@@ -9,13 +9,9 @@
 #include "Map.h"
 #include "KeyFrame.h"
 #include <opencv2/opencv.hpp>
-#include <opencv2/cvv.hpp>
-#include "BA.h"
 #include "Solver2D2D.h"
 
 namespace sky {
-
-    using namespace cv;
 
     class Initializer {
     private:
@@ -27,7 +23,7 @@ namespace sky {
         KeyFrame::Ptr keyFrame1, keyFrame2;
         Map::Ptr initialMap;
 
-        Initializer(cv::Ptr<DescriptorMatcher> matcher,
+        Initializer(cv::Ptr<cv::DescriptorMatcher> matcher,
                     double inlierThresRatio = 0.35, int maxFrameInterval = 5, int minFrameInterval = 2,
                     int minMapPointNum = 50) :
                 solver2D2D(matcher),

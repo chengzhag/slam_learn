@@ -7,19 +7,25 @@
 
 #include "Map.h"
 #include "common_include.h"
-#include <pcl/common/common_headers.h>
-#include <pcl/visualization/cloud_viewer.h>
+
+#ifdef CLOUDVIEWER_DEBUG
+
 #include <pcl/common/common_headers.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 #include <pcl/visualization/pcl_visualizer.h>
 
+#endif
+
+
 namespace sky {
 
     class MapViewer {
 
     public:
+
+#ifdef CLOUDVIEWER_DEBUG
         pcl::visualization::PCLVisualizer viewer;
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
 
@@ -34,6 +40,7 @@ namespace sky {
                                                     "Triangulated Point Cloud");
             viewer.addCoordinateSystem(1.0);
         }
+#endif
 
         void run();
 

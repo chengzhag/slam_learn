@@ -3,6 +3,7 @@
 //
 
 #include "Matcher.h"
+#include <opencv2/cvv.hpp>
 
 namespace sky {
 
@@ -15,7 +16,7 @@ namespace sky {
         cout << "Matcher: matching keypoints... " << endl;
 #endif
 
-        matcher->match(descriptors1, descriptors2, matches, noArray());
+        matcher->match(descriptors1, descriptors2, matches, cv::noArray());
 #ifdef DEBUG
         cout << "\tfound " << matches.size() << " keypoints matched with last frame" << endl;
 #endif
@@ -29,12 +30,12 @@ namespace sky {
         //过滤匹配点
         auto minMaxDis = minmax_element(
                 matches.begin(), matches.end(),
-                [](const DMatch &m1, const DMatch &m2) {
+                [](const cv::DMatch &m1, const cv::DMatch &m2) {
                     return m1.distance < m2.distance;
                 });
         auto minDis = minMaxDis.first->distance;
         auto maxDis = minMaxDis.second->distance;
-        vector<DMatch> goodMatches;
+        vector<cv::DMatch> goodMatches;
         for (auto match:matches) {
             if (match.distance <= max(disThresRatio * minDis, disThresMin))
                 goodMatches.push_back(match);

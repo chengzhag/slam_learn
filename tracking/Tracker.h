@@ -11,8 +11,6 @@
 
 namespace sky {
 
-    using namespace cv;
-
     class Tracker {
     private:
         double keyFrameMinInlierRatio;
@@ -24,7 +22,7 @@ namespace sky {
     public:
         typedef shared_ptr<Tracker> Ptr;
 
-        Tracker(LocalMap::Ptr localMap, cv::Ptr<DescriptorMatcher> matcher,
+        Tracker(LocalMap::Ptr localMap, cv::Ptr<cv::DescriptorMatcher> matcher,
                 double keyFrameMinInlierRatio = 0.1,
                 int minLocalMapPointsNum = 1000,
                 double minKeyFrameDis = 2) :

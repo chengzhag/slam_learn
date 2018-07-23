@@ -7,16 +7,10 @@
 
 #include "common_include.h"
 #include "Map.h"
-#include "KeyFrame.h"
 #include <opencv2/opencv.hpp>
-#include <opencv2/cvv.hpp>
-#include "BA.h"
-#include "KeyFrame.h"
-#include <algorithm>
 
 namespace sky {
 
-    using namespace cv;
 
     class Triangulater {
     private:
@@ -27,12 +21,12 @@ namespace sky {
         Triangulater(double maxDisRatio = 20) : maxDisRatio(maxDisRatio) {}
 
         Map::Ptr
-        triangulate(KeyFrame::Ptr keyFrame1, KeyFrame::Ptr keyFrame2, vector<DMatch> &matches, Mat &inlierMask);
+        triangulate(KeyFrame::Ptr keyFrame1, KeyFrame::Ptr keyFrame2, vector<cv::DMatch> &matches, Mat &inlierMask);
 
     private:
 
         void convAndAddMappoints(Map::Ptr map, const Mat &inlierMask,
-                                               const Mat &points4D, const vector<DMatch> &matches);
+                                 const Mat &points4D, const vector<cv::DMatch> &matches);
     };
 }
 

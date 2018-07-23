@@ -38,8 +38,8 @@ namespace sky {
         return camera2world(pixel2camera(p_p, depth), T_c_w);
     }
 
-    Point2f Camera::pixel2normal(const Point2d &p) const{
-        return Point2f
+    cv::Point2f Camera::pixel2normal(const cv::Point2d &p) const{
+        return cv::Point2f
                 (
                         (p.x - cx) / fx,
                         (p.y - cy) / fy
@@ -59,7 +59,7 @@ namespace sky {
     }
 
     cv::Mat Camera::getKMatCV() {
-        Mat K = (Mat_<float>(3, 3) << fx, 0, cx, 0, fy, cy, 0, 0, 1);
+        Mat K = (cv::Mat_<float>(3, 3) << fx, 0, cx, 0, fy, cy, 0, 0, 1);
         return K;
     }
 

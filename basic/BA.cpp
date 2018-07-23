@@ -18,10 +18,10 @@ namespace sky {
         for (auto &frame:map->keyFrames) {
             auto angleAxis = frame->getAngleAxisWcMatxCV<double>();
             auto t = frame->Tcw.translation();
-            frameExtrinsics[frame] = Matx23d(angleAxis(0), angleAxis(1), angleAxis(2),
+            frameExtrinsics[frame] = cv::Matx23d(angleAxis(0), angleAxis(1), angleAxis(2),
                                              t[0], t[1], t[2]);
             if (cameraIntrinsics.find(frame->camera) == cameraIntrinsics.end())
-                cameraIntrinsics[frame->camera] = Matx14d(
+                cameraIntrinsics[frame->camera] = cv::Matx14d(
                         frame->camera->fx, frame->camera->fy, frame->camera->cx, frame->camera->cy);
         }
 #ifdef DEBUG

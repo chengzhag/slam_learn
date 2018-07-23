@@ -3,6 +3,8 @@
 //
 
 #include "Initializer.h"
+#include <opencv2/cvv.hpp>
+#include "BA.h"
 
 namespace sky{
 

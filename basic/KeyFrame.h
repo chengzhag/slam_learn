@@ -9,13 +9,9 @@
 #include "MapPoint.h"
 #include "Camera.h"
 #include <opencv2/opencv.hpp>
-#include <opencv2/cvv.hpp>
-#include <opencv2/core/eigen.hpp>
 #include <unordered_map>
 
 namespace sky {
-
-    using namespace cv;
 
     class KeyFrame {
     public:
@@ -32,7 +28,7 @@ namespace sky {
 #ifdef DEBUG
             cout << "KeyFrame: detectAndCompute features... " << endl;
 #endif
-            feature2D->detectAndCompute(image, noArray(), keyPoints, descriptors);
+            feature2D->detectAndCompute(image, cv::noArray(), keyPoints, descriptors);
 #ifdef DEBUG
             cout << "\tfound " << keyPoints.size() << " keypoints" << endl;
 #endif
@@ -56,7 +52,7 @@ namespace sky {
         }
 
         template<typename T>
-        void setTcw(Matx<T, 2, 3> angleAxisAndTranslation) {
+        void setTcw(cv::Matx<T, 2, 3> angleAxisAndTranslation) {
             Tcw.so3() = SO3(angleAxisAndTranslation(0, 0),
                             angleAxisAndTranslation(0, 1),
                             angleAxisAndTranslation(0, 2));
@@ -81,7 +77,7 @@ namespace sky {
             return mapPoints[i];
         }
 
-        Point2f getKeyPointCoor(int i) {
+        cv::Point2f getKeyPointCoor(int i) {
             return keyPoints[i].pt;
         }
 

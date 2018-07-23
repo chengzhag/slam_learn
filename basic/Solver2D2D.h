@@ -7,18 +7,11 @@
 
 #include "common_include.h"
 #include "Map.h"
-#include "KeyFrame.h"
 #include <opencv2/opencv.hpp>
-#include <opencv2/cvv.hpp>
-#include "BA.h"
-#include "KeyFrame.h"
-#include <algorithm>
 #include "Matcher.h"
 #include "Triangulater.h"
 
 namespace sky {
-
-    using namespace cv;
 
     class Solver2D2D : protected Matcher {
 
@@ -29,7 +22,7 @@ namespace sky {
         typedef shared_ptr<Solver2D2D> Ptr;
         Mat inlierMask;
 
-        Solver2D2D(cv::Ptr<DescriptorMatcher> matcher,
+        Solver2D2D(cv::Ptr<cv::DescriptorMatcher> matcher,
                    double disThresRatio = 6, double disThresMin = 300) :
                 Matcher(matcher, disThresRatio, disThresMin) {}
 

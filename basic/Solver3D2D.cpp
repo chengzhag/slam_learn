@@ -3,6 +3,8 @@
 //
 
 #include "Solver3D2D.h"
+#include <opencv2/cvv.hpp>
+#include "BA.h"
 
 namespace sky {
 
@@ -91,8 +93,8 @@ namespace sky {
         cout << "Solver3D2D: solvePose..." << endl;
 #endif
         //解PnP得相机位姿
-        vector<Point2f> points2DPnP;
-        vector<Point3f> points3DPnP;
+        vector<cv::Point2f> points2DPnP;
+        vector<cv::Point3f> points3DPnP;
         for (auto match:matches) {
             points2DPnP.push_back(keyFrame2->getKeyPointCoor(match.trainIdx));
             points3DPnP.push_back(points3D[match.queryIdx]);

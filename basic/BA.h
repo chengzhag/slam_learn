@@ -17,8 +17,6 @@
 
 namespace sky {
 
-    using namespace std;
-
     class BA {
 
     public:
@@ -37,9 +35,9 @@ namespace sky {
         Map::Ptr map;
         ceres::Solver::Options ceres_config_options;
 
-        unordered_map<Camera::Ptr, Matx14d> cameraIntrinsics;
-        unordered_map<KeyFrame::Ptr, Matx23d> frameExtrinsics;
-        unordered_map<MapPoint::Ptr, Matx13d> mapPointsPos;
+        unordered_map<Camera::Ptr, cv::Matx14d> cameraIntrinsics;
+        unordered_map<KeyFrame::Ptr, cv::Matx23d> frameExtrinsics;
+        unordered_map<MapPoint::Ptr, cv::Matx13d> mapPointsPos;
 
     public:
         BA();
@@ -47,11 +45,7 @@ namespace sky {
         void operator()(Map::Ptr map,
                         ModeSet modeSet = {Mode_Fix_First_Frame, Mode_Fix_Intrinsic});
 
-    protected:
-
-        bool hasMode(Mode mode){
-            return modeSet.find(mode) != modeSet.end();
-        }
+    private:
 
         class ReprojectCost {
             cv::Point2d observation;
@@ -90,6 +84,10 @@ namespace sky {
                 return true;
             }
         };
+
+        bool hasMode(Mode mode) {
+            return modeSet.find(mode) != modeSet.end();
+        }
 
         void loadMap();
 

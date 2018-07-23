@@ -8,14 +8,11 @@
 
 #include "common_include.h"
 #include <unordered_map>
-#include <utility>
 
 namespace sky {
 
     class KeyFrame;
     typedef shared_ptr<KeyFrame> KeyFramePtr;
-
-    using namespace cv;
 
     class MapPoint {
 
@@ -25,12 +22,12 @@ namespace sky {
         Mat descriptor; // Descriptor for matching
         unordered_map<KeyFramePtr, cv::Point2d> observedFrames;//观测帧和像素坐标
         Vector3d pos;       // Position in world
-        Vec3b rgb;
+        cv::Vec3b rgb;
 
 
         MapPoint();
 
-        MapPoint(const Vector3d &pos, const Mat &descriptor, const Vec3b &rgb) :
+        MapPoint(const Vector3d &pos, const Mat &descriptor, const cv::Vec3b &rgb) :
                 pos(pos),
                 descriptor(descriptor),
                 rgb(rgb) {}

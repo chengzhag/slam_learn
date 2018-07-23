@@ -14,9 +14,9 @@ namespace sky {
     }
 
     void MapViewer::update(Map::Ptr map) {
+#ifdef CLOUDVIEWER_DEBUG
         if (!map)
             return;
-#ifdef CLOUDVIEWER_DEBUG
 #ifdef DEBUG
         cout << "MapViewer: Visualizing Point Could..." << endl;
         cout << "\t" << map->keyFrames.size() << " keyFrames" << endl;
@@ -42,12 +42,14 @@ namespace sky {
 #endif
     }
 
+#ifdef CLOUDVIEWER_DEBUG
     void MapViewer::threadFunc() {
         while (!viewer.wasStopped()) {
             viewer.spinOnce(100);
             boost::this_thread::sleep(boost::posix_time::microseconds(100));
         }
     }
+#endif
 
     void MapViewer::addFrame(KeyFrame::Ptr frame, string camName) {
 #ifdef CLOUDVIEWER_DEBUG
