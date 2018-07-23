@@ -7,10 +7,15 @@
 
 
 #include "common_include.h"
-#include "Frame.h"
+#include <unordered_map>
 #include <utility>
 
 namespace sky {
+
+    class KeyFrame;
+    typedef shared_ptr<KeyFrame> KeyFramePtr;
+
+    using namespace cv;
 
     class MapPoint {
 
@@ -18,7 +23,7 @@ namespace sky {
 
         typedef shared_ptr<MapPoint> Ptr;
         Mat descriptor; // Descriptor for matching
-        unordered_map<Frame::Ptr, cv::Point2d> observedFrames;//观测帧和像素坐标
+        unordered_map<KeyFramePtr, cv::Point2d> observedFrames;//观测帧和像素坐标
         Vector3d pos;       // Position in world
         Vec3b rgb;
 
@@ -47,10 +52,7 @@ namespace sky {
             pos(2) = posMatx13(2);
         }
 
-        void addObervedFrame(const Frame::Ptr &observedFrame, const cv::Point2d &pixelCoor) {
-            if (observedFrame)
-                observedFrames[observedFrame] = pixelCoor;
-        }
+        void addObervedFrame(const KeyFramePtr &observedFrame, const cv::Point2d &pixelCoor);
     };
 
 

@@ -10,7 +10,7 @@
 #include <ceres/rotation.h>
 #include <opencv2/opencv.hpp>
 #include "Map.h"
-#include "Frame.h"
+#include "KeyFrame.h"
 #include "common_include.h"
 #include <unordered_map>
 #include <unordered_set>
@@ -38,7 +38,7 @@ namespace sky {
         ceres::Solver::Options ceres_config_options;
 
         unordered_map<Camera::Ptr, Matx14d> cameraIntrinsics;
-        unordered_map<Frame::Ptr, Matx23d> frameExtrinsics;
+        unordered_map<KeyFrame::Ptr, Matx23d> frameExtrinsics;
         unordered_map<MapPoint::Ptr, Matx13d> mapPointsPos;
 
     public:

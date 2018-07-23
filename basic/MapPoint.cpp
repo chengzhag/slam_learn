@@ -6,6 +6,9 @@
 
 namespace sky {
 
-
+    void MapPoint::addObervedFrame(const KeyFramePtr &observedFrame, const cv::Point2d &pixelCoor) {
+        if (observedFrame)
+            observedFrames[observedFrame] = pixelCoor;
+    }
 
 }

@@ -7,12 +7,10 @@
 
 #include "common_include.h"
 #include "Map.h"
-#include "Frame.h"
+#include "KeyFrame.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/cvv.hpp>
 #include "BA.h"
-
-#include "KeyFrame.h"
 #include "Solver2D2D.h"
 
 namespace sky {

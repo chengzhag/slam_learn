@@ -23,7 +23,6 @@ namespace sky {
 
         void addMapPoint(MapPoint::Ptr mapPoint);
 
-        void visInCloudViewer();
     };
 
 }
