@@ -38,9 +38,9 @@ namespace sky {
             matchPointsNorm2.reserve(matches.size());
             for (auto &match:matches) {
                 matchPointsNorm1.push_back(
-                        keyFrame1->camera->pixel2normal(keyFrame1->keyPoints[match.queryIdx].pt));
+                        keyFrame1->camera->pixel2normal(keyFrame1->getKeyPointCoor(match.queryIdx)));
                 matchPointsNorm2.push_back(
-                        keyFrame2->camera->pixel2normal(keyFrame2->keyPoints[match.trainIdx].pt));
+                        keyFrame2->camera->pixel2normal(keyFrame2->getKeyPointCoor(match.trainIdx)));
             }
             Mat points4D;
             triangulatePoints(keyFrame1->getTcw34MatCV(CV_32F), keyFrame2->getTcw34MatCV(CV_32F),
@@ -49,8 +49,6 @@ namespace sky {
             //转换齐次坐标点，保存到Map，并做局部BA
             convAndAddMappoints(map, inlierMask, points4D, matches);
 
-            BA ba;
-            ba(map, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
             return map;
         }
 

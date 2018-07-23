@@ -62,6 +62,8 @@ namespace sky {
                     if (solver2D2D.getInlierRatio() > inlierThresRatio) {
                         Triangulater triangulater;
                         initialMap = solver2D2D.triangulate();
+                        BA ba;
+                        ba(initialMap, {BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
                         if (initialMap->mapPoints.size() >= minMapPointNum) {
                             keyFrame2 = frame;
                             frameInterval = -1;

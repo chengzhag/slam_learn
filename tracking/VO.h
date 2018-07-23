@@ -30,12 +30,12 @@ namespace sky {
         cv::Ptr<DescriptorMatcher> matcher;
         Camera::Ptr camera;
 
-        VO(const Camera::Ptr camera,
-           const cv::Ptr<DescriptorMatcher> &matcher,
+        VO(Camera::Ptr camera,
+           cv::Ptr<DescriptorMatcher> matcher,
            cv::Ptr<cv::Feature2D> feature2D,
            LocalMap::Ptr localMap) :
                 camera(camera), matcher(matcher), feature2D(feature2D),
-                localMap(localMap), tracker(new Tracker(localMap,matcher)) {
+                localMap(localMap), tracker(new Tracker(localMap, matcher)) {
             initializer = Initializer::Ptr(new Initializer(matcher));
         }
 
@@ -52,7 +52,7 @@ namespace sky {
                     }
                     break;
                 }
-                //追踪状态
+                    //追踪状态
                 case 1: {
                     tracker->step(keyFrame);
                     break;

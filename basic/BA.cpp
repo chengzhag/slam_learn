@@ -73,7 +73,7 @@ namespace sky {
 #endif
         for (auto &cameraIntrinsic:cameraIntrinsics) {
             problem.AddParameterBlock(cameraIntrinsic.second.val, 4);
-            if(hasMode(Mode_Fix_Intrinsic))
+            if (hasMode(Mode_Fix_Intrinsic))
                 problem.SetParameterBlockConstant(cameraIntrinsic.second.val);
         }
 
@@ -84,20 +84,23 @@ namespace sky {
         for (auto &mapPointPos:mapPointsPos) {
 
             problem.AddParameterBlock(mapPointPos.second.val, 3);
-            if(hasMode(Mode_Fix_Points))
+            if (hasMode(Mode_Fix_Points))
                 problem.SetParameterBlockConstant(mapPointPos.second.val);
 
             for (auto &observedFrame:mapPointPos.first->observedFrames) {
-                ceres::CostFunction *costFunction =
-                        new ceres::AutoDiffCostFunction<ReprojectCost, 2, 4, 6, 3>(
-                                new ReprojectCost(observedFrame.second));
-                problem.AddResidualBlock(
-                        costFunction,
-                        lossFunction,
-                        cameraIntrinsics[observedFrame.first->camera].val,            // Intrinsic
-                        frameExtrinsics[observedFrame.first].val,  // View Rotation and Translation
-                        mapPointPos.second.val          // Point in 3D space
-                );
+                if (frameExtrinsics.find(observedFrame.first) != frameExtrinsics.end()) {
+                    ceres::CostFunction *costFunction =
+                            new ceres::AutoDiffCostFunction<ReprojectCost, 2, 4, 6, 3>(
+                                    new ReprojectCost(observedFrame.second));
+                    problem.AddResidualBlock(
+                            costFunction,
+                            lossFunction,
+                            cameraIntrinsics[observedFrame.first->camera].val,            // Intrinsic
+                            frameExtrinsics[observedFrame.first].val,  // View Rotation and Translation
+                            mapPointPos.second.val          // Point in 3D space
+                    );
+                }
+
             }
         }
 
@@ -123,17 +126,19 @@ namespace sky {
 
     void BA::writeMap() {
         //写mapPointsPos
-        for (auto &mapPointPos:mapPointsPos) {
-            mapPointPos.first->setPos(mapPointPos.second);
-        }
+        if (!hasMode(Mode_Fix_Points))
+            for (auto &mapPointPos:mapPointsPos) {
+                mapPointPos.first->setPos(mapPointPos.second);
+            }
         //写frameExtrinsics
         for (auto &frameExtrinsic:frameExtrinsics) {
             frameExtrinsic.first->setTcw(frameExtrinsic.second);
         }
         //写cameraIntrinsics
-        for (auto &cameraIntrinsic:cameraIntrinsics) {
-            cameraIntrinsic.first->setIntrinsic(cameraIntrinsic.second);
-        }
+        if (!hasMode(Mode_Fix_Intrinsic))
+            for (auto &cameraIntrinsic:cameraIntrinsics) {
+                cameraIntrinsic.first->setIntrinsic(cameraIntrinsic.second);
+            }
     }
 
     void BA::clear() {
@@ -153,8 +158,9 @@ namespace sky {
         ceres_config_options.sparse_linear_algebra_library_type = ceres::EIGEN_SPARSE;
     }
 
-    void BA::operator()(Map::Ptr &map, ModeSet modeSet) {
-        this->map = map;KeyFrame:
+    void BA::operator()(Map::Ptr map, ModeSet modeSet) {
+        this->map = map;
+        KeyFrame:
         this->modeSet = modeSet;
         loadMap();
         bundleAdjustment();

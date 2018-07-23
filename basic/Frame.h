@@ -20,7 +20,7 @@ namespace sky {
         Camera::Ptr camera;     // Pinhole RGBD Camera model
         int cols, rows;
 
-        Frame(const Camera::Ptr &camera, const Mat &image) :
+        Frame(const Camera::Ptr camera, const Mat &image) :
                 camera(camera), cols(image.cols), rows(image.rows) {}
 
         ~Frame();
@@ -62,6 +62,15 @@ namespace sky {
 
         // check if a point is in this frame
         bool isInFrame(const Vector3d &pt_world);
+
+        //计算帧到某坐标的距离
+        double dis2Coor(Sophus::Vector3d coor){
+            Sophus::Vector3d coorFrom=Tcw.translation();
+            double dis=0;
+            for(int i=0;i<3;++i)
+                dis+=pow(coorFrom[i]-coor[i],2);
+            return sqrt(dis);
+        }
     };
 
 }

@@ -24,7 +24,7 @@ namespace sky {
         Mat descriptors;
         unordered_map<int, MapPoint::Ptr> mapPoints;//在descriptors或keyPoints中的序号和对应的地图点
 
-        KeyFrame(const Camera::Ptr &camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D) :
+        KeyFrame(const Camera::Ptr camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D) :
                 Frame(camera, image), image(image) {
 #ifdef DEBUG
             cout << "KeyFrame: detectAndCompute features... " << endl;

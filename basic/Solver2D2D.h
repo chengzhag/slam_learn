@@ -30,10 +30,13 @@ namespace sky {
         Mat inlierMask;
 
         Solver2D2D(cv::Ptr<DescriptorMatcher> matcher,
-                   double disThresRatio = 5, double disThresMin = 200) :
+                   double disThresRatio = 6, double disThresMin = 300) :
                 Matcher(matcher, disThresRatio, disThresMin) {}
 
         void solve(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2, bool saveResult = true) {
+            //重置中间变量
+            inlierMask = Mat();
+
             this->keyFrame1 = keyFrame1;
             this->keyFrame2 = keyFrame2;
 
@@ -42,7 +45,7 @@ namespace sky {
         }
 
         double getInlierRatio() {
-            return (double) countNonZero(inlierMask) / matches.size();
+            return (double) countNonZero(inlierMask) / getMatchesNum();
         }
 
         Map::Ptr triangulate() {
@@ -55,8 +58,8 @@ namespace sky {
         void solvePose(bool saveResult) {
             vector<Point2f> matchPoints1, matchPoints2;
             for (auto match:matches) {
-                matchPoints1.push_back(keyFrame1->keyPoints[match.queryIdx].pt);
-                matchPoints2.push_back(keyFrame2->keyPoints[match.trainIdx].pt);
+                matchPoints1.push_back(keyFrame1->getKeyPointCoor(match.queryIdx));
+                matchPoints2.push_back(keyFrame2->getKeyPointCoor(match.trainIdx));
             }
 
             cout << "Solver2D2D: findEssentialMat... \n\t";
@@ -95,7 +98,7 @@ namespace sky {
             Mat R, t;
             recoverPose(essentialMatrix, matchPoints1, matchPoints2,
                         keyFrame2->camera->getKMatxCV(), R, t, inlierMask);
-            if(saveResult){
+            if (saveResult) {
                 Eigen::Matrix3d eigenR2;
                 cv2eigen(R, eigenR2);
                 keyFrame2->Tcw = SE3(

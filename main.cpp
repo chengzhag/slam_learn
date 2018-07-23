@@ -52,7 +52,7 @@ int main() {
     LocalMap::Ptr localMap(new LocalMap(matcher));
     VO vo(camera,
           matcher,
-          ORB::create(2000),
+          ORB::create(500),
           localMap
     );
 
@@ -66,7 +66,7 @@ int main() {
 #endif
         vo.step(image);
         if (vo.getState() == 1) {
-            localMap->map->visInCloudViewer();
+            //localMap->map->visInCloudViewer();
             //break;
         }
     }

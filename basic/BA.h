@@ -34,10 +34,17 @@ namespace sky {
 
         ModeSet modeSet;
 
+        Map::Ptr map;
+        ceres::Solver::Options ceres_config_options;
+
+        unordered_map<Camera::Ptr, Matx14d> cameraIntrinsics;
+        unordered_map<Frame::Ptr, Matx23d> frameExtrinsics;
+        unordered_map<MapPoint::Ptr, Matx13d> mapPointsPos;
+
     public:
         BA();
 
-        void operator()(Map::Ptr &map,
+        void operator()(Map::Ptr map,
                         ModeSet modeSet = {Mode_Fix_First_Frame, Mode_Fix_Intrinsic});
 
     protected:
@@ -83,13 +90,6 @@ namespace sky {
                 return true;
             }
         };
-
-        Map::Ptr map;
-        ceres::Solver::Options ceres_config_options;
-
-        unordered_map<Camera::Ptr, Matx14d> cameraIntrinsics;
-        unordered_map<Frame::Ptr, Matx23d> frameExtrinsics;
-        unordered_map<MapPoint::Ptr, Matx13d> mapPointsPos;
 
         void loadMap();
 
