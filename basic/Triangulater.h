@@ -19,15 +19,20 @@ namespace sky {
     using namespace cv;
 
     class Triangulater {
+    private:
+        double maxDisRatio;
     public:
         KeyFrame::Ptr keyFrame1, keyFrame2;
 
-        Map::Ptr triangulate(KeyFrame::Ptr keyFrame1,KeyFrame::Ptr keyFrame2,vector<DMatch> &matches,Mat &inlierMask) {
+        Triangulater(double maxDisRatio = 20) : maxDisRatio(maxDisRatio) {}
+
+        Map::Ptr
+        triangulate(KeyFrame::Ptr keyFrame1, KeyFrame::Ptr keyFrame2, vector<DMatch> &matches, Mat &inlierMask) {
 #ifdef DEBUG
             cout << "Triangulater: triangulatePoints... " << endl;
 #endif
-            this->keyFrame1=keyFrame1;
-            this->keyFrame2=keyFrame2;
+            this->keyFrame1 = keyFrame1;
+            this->keyFrame2 = keyFrame2;
 
             Map::Ptr map(new Map);
             map->addFrame(keyFrame1);
@@ -54,7 +59,7 @@ namespace sky {
 
     private:
         void convAndAddMappoints(Map::Ptr map, const Mat &inlierMask,
-                                     const Mat &points4D, const vector<DMatch> &matches) {
+                                 const Mat &points4D, const vector<DMatch> &matches) {
 #ifdef DEBUG
             cout << "Triangulater: convAndAddMappoints... " << endl;
 #endif
@@ -122,7 +127,9 @@ namespace sky {
                     }
 
                     //记录当前帧加入地图的mapPoint和特征点下标
-                    keyFrame2->addMapPoint(iMapPoint2, mapPoint);
+                    if (keyFrame2->dis2Coor(mapPoint->pos) <
+                        maxDisRatio * keyFrame2->dis2Coor(keyFrame1->Tcw.translation()))
+                        keyFrame2->addMapPoint(iMapPoint2, mapPoint);
 
 /*#ifdef DEBUG
             if (i < 5)

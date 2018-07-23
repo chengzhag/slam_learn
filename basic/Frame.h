@@ -71,6 +71,7 @@ namespace sky {
                 dis+=pow(coorFrom[i]-coor[i],2);
             return sqrt(dis);
         }
+
     };
 
 }

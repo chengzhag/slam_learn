@@ -15,15 +15,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d03b25aa-01f9-4cb3-b1c6-c95429c4b77e" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/basic/MapViewer.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/basic/MapViewer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SLAM.h" beforeDir="false" afterPath="$PROJECT_DIR$/SLAM.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/Map.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/basic/Map.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/Solver3D2D.h" beforeDir="false" afterPath="$PROJECT_DIR$/basic/Solver3D2D.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local_map/LocalMap.h" beforeDir="false" afterPath="$PROJECT_DIR$/local_map/LocalMap.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic/Frame.h" beforeDir="false" afterPath="$PROJECT_DIR$/basic/Frame.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/basic/Triangulater.h" beforeDir="false" afterPath="$PROJECT_DIR$/basic/Triangulater.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tracking/Tracker.h" beforeDir="false" afterPath="$PROJECT_DIR$/tracking/Tracker.h" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -45,7 +39,7 @@
           <file leaf-file-name="MapViewer.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/basic/MapViewer.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="170">
+                <state relative-caret-position="1215">
                   <caret line="81" column="13" selection-start-line="81" selection-start-column="13" selection-end-line="81" selection-end-column="13" />
                   <folding>
                     <element signature="e#109#125#0" expanded="true" />
@@ -57,10 +51,22 @@
           <file leaf-file-name="Tracker.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/tracking/Tracker.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="305">
-                  <caret line="41" column="60" selection-start-line="41" selection-start-column="60" selection-end-line="41" selection-end-column="60" />
+                <state relative-caret-position="260">
+                  <caret line="31" column="23" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
                   <folding>
                     <element signature="e#105#132#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Triangulater.h" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/basic/Triangulater.h">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="453">
+                  <caret line="130" column="71" selection-start-line="130" selection-start-column="71" selection-end-line="130" selection-end-column="71" />
+                  <folding>
+                    <element signature="e#115#142#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -69,7 +75,7 @@
           <file leaf-file-name="KeyFrame.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/basic/KeyFrame.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="330">
+                <state relative-caret-position="465">
                   <caret line="31" column="72" selection-start-line="31" selection-start-column="72" selection-end-line="31" selection-end-column="72" />
                   <folding>
                     <element signature="e#107#134#0" expanded="true" />
@@ -78,11 +84,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
+          <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/main.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="320">
-                  <caret line="64" column="6" lean-forward="true" selection-start-line="64" selection-start-column="6" selection-end-line="64" selection-end-column="6" />
+                <state relative-caret-position="1020">
+                  <caret line="68" column="12" selection-start-line="68" selection-start-column="12" selection-end-line="68" selection-end-column="12" />
                   <folding>
                     <element signature="e#0#19#0" expanded="true" />
                   </folding>
@@ -93,8 +99,8 @@
           <file leaf-file-name="VO.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/tracking/VO.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="416">
-                  <caret line="56" column="31" lean-forward="true" selection-start-line="56" selection-start-column="31" selection-end-line="56" selection-end-column="31" />
+                <state relative-caret-position="840">
+                  <caret line="56" column="31" selection-start-line="56" selection-start-column="31" selection-end-line="56" selection-end-column="31" />
                   <folding>
                     <element signature="e#95#122#0" expanded="true" />
                   </folding>
@@ -109,7 +115,7 @@
           <file leaf-file-name="BA.cpp" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/basic/BA.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="333">
+                <state relative-caret-position="1335">
                   <caret line="89" column="36" selection-start-line="89" selection-start-column="23" selection-end-line="89" selection-end-column="36" />
                 </state>
               </provider>
@@ -118,7 +124,7 @@
           <file leaf-file-name="MapPoint.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/basic/MapPoint.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="407">
+                <state relative-caret-position="465">
                   <caret line="31" selection-start-line="31" selection-end-line="31" />
                   <folding>
                     <element signature="e#108#135#0" expanded="true" />
@@ -176,16 +182,16 @@
         <option value="$PROJECT_DIR$/basic/BA.cpp" />
         <option value="$PROJECT_DIR$/basic/Solver2D2D.h" />
         <option value="$PROJECT_DIR$/basic/MapPoint.h" />
-        <option value="$PROJECT_DIR$/basic/Triangulater.h" />
         <option value="$PROJECT_DIR$/tracking/Initializer.h" />
         <option value="$PROJECT_DIR$/local_map/LocalMap.h" />
         <option value="$PROJECT_DIR$/basic/Map.cpp" />
         <option value="$PROJECT_DIR$/SLAM.h" />
         <option value="$PROJECT_DIR$/basic/MapViewer.h" />
-        <option value="$PROJECT_DIR$/tracking/Tracker.h" />
         <option value="$PROJECT_DIR$/basic/Solver3D2D.h" />
         <option value="$PROJECT_DIR$/tracking/VO.h" />
         <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/tracking/Tracker.h" />
+        <option value="$PROJECT_DIR$/basic/Triangulater.h" />
       </list>
     </option>
   </component>
@@ -200,10 +206,10 @@
   </component>
   <component name="OCFindUsagesOptions" text="false" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="65" />
-    <option name="y" value="24" />
-    <option name="width" value="926" />
-    <option name="height" value="1056" />
+    <option name="x" value="89" />
+    <option name="y" value="-4" />
+    <option name="width" value="924" />
+    <option name="height" value="1048" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -241,7 +247,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../sfm_learn" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="CMakeSettings" />
@@ -280,12 +286,13 @@
       <workItem from="1531381513168" duration="528000" />
       <workItem from="1531382154962" duration="2844000" />
       <workItem from="1531464443214" duration="21274000" />
-      <workItem from="1531960968977" duration="19359000" />
+      <workItem from="1531960968977" duration="19691000" />
+      <workItem from="1532338673842" duration="977000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75777000" />
+    <option name="totallyTimeSpent" value="77086000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -305,19 +312,19 @@
       <window_info anchor="bottom" id="Messages" order="7" weight="0.325462" />
       <window_info anchor="bottom" id="CMake" order="11" weight="0.317734" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3295688" />
-      <window_info anchor="bottom" id="Version Control" order="10" weight="0.3295688" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.35112935" />
+      <window_info anchor="bottom" id="Version Control" order="10" weight="0.3295688" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.399384" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3295688" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -539,13 +546,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/local/include/opencv2/calib3d.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="738" column="18" selection-start-line="738" selection-start-column="18" selection-end-line="738" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/basic/Camera.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="175">
@@ -557,9 +557,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="70">
           <caret line="40" column="43" selection-start-line="40" selection-start-column="43" selection-end-line="40" selection-end-column="43" />
-          <folding>
-            <element signature="e#96#120#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -582,18 +579,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/basic/BA.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="333">
+        <state relative-caret-position="1335">
           <caret line="89" column="36" selection-start-line="89" selection-start-column="23" selection-end-line="89" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/Triangulater.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="62" column="56" selection-start-line="62" selection-start-column="56" selection-end-line="62" selection-end-column="56" />
-          <folding>
-            <element signature="e#115#142#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -640,7 +627,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/basic/MapPoint.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
+        <state relative-caret-position="465">
           <caret line="31" selection-start-line="31" selection-end-line="31" />
           <folding>
             <element signature="e#108#135#0" expanded="true" />
@@ -712,30 +699,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/basic/KeyFrame.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
+        <state relative-caret-position="465">
           <caret line="31" column="72" selection-start-line="31" selection-start-column="72" selection-end-line="31" selection-end-column="72" />
           <folding>
             <element signature="e#107#134#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/VO.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="56" column="31" lean-forward="true" selection-start-line="56" selection-start-column="31" selection-end-line="56" selection-end-column="31" />
-          <folding>
-            <element signature="e#95#122#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/Tracker.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="41" column="60" selection-start-line="41" selection-start-column="60" selection-end-line="41" selection-end-column="60" />
-          <folding>
-            <element signature="e#105#132#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -752,7 +719,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/basic/MapViewer.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
+        <state relative-caret-position="1215">
           <caret line="81" column="13" selection-start-line="81" selection-start-column="13" selection-end-line="81" selection-end-column="13" />
           <folding>
             <element signature="e#109#125#0" expanded="true" />
@@ -762,10 +729,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="64" column="6" lean-forward="true" selection-start-line="64" selection-start-column="6" selection-end-line="64" selection-end-column="6" />
+        <state relative-caret-position="1020">
+          <caret line="68" column="12" selection-start-line="68" selection-start-column="12" selection-end-line="68" selection-end-column="12" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/VO.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="840">
+          <caret line="56" column="31" selection-start-line="56" selection-start-column="31" selection-end-line="56" selection-end-column="31" />
+          <folding>
+            <element signature="e#95#122#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/Tracker.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="31" column="23" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
+          <folding>
+            <element signature="e#105#132#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/include/opencv2/calib3d.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="1703" column="18" selection-start-line="1703" selection-start-column="18" selection-end-line="1703" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/Triangulater.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="453">
+          <caret line="130" column="71" selection-start-line="130" selection-start-column="71" selection-end-line="130" selection-end-column="71" />
+          <folding>
+            <element signature="e#115#142#0" expanded="true" />
           </folding>
         </state>
       </provider>
