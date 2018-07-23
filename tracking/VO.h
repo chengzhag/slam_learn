@@ -35,34 +35,12 @@ namespace sky {
            cv::Ptr<cv::Feature2D> feature2D,
            LocalMap::Ptr localMap) :
                 camera(camera), matcher(matcher), feature2D(feature2D),
-                localMap(localMap), tracker(new Tracker(localMap, matcher)) {
-            initializer = Initializer::Ptr(new Initializer(matcher));
-        }
+                localMap(localMap), tracker(new Tracker(localMap, matcher)),
+                initializer(new Initializer(matcher)) {}
 
-        void step(Mat &image) {
-            KeyFrame::Ptr keyFrame(new KeyFrame(camera, image, feature2D));
-            switch (state) {
-                //初始化状态
-                case 0: {
-                    if (initializer->step(keyFrame)) {
-                        //保存初始化的地图
-                        localMap->map = initializer->initialMap;
-                        state = 1;
-                        initializer = nullptr;
-                    }
-                    break;
-                }
-                    //追踪状态
-                case 1: {
-                    tracker->step(keyFrame);
-                    break;
-                }
-            }
-        }
+        void step(Mat &image);
 
-        int getState() {
-            return state;
-        }
+        int getState();
 
     };
 

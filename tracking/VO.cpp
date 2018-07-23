@@ -6,4 +6,29 @@
 
 namespace sky{
 
+    void VO::step(Mat &image) {
+        KeyFrame::Ptr keyFrame(new KeyFrame(camera, image, feature2D));
+        switch (state) {
+            //初始化状态
+            case 0: {
+                if (initializer->step(keyFrame)) {
+                    //保存初始化的地图
+                    localMap->map = initializer->initialMap;
+                    state = 1;
+                    initializer = nullptr;
+                }
+                break;
+            }
+                //追踪状态
+            case 1: {
+                tracker->step(keyFrame);
+                break;
+            }
+        }
+    }
+
+    int VO::getState() {
+        return state;
+    }
+
 }

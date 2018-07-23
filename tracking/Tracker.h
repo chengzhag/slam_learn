@@ -33,22 +33,9 @@ namespace sky {
                 //minLocalMapPointsNum(minLocalMapPointsNum),
                 minKeyFrameDis(minKeyFrameDis) {}
 
-        void step(KeyFrame::Ptr frame) {
-            if(solver3D2D.solve(localMap->map, frame)){
-                //判断是否插入关键帧
-                if (isKeyFrame(frame)) {
-                    localMap->addFrame(frame);
-                } else {
-                    cout << "Tracker: InlierRatio " << solver3D2D.getInlierRatio()
-                         << " is not enough!" << endl;
-                }
-            }
-        }
+        void step(KeyFrame::Ptr frame);
 
-        bool isKeyFrame(KeyFrame::Ptr frame){
-            return solver3D2D.getInlierRatio() > keyFrameMinInlierRatio
-                    && frame->dis2Coor(localMap->map->keyFrames.back()->Tcw.translation())>minKeyFrameDis;
-        }
+        bool isKeyFrame(KeyFrame::Ptr frame);
 
 
     };
