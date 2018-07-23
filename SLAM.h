@@ -14,6 +14,7 @@
 #include "BA.h"
 #include "VO.h"
 #include "LocalMap.h"
+#include "MapViewer.h"
 
 namespace sky{
 

@@ -52,9 +52,11 @@ int main() {
     LocalMap::Ptr localMap(new LocalMap(matcher));
     VO vo(camera,
           matcher,
-          ORB::create(500),
+          ORB::create(300),
           localMap
     );
+    MapViewer mapViewer;
+    mapViewer.run();
 
     for (auto &imageDir:imagesDir) {
         Mat image = imread(imageDir);
@@ -65,10 +67,8 @@ int main() {
         cvv::showImage(image, CVVISUAL_LOCATION, "Adding image: " + imageDir, "");
 #endif
         vo.step(image);
-        if (vo.getState() == 1) {
-            //localMap->map->visInCloudViewer();
-            //break;
-        }
+        mapViewer.update(localMap->map);
+        boost::this_thread::sleep (boost::posix_time::microseconds (100));
     }
 
 

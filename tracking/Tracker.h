@@ -34,14 +34,14 @@ namespace sky {
                 minKeyFrameDis(minKeyFrameDis) {}
 
         void step(KeyFrame::Ptr frame) {
-            solver3D2D.solve(localMap->map, frame);
-            //判断是否插入关键帧
-            if (solver3D2D.getInlierRatio() > keyFrameMinInlierRatio) {
-                localMap->addFrame(frame);
-                localMap->map->visInCloudViewer();
-            } else {
-                cout << "Tracker: InlierRatio " << solver3D2D.getInlierRatio()
-                     << " is not enough!" << endl;
+            if(solver3D2D.solve(localMap->map, frame)){
+                //判断是否插入关键帧
+                if (solver3D2D.getInlierRatio() > keyFrameMinInlierRatio) {
+                    localMap->addFrame(frame);
+                } else {
+                    cout << "Tracker: InlierRatio " << solver3D2D.getInlierRatio()
+                         << " is not enough!" << endl;
+                }
             }
         }
 

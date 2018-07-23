@@ -4,8 +4,6 @@
 
 #include "Map.h"
 
-#include "Map.h"
-
 #ifdef CLOUDVIEWER_DEBUG
 
 #include <pcl/common/common_headers.h>
@@ -28,47 +26,6 @@ namespace sky {
     void Map::addMapPoint(MapPoint::Ptr mapPoint) {
         if (mapPoint)
             mapPoints.push_back(mapPoint);
-    }
-
-
-    void Map::visInCloudViewer() {
-#ifdef DEBUG
-        cout << "Map: Visualizing Point Could..." << endl;
-        cout << "\t" << keyFrames.size() << " keyFrames" << endl;
-        cout << "\t" << mapPoints.size() << " mapPoints" << endl;
-#endif
-#ifdef CLOUDVIEWER_DEBUG
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
-        for (auto point:mapPoints) {
-            pcl::PointXYZRGB pointXYZ(point->rgb[0], point->rgb[1], point->rgb[2]);
-            pointXYZ.x = point->pos(0);
-            pointXYZ.y = point->pos(1);
-            pointXYZ.z = point->pos(2);
-            cloud->push_back(pointXYZ);
-        }
-
-        pcl::visualization::PCLVisualizer viewer("Viewer");
-        viewer.setBackgroundColor(50, 50, 50);
-        viewer.addPointCloud(cloud, "Triangulated Point Cloud");
-        viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                                3,
-                                                "Triangulated Point Cloud");
-        viewer.addCoordinateSystem(1.0);
-
-        int indexFrame = 0;
-        for (auto &frame:keyFrames) {
-            Eigen::Matrix4f camPose;
-            auto T_c_w = frame->Tcw.inverse().matrix();
-            for (int i = 0; i < camPose.rows(); ++i)
-                for (int j = 0; j < camPose.cols(); ++j)
-                    camPose(i, j) = T_c_w(i, j);
-            viewer.addCoordinateSystem(1.0, Eigen::Affine3f(camPose), "cam" + to_string(indexFrame++));
-        }
-        viewer.initCameraParameters();
-        while (!viewer.wasStopped()) {
-            viewer.spin();
-        }
-#endif
     }
 
 

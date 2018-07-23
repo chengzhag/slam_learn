@@ -21,7 +21,7 @@ namespace sky {
 
     class Solver3D2D : protected Matcher {
     private:
-        int max3Dnum;
+        int max3Dnum, min3Dnum;
         int inlierNum;
         double maxPointDis;
     public:
@@ -32,11 +32,11 @@ namespace sky {
 
         Solver3D2D(cv::Ptr<DescriptorMatcher> matcher,
                    double disThresRatio = 5, double disThresMin = 200,
-                   int max3Dnum = 300, double maxPointDis = 20) :
+                   int max3Dnum = 200, int min3Dnum = 20, double maxPointDis = 20) :
                 Matcher(matcher, disThresRatio, disThresMin),
-                max3Dnum(max3Dnum), maxPointDis(maxPointDis) {}
+                max3Dnum(max3Dnum), min3Dnum(min3Dnum), maxPointDis(maxPointDis) {}
 
-        void solve(Map::Ptr map, KeyFrame::Ptr keyFrame2) {
+        bool solve(Map::Ptr map, KeyFrame::Ptr keyFrame2) {
             //重置中间变量
             points3D.clear();
             descriptorsMap = Mat();
@@ -71,6 +71,13 @@ namespace sky {
 #ifdef DEBUG
             cout << "\t" << points3D.size() << " points found" << endl;
 #endif
+            if (points3D.size() < min3Dnum){
+#ifdef DEBUG
+                cout << "\terror: 3Dnum not enough!" << endl;
+#endif
+                return false;
+            }
+
             match(descriptorsMap, keyFrame2->descriptors);
             Mat indexInliers = solvePose();
 
@@ -102,6 +109,7 @@ namespace sky {
             //BA当前相机位姿，固定点云和其他帧不动
             BA ba;
             ba(mapLastFrame, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});
+            return true;
         }
 
         double getInlierRatio() {

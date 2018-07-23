@@ -62,5 +62,5 @@ set(THIRD_PARTY_LIBS
         )
 
 include_directories("basic" "tracking" "local_map")
-add_executable(slam_learn main.cpp basic/common_include.h basic/Camera.cpp basic/Camera.h basic/Frame.cpp basic/Frame.h basic/MapPoint.cpp basic/MapPoint.h basic/Map.cpp basic/Map.h basic/BA.cpp basic/BA.h SLAM.cpp SLAM.h tracking/VO.cpp tracking/VO.h tracking/Initializer.cpp tracking/Initializer.h basic/KeyFrame.cpp basic/KeyFrame.h basic/Solver2D2D.cpp basic/Solver2D2D.h local_map/LocalMap.cpp local_map/LocalMap.h tracking/Tracker.cpp tracking/Tracker.h basic/Solver3D2D.cpp basic/Solver3D2D.h basic/Matcher.cpp basic/Matcher.h basic/Triangulater.cpp basic/Triangulater.h)
+add_executable(slam_learn main.cpp basic/common_include.h basic/Camera.cpp basic/Camera.h basic/Frame.cpp basic/Frame.h basic/MapPoint.cpp basic/MapPoint.h basic/Map.cpp basic/Map.h basic/BA.cpp basic/BA.h SLAM.cpp SLAM.h tracking/VO.cpp tracking/VO.h tracking/Initializer.cpp tracking/Initializer.h basic/KeyFrame.cpp basic/KeyFrame.h basic/Solver2D2D.cpp basic/Solver2D2D.h local_map/LocalMap.cpp local_map/LocalMap.h tracking/Tracker.cpp tracking/Tracker.h basic/Solver3D2D.cpp basic/Solver3D2D.h basic/Matcher.cpp basic/Matcher.h basic/Triangulater.cpp basic/Triangulater.h basic/MapViewer.cpp basic/MapViewer.h)
 target_link_libraries(slam_learn ${THIRD_PARTY_LIBS})
