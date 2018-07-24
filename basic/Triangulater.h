@@ -16,8 +16,9 @@ namespace sky {
     class Triangulater {
     private:
         double maxDisRatio;
-    public:
         KeyFrame::Ptr keyFrame1, keyFrame2;
+
+    public:
 
         Triangulater(double maxDisRatio = Config::get<double>("Triangulater.maxDisRatio")) :
                 maxDisRatio(maxDisRatio) {}

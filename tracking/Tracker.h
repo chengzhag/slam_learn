@@ -13,11 +13,12 @@
 namespace sky {
 
     class Tracker {
+
     private:
         double minKeyFrameDis;
-    protected:
         LocalMap::Ptr localMap;
         Solver3D2D solver3D2D;
+
     public:
         typedef shared_ptr<Tracker> Ptr;
 
@@ -29,6 +30,7 @@ namespace sky {
 
         void step(KeyFrame::Ptr frame);
 
+    private:
         bool isKeyFrame(KeyFrame::Ptr frame);
 
 

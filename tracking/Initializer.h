@@ -15,12 +15,14 @@
 namespace sky {
 
     class Initializer {
+
     private:
         Solver2D2D solver2D2D;
         int maxFrameInterval, minFrameInterval, frameInterval = 0, minMapPointNum;
+        KeyFrame::Ptr keyFrame1, keyFrame2;
+
     public:
         typedef shared_ptr<Initializer> Ptr;
-        KeyFrame::Ptr keyFrame1, keyFrame2;
         Map::Ptr initialMap;
 
         Initializer(cv::Ptr<cv::DescriptorMatcher> matcher,

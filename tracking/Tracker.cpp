@@ -19,10 +19,9 @@ namespace sky {
     }
 
     bool Tracker::isKeyFrame(KeyFrame::Ptr frame) {
-        if (frame->dis2Coor(localMap->map->keyFrames.back()->Tcw.translation()) < minKeyFrameDis) {
+        if (auto dis2LastFrame = frame->getDis2(localMap->getLastFrame()) < minKeyFrameDis) {
 #ifdef DEBUG
-            cout << "Tracker: Not a keyFrame cause distance to the last keyFrame "
-                 << frame->dis2Coor(localMap->map->keyFrames.back()->Tcw.translation())
+            cout << "Tracker: Not a keyFrame cause distance to the last keyFrame " << dis2LastFrame
                  << " is less than minKeyFrameDis " << minKeyFrameDis << endl;
 #endif
             return false;

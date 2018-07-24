@@ -52,6 +52,7 @@ namespace sky {
     }
 
     Map::Ptr Solver2D2D::triangulate() {
+        Triangulater triangulater;
         return triangulater.triangulate(keyFrame1, keyFrame2, matches, inlierMask);
     }
 
@@ -111,7 +112,7 @@ namespace sky {
         inlierRatio = (double) inlierNum / getMatchesNum();
 #ifdef DEBUG
         cout << inlierNum << " valid points of " << matchPoints1.size()
-             << " , " << (float) inlierNum * 100 / matchPoints1.size() << "% "
+             << " , " << inlierRatio * 100 << "% "
              << " are used" << endl;
 /*        cout << "2D-2D frame2 R: " << R.size << endl << R << endl;
         cout << "2D-2D frame2 t: " << t.size << endl << t << endl;

@@ -12,9 +12,10 @@
 namespace sky {
 
     class LocalMap {
+
     protected:
         Matcher matcher;
-        Triangulater triangulater;
+
     public:
         Map::Ptr map;
         typedef shared_ptr<LocalMap> Ptr;
@@ -23,6 +24,8 @@ namespace sky {
                 matcher(matcher) {}
                 
         void addFrame(KeyFrame::Ptr frame);
+
+        KeyFrame::Ptr getLastFrame();
 
     };
 

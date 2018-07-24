@@ -24,11 +24,12 @@ namespace sky {
 
     class MapViewer {
 
-    public:
-
 #ifdef CLOUDVIEWER_DEBUG
+    private:
         pcl::visualization::PCLVisualizer viewer;
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+
+    public:
 
         MapViewer() :
                 viewer("3D Viewer"),

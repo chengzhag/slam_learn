@@ -14,7 +14,7 @@ namespace sky {
 
     class Matcher {
 
-    protected:
+    private:
         cv::Ptr<cv::DescriptorMatcher> matcher;
         double disThresRatio, disThresMin;
 
@@ -27,9 +27,9 @@ namespace sky {
                 matcher(matcher),
                 disThresRatio(disThresRatio), disThresMin(disThresMin) {}
 
-        size_t getMatchesNum();
-
         void match(Mat descriptors1,Mat descriptors2);
+
+        size_t getMatchesNum();
 
     };
 

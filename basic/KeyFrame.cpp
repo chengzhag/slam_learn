@@ -8,6 +8,17 @@
 
 namespace sky {
 
+    KeyFrame::KeyFrame(const Camera::Ptr camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D) :
+            camera(camera), image(image) {
+#ifdef DEBUG
+        cout << "KeyFrame: detectAndCompute... ";
+#endif
+        feature2D->detectAndCompute(image, cv::noArray(), keyPoints, descriptors);
+#ifdef DEBUG
+        cout << keyPoints.size() << " keypoints found" << endl;
+#endif
+    }
+
     Vector3d KeyFrame::getCamCenterEigen() const {
         return Tcw.inverse().translation();
     }
@@ -45,13 +56,24 @@ namespace sky {
                && pixel(1, 0) < image.rows;
     }
 
-    //计算帧到某坐标的距离
-    double KeyFrame::dis2Coor(Sophus::Vector3d coor){
-        Sophus::Vector3d coorFrom=Tcw.translation();
-        double dis=0;
-        for(int i=0;i<3;++i)
-            dis+=pow(coorFrom[i]-coor[i],2);
+    bool KeyFrame::isInFrame(MapPoint::Ptr mapPoint){
+        return isInFrame(mapPoint->pos);
+    }
+
+    double KeyFrame::getDis2(Sophus::Vector3d &coor) {
+        Sophus::Vector3d coorFrom = Tcw.translation();
+        double dis = 0;
+        for (int i = 0; i < 3; ++i)
+            dis += pow(coorFrom[i] - coor[i], 2);
         return sqrt(dis);
+    }
+
+    double KeyFrame::getDis2(KeyFrame::Ptr keyFrame) {
+        return getDis2(keyFrame->Tcw.translation());
+    }
+
+    double KeyFrame::getDis2(MapPoint::Ptr mapPoint) {
+        return getDis2(mapPoint->pos);
     }
 
 }

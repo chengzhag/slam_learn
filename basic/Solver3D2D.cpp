@@ -26,7 +26,7 @@ namespace sky {
 
         for (MapPoint::Ptr &point:map->mapPoints) {
             if (keyFrame1->isInFrame(point->pos)
-                && keyFrame1->dis2Coor(point->pos) <= max3Ddis) {
+                && keyFrame1->getDis2(point) <= max3Ddis) {
                 pointsInView.push_back(point);
             }
         }
@@ -134,7 +134,7 @@ namespace sky {
         inlierRatio = (double) inlierNum / getMatchesNum();
 #ifdef DEBUG
         cout << inlierNum << " valid points of " << points2DPnP.size()
-             << " , " << (float) indexInliers.rows * 100 / points2DPnP.size() << "% "
+             << " , " << (float) inlierRatio * 100 << "% "
              << "are used" << endl;
 /*        cout << "2D-2D frame2 R: " << R.size << endl << R << endl;
         cout << "2D-2D frame2 t: " << t.size << endl << t << endl;

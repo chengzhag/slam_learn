@@ -27,9 +27,11 @@ namespace sky {
         Mat descriptorsMap;
         vector<cv::Point3f> points3D;
         KeyFrame::Ptr keyFrame2;
+
+        Mat indexInliers;
+
     public:
         typedef shared_ptr<Solver3D2D> Ptr;
-        Mat indexInliers;
 
         Solver3D2D(
                 cv::Ptr<cv::DescriptorMatcher> matcher,

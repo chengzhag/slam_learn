@@ -20,13 +20,13 @@ namespace sky {
         int state = 0;
 
         LocalMap::Ptr localMap;
-
         Tracker::Ptr tracker;
+
+        cv::Ptr<cv::DescriptorMatcher> matcher;
+        Camera::Ptr camera;
 
     public:
         typedef shared_ptr<VO> Ptr;
-        cv::Ptr<cv::DescriptorMatcher> matcher;
-        Camera::Ptr camera;
 
         VO(Camera::Ptr camera,
            cv::Ptr<cv::DescriptorMatcher> matcher,

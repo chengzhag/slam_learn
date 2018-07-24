@@ -46,10 +46,6 @@ namespace sky {
 #ifdef DEBUG
         cout << "Triangulater: convAndAddMappoints... ";
 #endif
-
-#ifdef DEBUG
-        int numOldMappoints = map->mapPoints.size();
-#endif
         for (int i = 0; i < points4D.cols; ++i) {
             MapPoint::Ptr mapPoint;
 
@@ -61,10 +57,9 @@ namespace sky {
             int iMapPoint2 = matches[i].trainIdx;
 
             //获取描述子
-            Mat descriptor = keyFrame2->descriptors.row(iMapPoint2);
+            Mat descriptor = keyFrame2->getKeyPointDesciptor(iMapPoint2);
 
             //如果是上一帧加到地图中的点，更新描述子、加入观测帧后跳过
-
             if (keyFrame1->hasMapPoint(iMapPoint1)) {
                 mapPoint = keyFrame1->getMapPoint(iMapPoint1);
                 //更新描述子
@@ -72,8 +67,6 @@ namespace sky {
                 //加入观测帧
                 mapPoint->addObervedFrame(
                         keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
-                //记录当前帧加入地图的mapPoint和特征点下标
-                keyFrame2->addMapPoint(iMapPoint2, mapPoint);
 
             } else {
 
@@ -110,12 +103,9 @@ namespace sky {
                 }
 
                 //检查是否在距离范围内
-                if (keyFrame2->dis2Coor(mapPoint->pos) >
-                    maxDisRatio * keyFrame2->dis2Coor(keyFrame1->Tcw.translation()))
+                if (keyFrame2->getDis2(mapPoint) >
+                    maxDisRatio * keyFrame2->getDis2(keyFrame1))
                     continue;
-
-                //记录当前帧加入地图的mapPoint和特征点下标
-                keyFrame2->addMapPoint(iMapPoint2, mapPoint);
 
 /*#ifdef DEBUG
             if (i < 5)
@@ -126,6 +116,8 @@ namespace sky {
                 map->addMapPoint(mapPoint);
             }
 
+            //记录当前帧加入地图的mapPoint和特征点下标
+            keyFrame2->addMapPoint(iMapPoint2, mapPoint);
 
         }
 #ifdef DEBUG

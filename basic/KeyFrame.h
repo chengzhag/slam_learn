@@ -23,16 +23,7 @@ namespace sky {
         Mat descriptors;
         unordered_map<int, MapPoint::Ptr> mapPoints;//在descriptors或keyPoints中的序号和对应的地图点
 
-        KeyFrame(const Camera::Ptr camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D) :
-                camera(camera), image(image) {
-#ifdef DEBUG
-            cout << "KeyFrame: detectAndCompute... ";
-#endif
-            feature2D->detectAndCompute(image, cv::noArray(), keyPoints, descriptors);
-#ifdef DEBUG
-            cout << keyPoints.size() << " keypoints found" << endl;
-#endif
-        }
+        KeyFrame(const Camera::Ptr camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D);
 
         Vector3d getCamCenterEigen() const;
 
@@ -64,8 +55,16 @@ namespace sky {
         // check if a point is in this frame
         bool isInFrame(const Vector3d &pt_world);
 
+        bool isInFrame(MapPoint::Ptr mapPoint);
+
         //计算帧到某坐标的距离
-        double dis2Coor(Sophus::Vector3d coor);
+        double getDis2(Sophus::Vector3d &coor);
+
+        //计算到某帧的距离
+        double getDis2(KeyFrame::Ptr keyFrame);
+
+        //计算到某地图点的距离
+        double getDis2(MapPoint::Ptr mapPoint);
 
 
         //在descriptors或keyPoints中的序号
@@ -74,11 +73,21 @@ namespace sky {
         }
 
         MapPoint::Ptr getMapPoint(int i) {
-            return mapPoints[i];
+            if (hasMapPoint(i))
+                return mapPoints[i];
+            else {
+                cerr << "MapPoint: getMapPoint failed! KeyPoint "
+                     << i << " has no corresponding mapPoint" << endl;
+                return nullptr;
+            }
         }
 
         cv::Point2f getKeyPointCoor(int i) {
             return keyPoints[i].pt;
+        }
+
+        Mat getKeyPointDesciptor(int i){
+            return descriptors.row(i);
         }
 
         void addMapPoint(int i, MapPoint::Ptr &mapPoint) {

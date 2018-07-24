@@ -24,10 +24,11 @@ namespace sky {
         double minInlierRatio;
 
         KeyFrame::Ptr keyFrame1, keyFrame2;
-        Triangulater triangulater;
+
+        Mat inlierMask;
+
     public:
         typedef shared_ptr<Solver2D2D> Ptr;
-        Mat inlierMask;
 
         Solver2D2D(cv::Ptr<cv::DescriptorMatcher> matcher,
                    int minInlierNum = Config::get<int>("Solver2D2D.minInlierNum"),

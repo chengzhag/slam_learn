@@ -33,7 +33,7 @@ namespace sky {
         cloud->height = 1;
         viewer.updatePointCloud(cloud, "Triangulated Point Cloud");
 
-        auto frame = map->keyFrames.back();
+        auto frame = map->getLastFrame();
         if (lastFrame != frame) {
             addFrame(frame);
             lastFrame = frame;

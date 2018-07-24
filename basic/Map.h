@@ -23,6 +23,8 @@ namespace sky {
 
         void addMapPoint(MapPoint::Ptr mapPoint);
 
+        KeyFrame::Ptr getLastFrame();
+
     };
 
 }
