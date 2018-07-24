@@ -17,7 +17,6 @@ namespace sky {
     class Initializer {
     private:
         Solver2D2D solver2D2D;
-        double minInlierRatio;
         int maxFrameInterval, minFrameInterval, frameInterval = 0, minMapPointNum;
     public:
         typedef shared_ptr<Initializer> Ptr;
@@ -25,12 +24,10 @@ namespace sky {
         Map::Ptr initialMap;
 
         Initializer(cv::Ptr<cv::DescriptorMatcher> matcher,
-                    double minInlierRatio = Config::get<double>("Initializer.minInlierRatio"),
                     int maxFrameInterval = Config::get<int>("Initializer.maxFrameInterval"),
                     int minFrameInterval = Config::get<int>("Initializer.minFrameInterval"),
                     int minMapPointNum = Config::get<int>("Initializer.minMapPointNum")) :
                 solver2D2D(matcher),
-                minInlierRatio(minInlierRatio),
                 maxFrameInterval(maxFrameInterval),
                 minFrameInterval(minFrameInterval),
                 minMapPointNum(minMapPointNum) {}

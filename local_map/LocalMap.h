@@ -6,19 +6,21 @@
 #define SLAM_LEARN_LOCALMAP_H
 
 #include "Map.h"
-#include "Solver2D2D.h"
+#include "Matcher.h"
+#include "Triangulater.h"
 
 namespace sky {
 
     class LocalMap {
     protected:
-        Solver2D2D solver2D2D;
+        Matcher matcher;
+        Triangulater triangulater;
     public:
         Map::Ptr map;
         typedef shared_ptr<LocalMap> Ptr;
 
         LocalMap(const cv::Ptr<cv::DescriptorMatcher> matcher) :
-                solver2D2D(matcher) {}
+                matcher(matcher) {}
                 
         void addFrame(KeyFrame::Ptr frame);
 

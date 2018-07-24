@@ -14,8 +14,6 @@ namespace sky {
 
     class Tracker {
     private:
-        int minInlierNum;
-        double minInlierRatio;
         double minKeyFrameDis;
     protected:
         LocalMap::Ptr localMap;
@@ -24,14 +22,10 @@ namespace sky {
         typedef shared_ptr<Tracker> Ptr;
 
         Tracker(LocalMap::Ptr localMap, cv::Ptr<cv::DescriptorMatcher> matcher,
-                int minInlierNum = Config::get<int>("Tracker.minInlierNum"),
-                double keyFrameMinInlierRatio = Config::get<double>("Tracker.minInlierRatio"),
                 double minKeyFrameDis = Config::get<double>("Tracker.minKeyFrameDis")
         ) :
                 localMap(localMap), solver3D2D(matcher),
-                minInlierRatio(keyFrameMinInlierRatio),
-                minKeyFrameDis(minKeyFrameDis),
-                minInlierNum(minInlierNum) {}
+                minKeyFrameDis(minKeyFrameDis) {}
 
         void step(KeyFrame::Ptr frame);
 

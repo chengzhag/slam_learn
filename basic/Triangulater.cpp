@@ -11,7 +11,7 @@ namespace sky {
 
     Map::Ptr
     Triangulater::triangulate(KeyFrame::Ptr keyFrame1, KeyFrame::Ptr keyFrame2, vector<cv::DMatch> &matches,
-                              Mat &inlierMask) {
+                              Mat inlierMask) {
 #ifdef DEBUG
         cout << "Triangulater: triangulatePoints... " << endl;
 #endif

@@ -23,7 +23,8 @@ namespace sky {
                 maxDisRatio(maxDisRatio) {}
 
         Map::Ptr
-        triangulate(KeyFrame::Ptr keyFrame1, KeyFrame::Ptr keyFrame2, vector<cv::DMatch> &matches, Mat &inlierMask);
+        triangulate(KeyFrame::Ptr keyFrame1, KeyFrame::Ptr keyFrame2, vector<cv::DMatch> &matches,
+                    Mat inlierMask = Mat());
 
     private:
 

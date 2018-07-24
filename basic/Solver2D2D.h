@@ -17,6 +17,12 @@ namespace sky {
     class Solver2D2D : protected Matcher {
 
     private:
+        int inlierNum;
+        double inlierRatio;
+
+        int minInlierNum;
+        double minInlierRatio;
+
         KeyFrame::Ptr keyFrame1, keyFrame2;
         Triangulater triangulater;
     public:
@@ -24,13 +30,19 @@ namespace sky {
         Mat inlierMask;
 
         Solver2D2D(cv::Ptr<cv::DescriptorMatcher> matcher,
-                   double disThresRatio = Config::get<double>("Solver2D2D.Matcher.disThresRatio"),
-                   double disThresMin = Config::get<double>("Solver2D2D.Matcher.disThresMin")) :
-                Matcher(matcher, disThresRatio, disThresMin) {}
+                   int minInlierNum = Config::get<int>("Solver2D2D.minInlierNum"),
+                   double minInlierRatio = Config::get<int>("Solver2D2D.minInlierRatio")
+        ) :
+                Matcher(matcher),
+                minInlierNum(minInlierNum),
+                minInlierRatio(minInlierRatio)
+        {}
 
-        void solve(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2, bool saveResult = true);
+        bool solve(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2, bool saveResult = true);
 
         double getInlierRatio();
+
+        int getInlierNum();
 
         Map::Ptr triangulate();
 

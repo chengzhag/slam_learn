@@ -8,6 +8,7 @@
 #include "common_include.h"
 #include "Map.h"
 #include <opencv2/opencv.hpp>
+#include "Config.h"
 
 namespace sky {
 
@@ -16,12 +17,13 @@ namespace sky {
     protected:
         cv::Ptr<cv::DescriptorMatcher> matcher;
         double disThresRatio, disThresMin;
-        vector<cv::DMatch> matches;
 
     public:
+        vector<cv::DMatch> matches;
 
         Matcher(cv::Ptr<cv::DescriptorMatcher> matcher,
-                double disThresRatio, double disThresMin) :
+                double disThresRatio = Config::get<double>("Matcher.disThresRatio"),
+                double disThresMin = Config::get<double>("Matcher.disThresMin")) :
                 matcher(matcher),
                 disThresRatio(disThresRatio), disThresMin(disThresMin) {}
 

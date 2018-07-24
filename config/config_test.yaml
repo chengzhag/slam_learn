@@ -3,37 +3,56 @@
 datasetDir: dataset/data_odometry_gray/dataset/sequences/00/image_0
 
 # basic
+
+# 相机内参
 Camera.fx: 718.856
 Camera.fy: 718.856
 Camera.cx: 607.1928
 Camera.cy: 185.2157
 
+# ORB描述子提取的数量
 ORB.nfeatures: 300
 
+# MapViewer的背景颜色
 MapViewer.backgroundColor.r: 0.8
 MapViewer.backgroundColor.g: 0.8
 MapViewer.backgroundColor.b: 0.8
 
-Solver2D2D.Matcher.disThresRatio: 6
-Solver2D2D.Matcher.disThresMin: 300
+# 特征距离阈值相对最小特征距离的比例
+Matcher.disThresRatio: 6
+# 特征阈值的最小值，防止阈值过小选出的点不够
+Matcher.disThresMin: 300
 
-Solver3D2D.Matcher.disThresRatio: 6
-Solver3D2D.Matcher.disThresMin: 300
+# 用于解对极约束的最少点数
+Solver2D2D.minInlierNum: 30
+# 用于解对极约束的最小内点比例
+Solver2D2D.minInlierRatio: 0.3
+
+# 用于解PnP选取的最多局部地图点
 Solver3D2D.max3Dnum: 200
-Solver3D2D.min3Dnum: 20
-Solver3D2D.maxFeatureDis: 20
+# 用于解PnP选取的最少局部地图点
+Solver3D2D.min3Dnum: 30
+# 用于解PnP选取的局部地图点距离范围
+Solver3D2D.max3Ddis: 30
+# 用于解PnP的最少点数
+Solver3D2D.minInlierNum: 20
+# 用于解PnP的最小内点比例
+Solver3D2D.minInlierRatio: 0.2
 
+# 三角化点的距离相对与帧间距的最大比例
 Triangulater.maxDisRatio: 30
 
 # local_map
 
 # tracking
-Initializer.minInlierRatio: 0.35
+
+# 初始化两帧的最大间隔
 Initializer.maxFrameInterval: 5
+# 初始化两帧的最小间隔
 Initializer.minFrameInterval: 2
+# 初始化地图的最小点数
 Initializer.minMapPointNum: 30
 
-Tracker.minInlierNum: 8
-Tracker.minInlierRatio: 0.3
+# 关键帧的最小间距
 Tracker.minKeyFrameDis: 1
 

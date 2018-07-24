@@ -35,17 +35,10 @@ namespace sky {
                 return false;
             }
 
-            solver2D2D.solve(keyFrame1, frame);
-
-            if (solver2D2D.getInlierRatio() < minInlierRatio) {
-#ifdef DEBUG
-                cout << "Initializer: Initialization not ready. inlierRatio " << solver2D2D.getInlierRatio()
-                     << " is less than minInlierRatio " << minInlierRatio << endl;
-#endif
-                return false;
+            if (!solver2D2D.solve(keyFrame1, frame)) {
+                cout << "Initializer: Initialization not ready. Solver2D2D failed!" << endl;
             }
 
-            Triangulater triangulater;
             initialMap = solver2D2D.triangulate();
 
             if (initialMap->mapPoints.size() < minMapPointNum) {

@@ -9,7 +9,7 @@
 
 namespace sky {
 
-    void Solver2D2D::solve(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2, bool saveResult) {
+    bool Solver2D2D::solve(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2, bool saveResult) {
         //重置中间变量
         inlierMask = Mat();
 
@@ -17,11 +17,38 @@ namespace sky {
         this->keyFrame2 = keyFrame2;
 
         match(keyFrame1->descriptors, keyFrame2->descriptors);
+        if (getMatchesNum() < minInlierNum) {
+#ifdef DEBUG
+            cout << "Solver2D2D: Failed! matchesNum " << getMatchesNum()
+                 << " is less than minInlierNum " << minInlierNum << endl;
+#endif
+            return false;
+        }
         solvePose(saveResult);
+
+        if (inlierNum < minInlierNum) {
+#ifdef DEBUG
+            cout << "Solver2D2D: Failed! inlierNum " << inlierNum
+                 << " is less than minInlierNum " << minInlierNum << endl;
+#endif
+            return false;
+        }
+        if (inlierRatio < minInlierRatio) {
+#ifdef DEBUG
+            cout << "Solver2D2D: Failed! inlierRatio " << inlierRatio
+                 << " is less than minInlierRatio " << minInlierRatio << endl;
+#endif
+            return false;
+        }
+        return true;
     }
 
     double Solver2D2D::getInlierRatio() {
-        return (double) countNonZero(inlierMask) / getMatchesNum();
+        return inlierRatio;
+    }
+
+    int Solver2D2D::getInlierNum() {
+        return inlierNum;
     }
 
     Map::Ptr Solver2D2D::triangulate() {
@@ -80,10 +107,11 @@ namespace sky {
             );
         }
 
+        inlierNum = countNonZero(inlierMask);
+        inlierRatio = (double) inlierNum / getMatchesNum();
 #ifdef DEBUG
-        int nPointsRecoverPose = countNonZero(inlierMask);
-        cout << nPointsRecoverPose << " valid points of " << matchPoints1.size()
-             << " , " << (float) nPointsRecoverPose * 100 / matchPoints1.size() << "% "
+        cout << inlierNum << " valid points of " << matchPoints1.size()
+             << " , " << (float) inlierNum * 100 / matchPoints1.size() << "% "
              << " are used" << endl;
 /*        cout << "2D-2D frame2 R: " << R.size << endl << R << endl;
         cout << "2D-2D frame2 t: " << t.size << endl << t << endl;

@@ -4,13 +4,16 @@
 
 #include "LocalMap.h"
 #include "BA.h"
+#include "Matcher.h"
+#include "Triangulater.h"
 
 namespace sky {
 
     void LocalMap::addFrame(KeyFrame::Ptr frame) {
-        //匹配上一个关键帧并通过2D2D选取内点，后三角化
-        solver2D2D.solve(map->keyFrames.back(), frame, false);
-        auto lastFrameMap = solver2D2D.triangulate();
+        //匹配上一个关键帧，后三角化
+        matcher.match(map->keyFrames.back()->descriptors, frame->descriptors);
+        auto lastFrameMap = triangulater.triangulate(
+                map->keyFrames.back(),frame,matcher.matches);
 
         BA ba;
         ba(lastFrameMap, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});

@@ -12,6 +12,7 @@ namespace sky {
         //重置中间变量
         points3D.clear();
         descriptorsMap = Mat();
+        indexInliers = Mat();
 
 
         this->keyFrame2 = keyFrame2;
@@ -25,7 +26,7 @@ namespace sky {
 
         for (MapPoint::Ptr &point:map->mapPoints) {
             if (keyFrame1->isInFrame(point->pos)
-                && keyFrame1->dis2Coor(point->pos) <= maxFeatureDis) {
+                && keyFrame1->dis2Coor(point->pos) <= max3Ddis) {
                 pointsInView.push_back(point);
             }
         }
@@ -51,8 +52,22 @@ namespace sky {
         }
 
         match(descriptorsMap, keyFrame2->descriptors);
-        Mat indexInliers = solvePose();
+        solvePose();
 
+        if (inlierNum < minInlierNum) {
+#ifdef DEBUG
+            cout << "Tracker: Not a keyFrame cause inlierNum " << inlierNum
+                 << " is less than minInlierNum " << minInlierNum << endl;
+#endif
+            return false;
+        }
+        if (inlierRatio < minInlierRatio) {
+#ifdef DEBUG
+            cout << "Tracker: Not a keyFrame cause inlierRatio " << inlierRatio
+                 << " is less than minInlierRatio " << minInlierRatio << endl;
+#endif
+            return false;
+        }
 
         //建立BA用局部地图
         Map::Ptr mapLastFrame(new Map);//用于最后帧BA的地图
@@ -85,14 +100,14 @@ namespace sky {
     }
 
     double Solver3D2D::getInlierRatio() {
-        return (double) getInlierNum() / getMatchesNum();
+        return inlierRatio;
     }
 
     int Solver3D2D::getInlierNum() {
         return inlierNum;
     }
 
-    Mat Solver3D2D::solvePose() {
+    void Solver3D2D::solvePose() {
 #ifdef DEBUG
         cout << "Solver3D2D: solvePose... ";
 #endif
@@ -103,7 +118,7 @@ namespace sky {
             points2DPnP.push_back(keyFrame2->getKeyPointCoor(match.trainIdx));
             points3DPnP.push_back(points3D[match.queryIdx]);
         }
-        Mat r, t, indexInliers;
+        Mat r, t;
         solvePnPRansac(points3DPnP, points2DPnP, keyFrame2->camera->getKMatxCV(),
                        cv::noArray(), r, t, false, 100, 8.0, 0.99,
                        indexInliers);
@@ -116,6 +131,7 @@ namespace sky {
         );
 
         inlierNum = indexInliers.rows;
+        inlierRatio = (double) inlierNum / getMatchesNum();
 #ifdef DEBUG
         cout << inlierNum << " valid points of " << points2DPnP.size()
              << " , " << (float) indexInliers.rows * 100 / points2DPnP.size() << "% "
@@ -126,7 +142,6 @@ namespace sky {
         cout << "2D-2D frame2 Tcw: " << endl << keyFrame2->frame->getTcwMatCV() << endl << endl;
         cout << "2D-2D frame2 ProjMat: " << endl << keyFrame2->frame->getTcw34MatCV() << endl << endl;*/
 #endif
-        return indexInliers;
     }
 
 }

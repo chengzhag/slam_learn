@@ -19,20 +19,6 @@ namespace sky {
     }
 
     bool Tracker::isKeyFrame(KeyFrame::Ptr frame) {
-        if (solver3D2D.getInlierNum() < minInlierNum) {
-#ifdef DEBUG
-            cout << "Tracker: Not a keyFrame cause inlierNum " << solver3D2D.getInlierNum()
-                 << " is less than minInlierNum " << minInlierNum << endl;
-#endif
-            return false;
-        }
-        if (solver3D2D.getInlierRatio() < minInlierRatio) {
-#ifdef DEBUG
-            cout << "Tracker: Not a keyFrame cause inlierRatio " << solver3D2D.getInlierRatio()
-                 << " is less than minInlierRatio " << minInlierRatio << endl;
-#endif
-            return false;
-        }
         if (frame->dis2Coor(localMap->map->keyFrames.back()->Tcw.translation()) < minKeyFrameDis) {
 #ifdef DEBUG
             cout << "Tracker: Not a keyFrame cause distance to the last keyFrame "
