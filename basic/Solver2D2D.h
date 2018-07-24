@@ -10,6 +10,7 @@
 #include <opencv2/opencv.hpp>
 #include "Matcher.h"
 #include "Triangulater.h"
+#include "Config.h"
 
 namespace sky {
 
@@ -23,7 +24,8 @@ namespace sky {
         Mat inlierMask;
 
         Solver2D2D(cv::Ptr<cv::DescriptorMatcher> matcher,
-                   double disThresRatio = 6, double disThresMin = 300) :
+                   double disThresRatio = Config::get<double>("Solver2D2D.Matcher.disThresRatio"),
+                   double disThresMin = Config::get<double>("Solver2D2D.Matcher.disThresMin")) :
                 Matcher(matcher, disThresRatio, disThresMin) {}
 
         void solve(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2, bool saveResult = true);

@@ -1,0 +1,39 @@
+%YAML:1.0
+# 路径
+datasetDir: dataset/data_odometry_gray/dataset/sequences/00/image_0
+
+# basic
+Camera.fx: 718.856
+Camera.fy: 718.856
+Camera.cx: 607.1928
+Camera.cy: 185.2157
+
+ORB.nfeatures: 300
+
+MapViewer.backgroundColor.r: 0.8
+MapViewer.backgroundColor.g: 0.8
+MapViewer.backgroundColor.b: 0.8
+
+Solver2D2D.Matcher.disThresRatio: 6
+Solver2D2D.Matcher.disThresMin: 300
+
+Solver3D2D.Matcher.disThresRatio: 6
+Solver3D2D.Matcher.disThresMin: 300
+Solver3D2D.max3Dnum: 200
+Solver3D2D.min3Dnum: 20
+Solver3D2D.maxFeatureDis: 20
+
+Triangulater.maxDisRatio: 30
+
+# local_map
+
+# tracking
+Initializer.minInlierRatio: 0.35
+Initializer.maxFrameInterval: 5
+Initializer.minFrameInterval: 2
+Initializer.minMapPointNum: 30
+
+Tracker.minInlierNum: 8
+Tracker.minInlierRatio: 0.3
+Tracker.minKeyFrameDis: 1
+

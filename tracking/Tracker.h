@@ -8,13 +8,14 @@
 #include "common_include.h"
 #include "LocalMap.h"
 #include "Solver3D2D.h"
+#include "Config.h"
 
 namespace sky {
 
     class Tracker {
     private:
-        double keyFrameMinInlierRatio;
-        //int minLocalMapPointsNum;
+        int minInlierNum;
+        double minInlierRatio;
         double minKeyFrameDis;
     protected:
         LocalMap::Ptr localMap;
@@ -23,13 +24,14 @@ namespace sky {
         typedef shared_ptr<Tracker> Ptr;
 
         Tracker(LocalMap::Ptr localMap, cv::Ptr<cv::DescriptorMatcher> matcher,
-                double keyFrameMinInlierRatio = 0.1,
-                int minLocalMapPointsNum = 1000,
-                double minKeyFrameDis = 2) :
+                int minInlierNum = Config::get<int>("Tracker.minInlierNum"),
+                double keyFrameMinInlierRatio = Config::get<double>("Tracker.minInlierRatio"),
+                double minKeyFrameDis = Config::get<double>("Tracker.minKeyFrameDis")
+        ) :
                 localMap(localMap), solver3D2D(matcher),
-                keyFrameMinInlierRatio(keyFrameMinInlierRatio),
-                //minLocalMapPointsNum(minLocalMapPointsNum),
-                minKeyFrameDis(minKeyFrameDis) {}
+                minInlierRatio(keyFrameMinInlierRatio),
+                minKeyFrameDis(minKeyFrameDis),
+                minInlierNum(minInlierNum) {}
 
         void step(KeyFrame::Ptr frame);
 

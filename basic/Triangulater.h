@@ -8,6 +8,7 @@
 #include "common_include.h"
 #include "Map.h"
 #include <opencv2/opencv.hpp>
+#include "Config.h"
 
 namespace sky {
 
@@ -18,7 +19,8 @@ namespace sky {
     public:
         KeyFrame::Ptr keyFrame1, keyFrame2;
 
-        Triangulater(double maxDisRatio = 20) : maxDisRatio(maxDisRatio) {}
+        Triangulater(double maxDisRatio = Config::get<double>("Triangulater.maxDisRatio")) :
+                maxDisRatio(maxDisRatio) {}
 
         Map::Ptr
         triangulate(KeyFrame::Ptr keyFrame1, KeyFrame::Ptr keyFrame2, vector<cv::DMatch> &matches, Mat &inlierMask);

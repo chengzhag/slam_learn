@@ -15,6 +15,7 @@
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 #include <pcl/visualization/pcl_visualizer.h>
+#include "Config.h"
 
 #endif
 
@@ -33,7 +34,11 @@ namespace sky {
                 viewer("3D Viewer"),
                 cloud(new pcl::PointCloud<pcl::PointXYZRGB>) {
 
-            viewer.setBackgroundColor(0.8, 0.8, 0.8);
+            viewer.setBackgroundColor(
+                    Config::get<double>("MapViewer.backgroundColor.r"),
+                    Config::get<double>("MapViewer.backgroundColor.g"),
+                    Config::get<double>("MapViewer.backgroundColor.b")
+                            );
             viewer.addPointCloud(cloud, "Triangulated Point Cloud");
             viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
                                                     3,

@@ -42,7 +42,7 @@ namespace sky {
     }
 
     void Triangulater::convAndAddMappoints(Map::Ptr map, const Mat &inlierMask,
-                             const Mat &points4D, const vector<cv::DMatch> &matches) {
+                                           const Mat &points4D, const vector<cv::DMatch> &matches) {
 #ifdef DEBUG
         cout << "Triangulater: convAndAddMappoints... " << endl;
 #endif
@@ -109,10 +109,13 @@ namespace sky {
                     ));
                 }
 
-                //记录当前帧加入地图的mapPoint和特征点下标
-                if (keyFrame2->dis2Coor(mapPoint->pos) <
+                //检查是否在距离范围内
+                if (keyFrame2->dis2Coor(mapPoint->pos) >
                     maxDisRatio * keyFrame2->dis2Coor(keyFrame1->Tcw.translation()))
-                    keyFrame2->addMapPoint(iMapPoint2, mapPoint);
+                    continue;
+
+                //记录当前帧加入地图的mapPoint和特征点下标
+                keyFrame2->addMapPoint(iMapPoint2, mapPoint);
 
 /*#ifdef DEBUG
             if (i < 5)

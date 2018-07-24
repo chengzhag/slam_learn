@@ -13,8 +13,14 @@
 using namespace cv;
 using namespace sky;
 
-int main() {
-    string imagesFolder("dataset/data_odometry_gray/dataset/sequences/00/image_0");
+int main(int argc, char **argv) {
+    if (argc != 2) {
+        cout << "usage: run_vo parameter_file" << endl;
+        return 1;
+    }
+    Config::setParameterFile(argv[1]);
+
+    string imagesFolder(Config::get<string>("datasetDir"));
 #ifdef DEBUG
     std::cout << "Reading images from: " + imagesFolder << std::endl;
 #endif
@@ -46,13 +52,16 @@ int main() {
     }
 
     Camera::Ptr camera = Camera::Ptr(new Camera(
-            718.856, 718.856, 607.1928, 185.2157
+            Config::get<float>("Camera.fx"),
+            Config::get<float>("Camera.fy"),
+            Config::get<float>("Camera.cx"),
+            Config::get<float>("Camera.cy")
     ));
     auto matcher = DescriptorMatcher::create("BruteForce");
     LocalMap::Ptr localMap(new LocalMap(matcher));
     VO vo(camera,
           matcher,
-          ORB::create(300),
+          ORB::create(Config::get<int>("ORB.nfeatures")),
           localMap
     );
     MapViewer mapViewer;
@@ -68,7 +77,7 @@ int main() {
 #endif
         vo.step(image);
         mapViewer.update(localMap->map);
-        boost::this_thread::sleep (boost::posix_time::microseconds (100));
+        boost::this_thread::sleep(boost::posix_time::microseconds(100));
     }
 
 

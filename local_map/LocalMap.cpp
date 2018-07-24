@@ -14,9 +14,10 @@ namespace sky {
 
         BA ba;
         ba(lastFrameMap, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
-        cout << "LocalMap: " << frame->dis2Coor(map->keyFrames.back()->Tcw.translation())
+#ifdef DEBUG
+        cout << "LocalMap adding keyFrame: " << frame->dis2Coor(map->keyFrames.back()->Tcw.translation())
              << " from last keyFrame" << endl;
-
+#endif
         //添加关键帧和地图点
         map->addFrame(frame);
         for (auto &point:lastFrameMap->mapPoints) {

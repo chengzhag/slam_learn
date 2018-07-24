@@ -10,13 +10,14 @@
 #include "KeyFrame.h"
 #include <opencv2/opencv.hpp>
 #include "Solver2D2D.h"
+#include "Config.h"
 
 namespace sky {
 
     class Initializer {
     private:
         Solver2D2D solver2D2D;
-        double inlierThresRatio;
+        double minInlierRatio;
         int maxFrameInterval, minFrameInterval, frameInterval = 0, minMapPointNum;
     public:
         typedef shared_ptr<Initializer> Ptr;
@@ -24,10 +25,12 @@ namespace sky {
         Map::Ptr initialMap;
 
         Initializer(cv::Ptr<cv::DescriptorMatcher> matcher,
-                    double inlierThresRatio = 0.35, int maxFrameInterval = 5, int minFrameInterval = 2,
-                    int minMapPointNum = 50) :
+                    double minInlierRatio = Config::get<double>("Initializer.minInlierRatio"),
+                    int maxFrameInterval = Config::get<int>("Initializer.maxFrameInterval"),
+                    int minFrameInterval = Config::get<int>("Initializer.minFrameInterval"),
+                    int minMapPointNum = Config::get<int>("Initializer.minMapPointNum")) :
                 solver2D2D(matcher),
-                inlierThresRatio(inlierThresRatio),
+                minInlierRatio(minInlierRatio),
                 maxFrameInterval(maxFrameInterval),
                 minFrameInterval(minFrameInterval),
                 minMapPointNum(minMapPointNum) {}

@@ -25,7 +25,7 @@ namespace sky {
 
         for (MapPoint::Ptr &point:map->mapPoints) {
             if (keyFrame1->isInFrame(point->pos)
-                && keyFrame1->dis2Coor(point->pos) <= maxPointDis) {
+                && keyFrame1->dis2Coor(point->pos) <= maxFeatureDis) {
                 pointsInView.push_back(point);
             }
         }
@@ -85,7 +85,11 @@ namespace sky {
     }
 
     double Solver3D2D::getInlierRatio() {
-        return (double) inlierNum / getMatchesNum();
+        return (double) getInlierNum() / getMatchesNum();
+    }
+
+    int Solver3D2D::getInlierNum(){
+        return inlierNum;
     }
 
     Mat Solver3D2D::solvePose() {
