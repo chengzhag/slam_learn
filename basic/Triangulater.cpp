@@ -44,7 +44,7 @@ namespace sky {
     void Triangulater::convAndAddMappoints(Map::Ptr map, const Mat &inlierMask,
                                            const Mat &points4D, const vector<cv::DMatch> &matches) {
 #ifdef DEBUG
-        cout << "Triangulater: convAndAddMappoints... " << endl;
+        cout << "Triangulater: convAndAddMappoints... ";
 #endif
 
 #ifdef DEBUG
@@ -129,8 +129,7 @@ namespace sky {
 
         }
 #ifdef DEBUG
-        cout << "\t" << map->mapPoints.size() - numOldMappoints << " new 3D points added to the map" << endl
-             << "\t" << map->mapPoints.size() << " in total" << endl;
+        cout << map->mapPoints.size() << " 3D points triangulated" << endl;
 #endif
 
     }

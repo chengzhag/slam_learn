@@ -8,7 +8,7 @@ namespace sky {
 
     void BA::loadMap() {
 #ifdef DEBUG
-        cout << "BA: loadMap... " << endl;
+        cout << "BA: loadMap... ";
 #endif
         //加载mapPointsPos
         for (auto &mapPoints:map->mapPoints) {
@@ -25,7 +25,7 @@ namespace sky {
                         frame->camera->fx, frame->camera->fy, frame->camera->cx, frame->camera->cy);
         }
 #ifdef DEBUG
-        cout << "\t" << mapPointsPos.size() << " map points" << endl;
+        cout << mapPointsPos.size() << " map points, ";
 /*            int i = 0;
             for (auto &mapPoints:mapPointsPos) {
                 cout << mapPoints.second << endl;
@@ -34,7 +34,7 @@ namespace sky {
             }
             cout << "..." << endl;*/
 
-        cout << "\t" << frameExtrinsics.size() << " keyFrames" << endl;
+        cout << frameExtrinsics.size() << " keyFrames, ";
 /*            i = 0;
             for (auto &frame:frameExtrinsics) {
                 cout << frame.second << endl;
@@ -43,7 +43,7 @@ namespace sky {
             }
             cout << "..." << endl;*/
 
-        cout << "\t" << cameraIntrinsics.size() << " cameras" << endl;
+        cout << cameraIntrinsics.size() << " cameras, " << endl;
 /*            i = 0;
             for (auto &camera:cameraIntrinsics) {
                 cout << camera.second << endl;
@@ -60,26 +60,26 @@ namespace sky {
 #endif
         ceres::Problem problem;
 
-#ifdef DEBUG
+/*#ifdef DEBUG
         cout << "\tloading frameExtrinsics..." << endl;
-#endif
+#endif*/
         for (auto &frameExtrinsic:frameExtrinsics)
             problem.AddParameterBlock(frameExtrinsic.second.val, 6);
         if (hasMode(Mode_Fix_First_Frame))
             problem.SetParameterBlockConstant(frameExtrinsics[map->keyFrames.front()].val);
 
-#ifdef DEBUG
+/*#ifdef DEBUG
         cout << "\tloading cameraIntrinsics..." << endl;
-#endif
+#endif*/
         for (auto &cameraIntrinsic:cameraIntrinsics) {
             problem.AddParameterBlock(cameraIntrinsic.second.val, 4);
             if (hasMode(Mode_Fix_Intrinsic))
                 problem.SetParameterBlockConstant(cameraIntrinsic.second.val);
         }
 
-#ifdef DEBUG
+/*#ifdef DEBUG
         cout << "\tloading mapPointsPos..." << endl;
-#endif
+#endif*/
         ceres::LossFunction *lossFunction = new ceres::HuberLoss(4);
         for (auto &mapPointPos:mapPointsPos) {
 
@@ -104,9 +104,9 @@ namespace sky {
             }
         }
 
-#ifdef DEBUG
+/*#ifdef DEBUG
         cout << "\tsolving BA..." << endl;
-#endif
+#endif*/
 
         ceres::Solver::Summary summary;
         ceres::Solve(ceres_config_options, &problem, &summary);

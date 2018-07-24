@@ -18,9 +18,8 @@ namespace sky {
         if (!map)
             return;
 #ifdef DEBUG
-        cout << "MapViewer: Visualizing Point Could..." << endl;
-        cout << "\t" << map->keyFrames.size() << " keyFrames" << endl;
-        cout << "\t" << map->mapPoints.size() << " mapPoints" << endl;
+        cout << "MapViewer: Visualizing " << map->keyFrames.size() << " keyFrames and " << map->mapPoints.size()
+             << " mapPoints" << endl;
 #endif
         cloud->clear();
         for (auto point:map->mapPoints) {
@@ -43,12 +42,14 @@ namespace sky {
     }
 
 #ifdef CLOUDVIEWER_DEBUG
+
     void MapViewer::threadFunc() {
         while (!viewer.wasStopped()) {
             viewer.spinOnce(100);
             boost::this_thread::sleep(boost::posix_time::microseconds(100));
         }
     }
+
 #endif
 
     void MapViewer::addFrame(KeyFrame::Ptr frame, string camName) {

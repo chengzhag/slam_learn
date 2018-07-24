@@ -35,7 +35,7 @@ namespace sky {
             matchPoints2.push_back(keyFrame2->getKeyPointCoor(match.trainIdx));
         }
 
-        cout << "Solver2D2D: findEssentialMat... \n\t";
+        cout << "Solver2D2D: findEssentialMat... ";
         Mat essentialMatrix;
         essentialMatrix = findEssentialMat(matchPoints1, matchPoints2,
                                            keyFrame2->camera->getFocalLength(),
@@ -43,13 +43,13 @@ namespace sky {
                                            cv::RANSAC, 0.999, 1.0, inlierMask);
 #ifdef DEBUG
         int nPointsFindEssentialMat = countNonZero(inlierMask);
-        cout << nPointsFindEssentialMat << " valid points, " <<
-             (float) nPointsFindEssentialMat * 100 / matchPoints1.size()
-             << "% of " << matchPoints1.size() << " points are used" << endl;
+        cout << nPointsFindEssentialMat << " valid points of " << matchPoints1.size()
+             << " , " << (float) nPointsFindEssentialMat * 100 / matchPoints1.size() << "% "
+             << " are used" << endl;
 #endif
         //可视化用于解对极约束的点
 #ifdef CVVISUAL_DEBUGMODE
-        vector<DMatch> inlierMatches;
+        vector<cv::DMatch> inlierMatches;
             vector<cv::KeyPoint> inlierKeyPoints1, inlierKeyPoints2;
             for (int i = 0; i < matches.size(); ++i) {
                 if (!inlierMask.at<uint8_t>(i, 0))
@@ -67,7 +67,7 @@ namespace sky {
 #endif
 
         //解frame2的R、t并计算se3
-        cout << "Solver2D2D: recoverPose... \n\t";
+        cout << "Solver2D2D: recoverPose... ";
         Mat R, t;
         recoverPose(essentialMatrix, matchPoints1, matchPoints2,
                     keyFrame2->camera->getKMatxCV(), R, t, inlierMask);
@@ -82,9 +82,9 @@ namespace sky {
 
 #ifdef DEBUG
         int nPointsRecoverPose = countNonZero(inlierMask);
-        cout << nPointsRecoverPose << " valid points, " <<
-             (float) nPointsRecoverPose * 100 / matchPoints1.size()
-             << "% of " << matchPoints1.size() << " points are used" << endl;
+        cout << nPointsRecoverPose << " valid points of " << matchPoints1.size()
+             << " , " << (float) nPointsRecoverPose * 100 / matchPoints1.size() << "% "
+             << " are used" << endl;
 /*        cout << "2D-2D frame2 R: " << R.size << endl << R << endl;
         cout << "2D-2D frame2 t: " << t.size << endl << t << endl;
         cout << "2D-2D frame2 SE3: " << endl << keyFrame2->Tcw << endl;

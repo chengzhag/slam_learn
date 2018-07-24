@@ -16,7 +16,7 @@ namespace sky {
 
         this->keyFrame2 = keyFrame2;
 #ifdef DEBUG
-        cout << "Solver3D2D: finding mapPoints in the last frame... " << endl;
+        cout << "Solver3D2D: finding mapPoints in the last frame... ";
 #endif
         auto keyFrame1 = map->keyFrames.back();
 
@@ -41,11 +41,11 @@ namespace sky {
         }
 
 #ifdef DEBUG
-        cout << "\t" << points3D.size() << " points found" << endl;
+        cout << points3D.size() << " points found" << endl;
 #endif
         if (points3D.size() < min3Dnum) {
 #ifdef DEBUG
-            cout << "\terror: 3Dnum not enough!" << endl;
+            cout << "Failed! " << points3D.size() << " is less than min3Dnum: " << min3Dnum << endl;
 #endif
             return false;
         }
@@ -88,13 +88,13 @@ namespace sky {
         return (double) getInlierNum() / getMatchesNum();
     }
 
-    int Solver3D2D::getInlierNum(){
+    int Solver3D2D::getInlierNum() {
         return inlierNum;
     }
 
     Mat Solver3D2D::solvePose() {
 #ifdef DEBUG
-        cout << "Solver3D2D: solvePose..." << endl;
+        cout << "Solver3D2D: solvePose... ";
 #endif
         //解PnP得相机位姿
         vector<cv::Point2f> points2DPnP;
@@ -117,9 +117,9 @@ namespace sky {
 
         inlierNum = indexInliers.rows;
 #ifdef DEBUG
-        cout << "\tsolvePnPRansac: " << inlierNum << " valid points, " <<
-             (float) indexInliers.rows * 100 / points2DPnP.size()
-             << "% of " << points2DPnP.size() << " points are used" << endl;
+        cout << inlierNum << " valid points of " << points2DPnP.size()
+             << " , " << (float) indexInliers.rows * 100 / points2DPnP.size() << "% "
+             << "are used" << endl;
 /*        cout << "2D-2D frame2 R: " << R.size << endl << R << endl;
         cout << "2D-2D frame2 t: " << t.size << endl << t << endl;
         cout << "2D-2D frame2 SE3: " << endl << keyFrame2->frame->Tcw << endl;

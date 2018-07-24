@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
 #endif
         vo.step(image);
         mapViewer.update(localMap->map);
-        boost::this_thread::sleep(boost::posix_time::microseconds(100));
+        //boost::this_thread::sleep(boost::posix_time::microseconds(100));
     }
 
 

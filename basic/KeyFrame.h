@@ -26,11 +26,11 @@ namespace sky {
         KeyFrame(const Camera::Ptr camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D) :
                 camera(camera), image(image) {
 #ifdef DEBUG
-            cout << "KeyFrame: detectAndCompute features... " << endl;
+            cout << "KeyFrame: detectAndCompute... ";
 #endif
             feature2D->detectAndCompute(image, cv::noArray(), keyPoints, descriptors);
 #ifdef DEBUG
-            cout << "\tfound " << keyPoints.size() << " keypoints" << endl;
+            cout << keyPoints.size() << " keypoints found" << endl;
 #endif
         }
 

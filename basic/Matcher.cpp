@@ -13,12 +13,12 @@ namespace sky {
 
     void Matcher::match(Mat descriptors1,Mat descriptors2){
 #ifdef DEBUG
-        cout << "Matcher: matching keypoints... " << endl;
+        cout << "Matcher: matching... ";
 #endif
 
         matcher->match(descriptors1, descriptors2, matches, cv::noArray());
 #ifdef DEBUG
-        cout << "\tfound " << matches.size() << " keypoints matched with last frame" << endl;
+        cout << matches.size() <<" matches found ";
 #endif
 
 /*#ifdef CVVISUAL_DEBUGMODE
@@ -42,7 +42,7 @@ namespace sky {
         }
         matches = goodMatches;
 #ifdef DEBUG
-        cout << "\tfound " << matches.size() << " good matches" << endl;
+        cout << "(" << matches.size() << " good matches)" << endl;
 #endif
     }
 
