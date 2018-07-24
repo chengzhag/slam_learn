@@ -32,7 +32,7 @@ namespace sky {
 
         Solver2D2D(cv::Ptr<cv::DescriptorMatcher> matcher,
                    int minInlierNum = Config::get<int>("Solver2D2D.minInlierNum"),
-                   double minInlierRatio = Config::get<int>("Solver2D2D.minInlierRatio")
+                   double minInlierRatio = Config::get<double>("Solver2D2D.minInlierRatio")
         ) :
                 Matcher(matcher),
                 minInlierNum(minInlierNum),

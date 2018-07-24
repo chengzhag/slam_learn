@@ -53,6 +53,7 @@ namespace sky {
 #endif
 
     void MapViewer::addFrame(KeyFrame::Ptr frame, string camName) {
+        //TODO:更换帧的显示方式
 #ifdef CLOUDVIEWER_DEBUG
         //添加一帧的位姿
         Eigen::Matrix4f camPose;
