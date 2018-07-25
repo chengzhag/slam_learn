@@ -33,10 +33,9 @@ namespace sky {
         cloud->height = 1;
         viewer.updatePointCloud(cloud, "Triangulated Point Cloud");
 
-        auto frame = map->getLastFrame();
-        if (lastFrame != frame) {
+        viewer.removeAllCoordinateSystems();
+        for(auto &frame:map->keyFrames){
             addFrame(frame);
-            lastFrame = frame;
         }
 #endif
     }
@@ -53,7 +52,6 @@ namespace sky {
 #endif
 
     void MapViewer::addFrame(KeyFrame::Ptr frame, string camName) {
-        //TODO:更换帧的显示方式
 #ifdef CLOUDVIEWER_DEBUG
         //添加一帧的位姿
         Eigen::Matrix4f camPose;

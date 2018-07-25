@@ -57,8 +57,6 @@ namespace sky {
         ~MapViewer() {}
 
     private:
-        KeyFrame::Ptr lastFrame;
-
         void threadFunc();
 
         void addFrame(KeyFrame::Ptr frame, string camName = "");
