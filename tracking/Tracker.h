@@ -22,10 +22,11 @@ namespace sky {
     public:
         typedef shared_ptr<Tracker> Ptr;
 
-        Tracker(LocalMap::Ptr localMap, cv::Ptr<cv::DescriptorMatcher> matcher,
+        Tracker(
+                LocalMap::Ptr localMap,
                 double minKeyFrameDis = Config::get<double>("Tracker.minKeyFrameDis")
         ) :
-                localMap(localMap), solver3D2D(matcher),
+                localMap(localMap),
                 minKeyFrameDis(minKeyFrameDis) {}
 
         void step(KeyFrame::Ptr frame);

@@ -34,14 +34,12 @@ namespace sky {
         typedef shared_ptr<Solver3D2D> Ptr;
 
         Solver3D2D(
-                cv::Ptr<cv::DescriptorMatcher> matcher,
                 int minInlierNum = Config::get<int>("Solver3D2D.minInlierNum"),
                 double minInlierRatio = Config::get<double>("Solver3D2D.minInlierRatio"),
                 int max3Dnum = Config::get<int>("Solver3D2D.max3Dnum"),
                 int min3Dnum = Config::get<int>("Solver3D2D.min3Dnum"),
                 double max3Ddis = Config::get<double>("Solver3D2D.max3Ddis")
         ) :
-                Matcher(matcher),
                 minInlierNum(minInlierNum),
                 minInlierRatio(minInlierRatio),
                 max3Dnum(max3Dnum), min3Dnum(min3Dnum), max3Ddis(max3Ddis) {}

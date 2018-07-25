@@ -9,6 +9,8 @@
 #include "Initializer.h"
 #include "LocalMap.h"
 #include "Tracker.h"
+#include <opencv2/features2d/features2d.hpp>
+//#include <opencv2/xfeatures2d.hpp>
 
 namespace sky {
 
@@ -22,19 +24,17 @@ namespace sky {
         LocalMap::Ptr localMap;
         Tracker::Ptr tracker;
 
-        cv::Ptr<cv::DescriptorMatcher> matcher;
         Camera::Ptr camera;
 
     public:
         typedef shared_ptr<VO> Ptr;
 
         VO(Camera::Ptr camera,
-           cv::Ptr<cv::DescriptorMatcher> matcher,
-           cv::Ptr<cv::Feature2D> feature2D,
-           LocalMap::Ptr localMap) :
-                camera(camera), matcher(matcher), feature2D(feature2D),
-                localMap(localMap), tracker(new Tracker(localMap, matcher)),
-                initializer(new Initializer(matcher)) {}
+           LocalMap::Ptr localMap,
+           cv::Ptr<cv::Feature2D> feature2D = cv::ORB::create(Config::get<int>("ORB.nfeatures"))) :
+                camera(camera), feature2D(feature2D),
+                localMap(localMap), tracker(new Tracker(localMap)),
+                initializer(new Initializer) {}
 
         void step(Mat &image);
 

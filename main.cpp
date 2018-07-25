@@ -6,7 +6,8 @@
 #include <boost/filesystem.hpp>
 
 #include <opencv2/opencv.hpp>
-#include <opencv2/features2d/features2d.hpp>
+//#include <opencv2/features2d/features2d.hpp>
+//#include <opencv2/xfeatures2d.hpp>
 
 #include "SLAM.h"
 
@@ -57,12 +58,12 @@ int main(int argc, char **argv) {
             Config::get<float>("Camera.cx"),
             Config::get<float>("Camera.cy")
     ));
-    auto matcher = DescriptorMatcher::create("BruteForce");
-    LocalMap::Ptr localMap(new LocalMap(matcher));
+
+    LocalMap::Ptr localMap(new LocalMap);
     VO vo(camera,
-          matcher,
-          ORB::create(Config::get<int>("ORB.nfeatures")),
           localMap
+            //ORB::create(Config::get<int>("ORB.nfeatures"))
+            //xfeatures2d::SIFT::create(Config::get<int>("ORB.nfeatures"), 3, 0.04, 10)
     );
     MapViewer mapViewer;
     mapViewer.run();
@@ -72,12 +73,12 @@ int main(int argc, char **argv) {
 #ifdef DEBUG
         cout << endl << "==============Adding image: " + imageDir << "==============" << endl;
 #endif
-#ifdef CVVISUAL_DEBUGMODE
+/*#ifdef CVVISUAL_DEBUGMODE
         cvv::showImage(image, CVVISUAL_LOCATION, "Adding image: " + imageDir, "");
-#endif
+#endif*/
         vo.step(image);
         mapViewer.update(localMap->map);
-        //boost::this_thread::sleep(boost::posix_time::microseconds(100));
+        boost::this_thread::sleep(boost::posix_time::microseconds(100));
     }
 
 

@@ -25,11 +25,9 @@ namespace sky {
         typedef shared_ptr<Initializer> Ptr;
         Map::Ptr initialMap;
 
-        Initializer(cv::Ptr<cv::DescriptorMatcher> matcher,
-                    int maxFrameInterval = Config::get<int>("Initializer.maxFrameInterval"),
+        Initializer(int maxFrameInterval = Config::get<int>("Initializer.maxFrameInterval"),
                     int minFrameInterval = Config::get<int>("Initializer.minFrameInterval"),
                     int minMapPointNum = Config::get<int>("Initializer.minMapPointNum")) :
-                solver2D2D(matcher),
                 maxFrameInterval(maxFrameInterval),
                 minFrameInterval(minFrameInterval),
                 minMapPointNum(minMapPointNum) {}

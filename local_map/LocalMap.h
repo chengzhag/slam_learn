@@ -20,9 +20,8 @@ namespace sky {
         Map::Ptr map;
         typedef shared_ptr<LocalMap> Ptr;
 
-        LocalMap(const cv::Ptr<cv::DescriptorMatcher> matcher) :
-                matcher(matcher) {}
-                
+        LocalMap() {}
+
         void addFrame(KeyFrame::Ptr frame);
 
         KeyFrame::Ptr getLastFrame();
