@@ -58,13 +58,13 @@ namespace sky {
         bool isInFrame(MapPoint::Ptr mapPoint);
 
         //计算帧到某坐标的距离
-        double getDis2(Sophus::Vector3d &coor);
+        float getDis2(Sophus::Vector3d &coor);
 
         //计算到某帧的距离
-        double getDis2(KeyFrame::Ptr keyFrame);
+        float getDis2(KeyFrame::Ptr keyFrame);
 
         //计算到某地图点的距离
-        double getDis2(MapPoint::Ptr mapPoint);
+        float getDis2(MapPoint::Ptr mapPoint);
 
 
         //在descriptors或keyPoints中的序号

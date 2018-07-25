@@ -43,8 +43,9 @@ Solver3D2D.minInlierNum: 20
 # 用于解PnP的最小内点比例
 Solver3D2D.minInlierRatio: 0.3
 
-# 三角化点的距离相对于帧间距的最大比例
+# 三角化点到两帧的最大距离相对于帧间距的最大比例
 Triangulater.maxDisRatio: 20
+Triangulater.minDisRatio: 1
 
 # local_map
 
@@ -59,4 +60,5 @@ Initializer.minMapPointNum: 50
 
 # 关键帧的最小间距
 Tracker.minKeyFrameDis: 0.9
-
+# 关键帧的最大间距
+Tracker.maxKeyFrameDis: 10

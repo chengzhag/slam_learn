@@ -15,7 +15,7 @@ namespace sky {
     class Tracker {
 
     private:
-        double minKeyFrameDis;
+        float minKeyFrameDis, maxKeyFrameDis;
         LocalMap::Ptr localMap;
         Solver3D2D solver3D2D;
 
@@ -24,10 +24,13 @@ namespace sky {
 
         Tracker(
                 LocalMap::Ptr localMap,
-                double minKeyFrameDis = Config::get<double>("Tracker.minKeyFrameDis")
+                float minKeyFrameDis = Config::get<float>("Tracker.minKeyFrameDis"),
+                float maxKeyFrameDis = Config::get<float>("Tracker.maxKeyFrameDis")
         ) :
                 localMap(localMap),
-                minKeyFrameDis(minKeyFrameDis) {}
+                minKeyFrameDis(minKeyFrameDis),
+                maxKeyFrameDis(maxKeyFrameDis)
+        {}
 
         void step(KeyFrame::Ptr frame);
 

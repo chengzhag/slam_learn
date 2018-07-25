@@ -15,12 +15,12 @@ namespace sky {
 
     class Triangulater {
     private:
-        double maxDisRatio;
+        float maxDisRatio, minDisRatio;
         KeyFrame::Ptr keyFrame1, keyFrame2;
 
     public:
 
-        Triangulater(double maxDisRatio = Config::get<double>("Triangulater.maxDisRatio")) :
+        Triangulater(float maxDisRatio = Config::get<float>("Triangulater.maxDisRatio")) :
                 maxDisRatio(maxDisRatio) {}
 
         Map::Ptr
@@ -31,6 +31,8 @@ namespace sky {
 
         void convAndAddMappoints(Map::Ptr map, const Mat &inlierMask,
                                  const Mat &points4D, const vector<cv::DMatch> &matches);
+
+        bool isGoodPoint(MapPoint::Ptr mapPoint);
     };
 }
 

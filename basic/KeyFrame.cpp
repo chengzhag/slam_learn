@@ -60,19 +60,19 @@ namespace sky {
         return isInFrame(mapPoint->pos);
     }
 
-    double KeyFrame::getDis2(Sophus::Vector3d &coor) {
+    float KeyFrame::getDis2(Sophus::Vector3d &coor) {
         Sophus::Vector3d coorFrom = Tcw.translation();
-        double dis = 0;
+        float dis = 0;
         for (int i = 0; i < 3; ++i)
             dis += pow(coorFrom[i] - coor[i], 2);
         return sqrt(dis);
     }
 
-    double KeyFrame::getDis2(KeyFrame::Ptr keyFrame) {
+    float KeyFrame::getDis2(KeyFrame::Ptr keyFrame) {
         return getDis2(keyFrame->Tcw.translation());
     }
 
-    double KeyFrame::getDis2(MapPoint::Ptr mapPoint) {
+    float KeyFrame::getDis2(MapPoint::Ptr mapPoint) {
         return getDis2(mapPoint->pos);
     }
 

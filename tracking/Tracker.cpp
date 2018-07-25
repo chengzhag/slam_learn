@@ -27,6 +27,13 @@ namespace sky {
 #endif
             return false;
         }
+        if (dis2LastFrame > maxKeyFrameDis) {
+#ifdef DEBUG
+            cout << "Tracker: Not a keyFrame cause distance to the last keyFrame " << dis2LastFrame
+                 << " is larger than maxKeyFrameDis " << maxKeyFrameDis << endl;
+#endif
+            return false;
+        }
         return true;
     }
 

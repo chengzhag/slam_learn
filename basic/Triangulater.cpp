@@ -102,9 +102,7 @@ namespace sky {
                     ));
                 }
 
-                //检查是否在距离范围内
-                if (keyFrame2->getDis2(mapPoint) >
-                    maxDisRatio * keyFrame2->getDis2(keyFrame1))
+                if (!isGoodPoint(mapPoint))
                     continue;
 
 /*#ifdef DEBUG
@@ -124,6 +122,18 @@ namespace sky {
         cout << map->mapPoints.size() << " 3D points triangulated" << endl;
 #endif
 
+    }
+
+    bool Triangulater::isGoodPoint(MapPoint::Ptr mapPoint) {
+        //检查是否在距离范围内
+        auto dis2keyFrame2 = keyFrame2->getDis2(mapPoint);
+        auto disB12 = keyFrame2->getDis2(keyFrame1);
+        if (dis2keyFrame2 > maxDisRatio * disB12
+            || dis2keyFrame2 < minDisRatio * disB12)
+            return false;
+        if (!keyFrame1->isInFrame(mapPoint) || !keyFrame2->isInFrame(mapPoint))
+            return false;
+        return true;
     }
 
 }
