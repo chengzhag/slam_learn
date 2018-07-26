@@ -94,8 +94,8 @@ namespace sky {
         }
 
         //BA当前相机位姿，固定点云和其他帧不动
-        BA ba;
-        ba(mapLastFrame, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});
+        //BA ba;
+        //ba(mapLastFrame, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});
         return true;
     }
 

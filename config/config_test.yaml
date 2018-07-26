@@ -17,6 +17,8 @@ ORB.nfeatures: 2000
 MapViewer.backgroundColor.r: 0.8
 MapViewer.backgroundColor.g: 0.8
 MapViewer.backgroundColor.b: 0.8
+# MapViewer进行update后是否等待按键
+MapViewer.updateWait: 1
 
 # 特征距离阈值相对最小特征距离的比例
 Matcher.disThresRatio: 5
@@ -25,7 +27,7 @@ Matcher.disThresMin: 30
 # 如果testRatio不为0，通过knnMatch获得距离最近的两个match
 # 测试第一个match的距离是否小于第二个match的距离的testRatio倍
 # 0 <= testRati < 1
-Matcher.testRatio: 0.7
+Matcher.testRatio: 0.75
 
 # 用于解对极约束的最少点数
 Solver2D2D.minInlierNum: 100
@@ -44,7 +46,7 @@ Solver3D2D.minInlierNum: 20
 Solver3D2D.minInlierRatio: 0.3
 
 # 三角化点到两帧的最大距离相对于帧间距的最大比例
-Triangulater.maxDisRatio: 20
+Triangulater.maxDisRatio: 30
 Triangulater.minDisRatio: 1
 
 # local_map

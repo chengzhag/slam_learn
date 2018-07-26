@@ -30,13 +30,15 @@ namespace sky {
         pcl::visualization::PCLVisualizer viewer;
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
         boost::thread thread;
-        boost::mutex updateMutex;
+        boost::mutex updateMutex, wait4keyMutex;
+        bool updateWait;
 #endif
 
     public:
 #ifdef CLOUDVIEWER_DEBUG
 
-        MapViewer() :
+        MapViewer(bool updateWait = Config::get<int>("MapViewer.updateWait")) :
+                updateWait(updateWait),
                 viewer("3D Viewer"),
                 cloud(new pcl::PointCloud<pcl::PointXYZRGB>) {
 
@@ -53,6 +55,9 @@ namespace sky {
             viewer.addCoordinateSystem(1.0);
 
             thread = boost::thread(boost::bind(&MapViewer::threadFunc, this));
+            if (updateWait) {
+                viewer.registerKeyboardCallback(boost::bind(&MapViewer::keyboardEventOccurred, this, _1));
+            }
         }
 
 #endif
@@ -63,6 +68,8 @@ namespace sky {
 
     private:
         void threadFunc();
+
+        void keyboardEventOccurred(const pcl::visualization::KeyboardEvent &event);
 
         void addFrame(KeyFrame::Ptr frame, string camName = "");
     };

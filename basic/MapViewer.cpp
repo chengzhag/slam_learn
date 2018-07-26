@@ -34,6 +34,9 @@ namespace sky {
             addFrame(frame);
         }
         lock.unlock();
+        if (updateWait) {
+            wait4keyMutex.lock();
+        }
 #endif
     }
 
@@ -41,10 +44,16 @@ namespace sky {
 
     void MapViewer::threadFunc() {
         while (!viewer.wasStopped()) {
-            boost::mutex::scoped_lock lock(updateMutex);
+            updateMutex.lock();
             viewer.spinOnce();
-            lock.unlock();
+            updateMutex.unlock();
             boost::this_thread::sleep(boost::posix_time::milliseconds(15));
+        }
+    }
+
+    void MapViewer::keyboardEventOccurred(const pcl::visualization::KeyboardEvent &event) {
+        if (event.getKeySym() == "Return" && event.keyDown()) {
+            wait4keyMutex.unlock();
         }
     }
 
