@@ -6,13 +6,6 @@
 
 namespace sky {
 
-    void MapViewer::run() {
-#ifdef CLOUDVIEWER_DEBUG
-        boost::function0<void> f = boost::bind(&MapViewer::threadFunc, this);
-        boost::thread t(f);
-#endif
-    }
-
     void MapViewer::update(Map::Ptr map) {
 #ifdef CLOUDVIEWER_DEBUG
         if (!map)
@@ -31,12 +24,16 @@ namespace sky {
         }
         cloud->width = cloud->size();
         cloud->height = 1;
+        cloud->is_dense = true;
         viewer.updatePointCloud(cloud, "Triangulated Point Cloud");
 
+        //viewer.removeAllShapes();
+        boost::mutex::scoped_lock lock(updateMutex);
         viewer.removeAllCoordinateSystems();
-        for(auto &frame:map->keyFrames){
+        for (auto &frame:map->keyFrames) {
             addFrame(frame);
         }
+        lock.unlock();
 #endif
     }
 
@@ -44,8 +41,10 @@ namespace sky {
 
     void MapViewer::threadFunc() {
         while (!viewer.wasStopped()) {
-            viewer.spinOnce(100);
-            boost::this_thread::sleep(boost::posix_time::microseconds(100));
+            boost::mutex::scoped_lock lock(updateMutex);
+            viewer.spinOnce();
+            lock.unlock();
+            boost::this_thread::sleep(boost::posix_time::milliseconds(15));
         }
     }
 
@@ -53,13 +52,21 @@ namespace sky {
 
     void MapViewer::addFrame(KeyFrame::Ptr frame, string camName) {
 #ifdef CLOUDVIEWER_DEBUG
-        //添加一帧的位姿
+        //添加一帧的位姿图标
         Eigen::Matrix4f camPose;
+        //auto T_c_w = frame->Tcw.inverse();
         auto T_c_w = frame->Tcw.inverse().matrix();
         for (int i = 0; i < camPose.rows(); ++i)
             for (int j = 0; j < camPose.cols(); ++j)
                 camPose(i, j) = T_c_w(i, j);
         viewer.addCoordinateSystem(1.0, Eigen::Affine3f(camPose), camName);
+        /*Vector3d pointStart(0, 0, 0), pointTo(0, 0, 1);
+        pointStart = T_c_w * pointStart;
+        pointTo = T_c_w * pointStart;
+        viewer.addLine(pcl::PointXYZ(pointStart[0], pointStart[1], pointStart[2]),
+                       pcl::PointXYZ(pointTo[0], pointTo[1], pointTo[2]),
+                       1, 1, 1,
+                       camName);*/
 #endif
     }
 

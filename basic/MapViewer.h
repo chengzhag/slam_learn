@@ -29,10 +29,13 @@ namespace sky {
 #ifdef CLOUDVIEWER_DEBUG
         pcl::visualization::PCLVisualizer viewer;
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+        boost::thread thread;
+        boost::mutex updateMutex;
 #endif
 
     public:
 #ifdef CLOUDVIEWER_DEBUG
+
         MapViewer() :
                 viewer("3D Viewer"),
                 cloud(new pcl::PointCloud<pcl::PointXYZRGB>) {
@@ -41,16 +44,18 @@ namespace sky {
                     Config::get<double>("MapViewer.backgroundColor.r"),
                     Config::get<double>("MapViewer.backgroundColor.g"),
                     Config::get<double>("MapViewer.backgroundColor.b")
-                            );
+            );
             viewer.addPointCloud(cloud, "Triangulated Point Cloud");
             viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
                                                     3,
                                                     "Triangulated Point Cloud");
+            viewer.initCameraParameters();
             viewer.addCoordinateSystem(1.0);
-        }
-#endif
 
-        void run();
+            thread = boost::thread(boost::bind(&MapViewer::threadFunc, this));
+        }
+
+#endif
 
         void update(Map::Ptr map);
 

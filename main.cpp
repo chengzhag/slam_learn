@@ -66,7 +66,6 @@ int main(int argc, char **argv) {
             //xfeatures2d::SIFT::create(Config::get<int>("ORB.nfeatures"), 3, 0.04, 10)
     );
     MapViewer mapViewer;
-    mapViewer.run();
 
     for (auto &imageDir:imagesDir) {
         Mat image = imread(imageDir);
@@ -78,7 +77,6 @@ int main(int argc, char **argv) {
 #endif*/
         vo.step(image);
         mapViewer.update(localMap->map);
-        boost::this_thread::sleep(boost::posix_time::microseconds(100));
     }
 
 
