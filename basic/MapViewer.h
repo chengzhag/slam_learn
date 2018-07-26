@@ -67,11 +67,13 @@ namespace sky {
         ~MapViewer() {}
 
     private:
+#ifdef CLOUDVIEWER_DEBUG
         void threadFunc();
 
         void keyboardEventOccurred(const pcl::visualization::KeyboardEvent &event);
 
         void addFrame(KeyFrame::Ptr frame, string camName = "");
+#endif
     };
 
 }

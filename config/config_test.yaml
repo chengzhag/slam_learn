@@ -48,6 +48,8 @@ Solver3D2D.minInlierRatio: 0.3
 # 三角化点到两帧的最大距离相对于帧间距的最大比例
 Triangulater.maxDisRatio: 30
 Triangulater.minDisRatio: 1
+# 重投影误差最大值
+Triangulater.maxProjDis: 20
 
 # local_map
 

@@ -44,20 +44,16 @@ namespace sky {
         return TwcCVR;
     }
 
-    bool KeyFrame::isInFrame(const Vector3d &pt_world) {
-        // cout<<"pt_world = "<<endl<<pt_world<<endl;
+    bool KeyFrame::proj2frame(const Vector3d &pt_world, Vector2d &pixelColRow) {
         Vector3d p_cam = camera->world2camera(pt_world, Tcw);
-        // cout<<"P_cam = "<<p_cam.transpose()<<endl;
+        pixelColRow = camera->world2pixel(pt_world, Tcw);
+        // cout<<"pt_world = "<<endl<<pt_world<<endl;
+        // cout<<"P_pixel = "<<pixelColRow.transpose()<<endl<<endl;
         if (p_cam(2, 0) < 0) return false;
-        Vector2d pixel = camera->world2pixel(pt_world, Tcw);
-        // cout<<"P_pixel = "<<pixel.transpose()<<endl<<endl;
-        return pixel(0, 0) > 0 && pixel(1, 0) > 0
-               && pixel(0, 0) < image.cols
-               && pixel(1, 0) < image.rows;
-    }
-
-    bool KeyFrame::isInFrame(MapPoint::Ptr mapPoint){
-        return isInFrame(mapPoint->pos);
+        return pixelColRow(0, 0) > 0
+               && pixelColRow(1, 0) > 0
+               && pixelColRow(0, 0) < image.cols
+               && pixelColRow(1, 0) < image.rows;
     }
 
     float KeyFrame::getDis2(Sophus::Vector3d &coor) {
@@ -74,6 +70,40 @@ namespace sky {
 
     float KeyFrame::getDis2(MapPoint::Ptr mapPoint) {
         return getDis2(mapPoint->pos);
+    }
+
+    bool KeyFrame::hasMapPoint(int i) {
+        return mapPoints.find(i) != mapPoints.end();
+    }
+
+    MapPoint::Ptr KeyFrame::getMapPoint(int i) {
+        if (hasMapPoint(i))
+            return mapPoints[i];
+        else {
+            cerr << "MapPoint: getMapPoint failed! KeyPoint "
+                 << i << " has no corresponding mapPoint" << endl;
+            return nullptr;
+        }
+    }
+
+    bool KeyFrame::setMapPoint(int i, MapPoint::Ptr &mapPoint) {
+        if (hasMapPoint(i)) {
+            mapPoints[i] = mapPoint;
+            return true;
+        }
+        return false;
+    }
+
+    cv::Point2f KeyFrame::getKeyPointCoor(int i) {
+        return keyPoints[i].pt;
+    }
+
+    Mat KeyFrame::getKeyPointDesciptor(int i) {
+        return descriptors.row(i);
+    }
+
+    void KeyFrame::addMapPoint(int i, MapPoint::Ptr &mapPoint) {
+        mapPoints[i] = mapPoint;
     }
 
 }

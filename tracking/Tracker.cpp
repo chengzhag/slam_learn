@@ -22,14 +22,14 @@ namespace sky {
         auto dis2LastFrame = frame->getDis2(localMap->getLastFrame());
         if (dis2LastFrame < minKeyFrameDis) {
 #ifdef DEBUG
-            cout << "Tracker: Not a keyFrame cause distance to the last keyFrame " << dis2LastFrame
+            cout << "Tracker: Not a keyFrame. Distance to the last keyFrame " << dis2LastFrame
                  << " is less than minKeyFrameDis " << minKeyFrameDis << endl;
 #endif
             return false;
         }
         if (dis2LastFrame > maxKeyFrameDis) {
 #ifdef DEBUG
-            cout << "Tracker: Not a keyFrame cause distance to the last keyFrame " << dis2LastFrame
+            cout << "Tracker: Not a keyFrame. Distance to the last keyFrame " << dis2LastFrame
                  << " is larger than maxKeyFrameDis " << maxKeyFrameDis << endl;
 #endif
             return false;

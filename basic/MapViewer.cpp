@@ -59,8 +59,8 @@ namespace sky {
 
 #endif
 
-    void MapViewer::addFrame(KeyFrame::Ptr frame, string camName) {
 #ifdef CLOUDVIEWER_DEBUG
+    void MapViewer::addFrame(KeyFrame::Ptr frame, string camName) {
         //添加一帧的位姿图标
         Eigen::Matrix4f camPose;
         //auto T_c_w = frame->Tcw.inverse();
@@ -76,7 +76,6 @@ namespace sky {
                        pcl::PointXYZ(pointTo[0], pointTo[1], pointTo[2]),
                        1, 1, 1,
                        camName);*/
-#endif
     }
-
+#endif
 }

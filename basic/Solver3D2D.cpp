@@ -52,18 +52,25 @@ namespace sky {
         }
 
         match(descriptorsMap, keyFrame2->descriptors);
+        if (matches.size() < minInlierNum) {
+#ifdef DEBUG
+            cout << "Solver3D2D: Failed! matchesNum " << matches.size()
+                 << " is less than minInlierNum " << minInlierNum << endl;
+#endif
+            return false;
+        }
         solvePose();
 
         if (inlierNum < minInlierNum) {
 #ifdef DEBUG
-            cout << "Tracker: Not a keyFrame cause inlierNum " << inlierNum
+            cout << "Solver3D2D: Failed! inlierNum " << inlierNum
                  << " is less than minInlierNum " << minInlierNum << endl;
 #endif
             return false;
         }
         if (inlierRatio < minInlierRatio) {
 #ifdef DEBUG
-            cout << "Tracker: Not a keyFrame cause inlierRatio " << inlierRatio
+            cout << "Solver3D2D: Failed! inlierRatio " << inlierRatio
                  << " is less than minInlierRatio " << minInlierRatio << endl;
 #endif
             return false;

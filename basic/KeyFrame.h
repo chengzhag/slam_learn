@@ -52,10 +52,31 @@ namespace sky {
                                          angleAxisAndTranslation(1, 2));
         }
 
-        // check if a point is in this frame
-        bool isInFrame(const Vector3d &pt_world);
+        //将3D点投影到帧，如果在帧里，返回真
+        bool proj2frame(const Vector3d &pt_world, Vector2d &pixelColRow);
 
-        bool isInFrame(MapPoint::Ptr mapPoint);
+        inline bool proj2frame(MapPoint::Ptr mapPoint, Vector2d &pixelColRow) {
+            return proj2frame(mapPoint->pos, pixelColRow);
+        }
+
+        inline bool proj2frame(MapPoint::Ptr mapPoint, cv::Point2d &pixelColRow) {
+            Vector2d pixelVec;
+            bool r = proj2frame(mapPoint->pos, pixelVec);
+            pixelColRow.x = pixelVec[0];
+            pixelColRow.y = pixelVec[1];
+            return r;
+        }
+
+        // check if a point is in this frame
+        inline bool isInFrame(const Vector3d &pt_world) {
+            Vector2d pixelColRow;
+            return proj2frame(pt_world, pixelColRow);
+        }
+
+        inline bool isInFrame(MapPoint::Ptr mapPoint) {
+            return isInFrame(mapPoint->pos);
+        }
+
 
         //计算帧到某坐标的距离
         float getDis2(Sophus::Vector3d &coor);
@@ -68,31 +89,17 @@ namespace sky {
 
 
         //在descriptors或keyPoints中的序号
-        bool hasMapPoint(int i) {
-            return mapPoints.find(i) != mapPoints.end();
-        }
+        bool hasMapPoint(int i);
 
-        MapPoint::Ptr getMapPoint(int i) {
-            if (hasMapPoint(i))
-                return mapPoints[i];
-            else {
-                cerr << "MapPoint: getMapPoint failed! KeyPoint "
-                     << i << " has no corresponding mapPoint" << endl;
-                return nullptr;
-            }
-        }
+        MapPoint::Ptr getMapPoint(int i);
 
-        cv::Point2f getKeyPointCoor(int i) {
-            return keyPoints[i].pt;
-        }
+        bool setMapPoint(int i, MapPoint::Ptr &mapPoint);
 
-        Mat getKeyPointDesciptor(int i){
-            return descriptors.row(i);
-        }
+        cv::Point2f getKeyPointCoor(int i);
 
-        void addMapPoint(int i, MapPoint::Ptr &mapPoint) {
-            mapPoints[i] = mapPoint;
-        }
+        Mat getKeyPointDesciptor(int i);
+
+        void addMapPoint(int i, MapPoint::Ptr &mapPoint);
     };
 
 }

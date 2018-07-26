@@ -62,11 +62,20 @@ namespace sky {
             //如果是上一帧加到地图中的点，更新描述子、加入观测帧后跳过
             if (keyFrame1->hasMapPoint(iMapPoint1)) {
                 mapPoint = keyFrame1->getMapPoint(iMapPoint1);
-                //更新描述子
-                mapPoint->descriptor = descriptor;
-                //加入观测帧
+
+                //创建临时mapPoint拷贝并加入关键帧，再作isGoodPoint判断
+                MapPoint::Ptr testMapPoint(new MapPoint(mapPoint));
+                testMapPoint->addObervedFrame(
+                        keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
+
+                if (!isGoodPoint(testMapPoint))
+                    continue;
+
+                //更新mapPoint观测帧
                 mapPoint->addObervedFrame(
                         keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
+                //更新描述子
+                mapPoint->descriptor = descriptor;
 
             } else {
 
@@ -102,15 +111,16 @@ namespace sky {
                     ));
                 }
 
-                if (!isGoodPoint(mapPoint))
-                    continue;
-
 /*#ifdef DEBUG
             if (i < 5)
                 cout << mapPoint->pos << endl << endl;
 #endif*/
                 mapPoint->addObervedFrame(keyFrame1, keyFrame1->getKeyPointCoor(iMapPoint1));
                 mapPoint->addObervedFrame(keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
+
+                if (!isGoodPoint(mapPoint))
+                    continue;
+
                 map->addMapPoint(mapPoint);
             }
 
@@ -122,6 +132,46 @@ namespace sky {
         cout << map->mapPoints.size() << " 3D points triangulated" << endl;
 #endif
 
+/*#ifdef DEBUG
+        cout << "Triangulater: Showing rawPos and projPos of mapPoints... " << endl;
+        for (auto &mapPoint:map->mapPoints) {
+            cout.width(6);
+
+            auto &rawPos1 = mapPoint->observedFrames[keyFrame1];
+            cv::Point2d projPos1;
+            keyFrame1->proj2frame(mapPoint, projPos1);
+            cout << setiosflags(ios::fixed) << setprecision(2)
+                 << "rawPos1: " << rawPos1 << "\tprojPos1: " << projPos1 << "\tdis: " << point2dis(rawPos1, projPos1);
+
+            auto &rawPos2 = mapPoint->observedFrames[keyFrame1];
+            cv::Point2d projPos2;
+            keyFrame2->proj2frame(mapPoint, projPos2);
+            cout << setiosflags(ios::fixed) << setprecision(2)
+                 << "\trawPos2: " << rawPos2 << "\tprojPos2: " << projPos2 << "\tdis: " << point2dis(rawPos2, projPos2)
+                 << endl;
+        }
+#endif*/
+
+#ifdef CVVISUAL_DEBUGMODE
+        //通过匹配点的方式可视化重投影误差
+        vector<cv::KeyPoint> rawPoints, projPoints;
+        vector<cv::DMatch> projMatches;
+        int i = 0;
+        for (auto &mapPoint:map->mapPoints) {
+            auto &rawPos1 = mapPoint->observedFrames[keyFrame2];
+            cv::Point2d projPos1;
+            keyFrame2->proj2frame(mapPoint, projPos1);
+
+            rawPoints.push_back(cv::KeyPoint(rawPos1, 1));
+            projPoints.push_back(cv::KeyPoint(projPos1, 1));
+            projMatches.push_back(cv::DMatch(i, i, point2dis(rawPos1, projPos1)));
+            ++i;
+        }
+        cvv::debugDMatch(keyFrame2->image, rawPoints, keyFrame2->image, projPoints, projMatches,
+                         CVVISUAL_LOCATION,
+                         "Reprojection");
+#endif
+
     }
 
     bool Triangulater::isGoodPoint(MapPoint::Ptr mapPoint) {
@@ -131,8 +181,23 @@ namespace sky {
         if (dis2keyFrame2 > maxDisRatio * disB12
             || dis2keyFrame2 < minDisRatio * disB12)
             return false;
-        if (!keyFrame1->isInFrame(mapPoint) || !keyFrame2->isInFrame(mapPoint))
+
+        //测试重投影误差
+        auto &rawPos1 = mapPoint->observedFrames[keyFrame1];
+        cv::Point2d projPos1;
+        if (!keyFrame1->proj2frame(mapPoint, projPos1))
             return false;
+        if (point2dis(rawPos1, projPos1) > maxProjDis)
+            return false;
+
+        auto &rawPos2 = mapPoint->observedFrames[keyFrame1];
+        cv::Point2d projPos2;
+        if (!keyFrame2->proj2frame(mapPoint, projPos2))
+            return false;
+        if (point2dis(rawPos2, projPos2) > maxProjDis)
+            return false;
+
+
         return true;
     }
 

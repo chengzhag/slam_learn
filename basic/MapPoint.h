@@ -12,6 +12,7 @@
 namespace sky {
 
     class KeyFrame;
+
     typedef shared_ptr<KeyFrame> KeyFramePtr;
 
     class MapPoint {
@@ -31,6 +32,23 @@ namespace sky {
                 pos(pos),
                 descriptor(descriptor),
                 rgb(rgb) {}
+
+        MapPoint(const MapPoint &mapPoint) :
+                observedFrames(mapPoint.observedFrames),
+                pos(mapPoint.pos),
+                rgb(mapPoint.rgb) {
+            mapPoint.descriptor.copyTo(descriptor);
+        }
+
+        MapPoint &operator=(const MapPoint &mapPoint) {
+            observedFrames = mapPoint.observedFrames;
+            pos = mapPoint.pos;
+            rgb = mapPoint.rgb;
+            mapPoint.descriptor.copyTo(descriptor);
+        }
+
+        MapPoint(const MapPoint::Ptr mapPoint) : MapPoint(*mapPoint) {}
+
 
         template<typename T>
         cv::Point3_<T> getPosPoint3_CV() const {
