@@ -7,9 +7,10 @@
 namespace sky {
 
     void Tracker::step(const KeyFrame::Ptr &frame) {
+        this->frame = frame;
         if (solver3D2D.solve(localMap->map, frame)) {
             //判断是否插入关键帧
-            if (isKeyFrame(frame)) {
+            if (isKeyFrame()) {
 #ifdef DEBUG
                 cout << "Tracker: Adding keyframe..." << endl;
 #endif
@@ -18,7 +19,7 @@ namespace sky {
         }
     }
 
-    bool Tracker::isKeyFrame(const KeyFrame::Ptr &frame) {
+    bool Tracker::isKeyFrame() {
         auto dis2LastFrame = frame->getDis2(localMap->getLastFrame());
         if (dis2LastFrame < minKeyFrameDis) {
 #ifdef DEBUG
@@ -30,7 +31,15 @@ namespace sky {
         if (dis2LastFrame > maxKeyFrameDis) {
 #ifdef DEBUG
             cout << "Tracker: Not a keyFrame. Distance to the last keyFrame " << dis2LastFrame
-                 << " is larger than maxKeyFrameDis " << maxKeyFrameDis << endl;
+                 << " is more than maxKeyFrameDis " << maxKeyFrameDis << endl;
+#endif
+            return false;
+        }
+
+        if (solver3D2D.getInlierNum() < minKeyFrameInlierNum) {
+#ifdef DEBUG
+            cout << "Tracker: Not a keyFrame. InlierNum " << solver3D2D.getInlierNum()
+                 << " is less than minKeyFrameInlierNum " << minKeyFrameInlierNum << endl;
 #endif
             return false;
         }

@@ -16,8 +16,10 @@ namespace sky {
 
     private:
         float minKeyFrameDis, maxKeyFrameDis;
+        int minKeyFrameInlierNum;
         LocalMap::Ptr localMap;
         Solver3D2D solver3D2D;
+        KeyFrame::Ptr frame;
 
     public:
         typedef shared_ptr<Tracker> Ptr;
@@ -25,17 +27,18 @@ namespace sky {
         Tracker(
                 LocalMap::Ptr localMap,
                 float minKeyFrameDis = Config::get<float>("Tracker.minKeyFrameDis"),
-                float maxKeyFrameDis = Config::get<float>("Tracker.maxKeyFrameDis")
+                float maxKeyFrameDis = Config::get<float>("Tracker.maxKeyFrameDis"),
+                int minKeyFrameInlierNum = Config::get<int>("Tracker.minKeyFrameInlierNum")
         ) :
                 localMap(localMap),
                 minKeyFrameDis(minKeyFrameDis),
-                maxKeyFrameDis(maxKeyFrameDis)
-        {}
+                maxKeyFrameDis(maxKeyFrameDis),
+                minKeyFrameInlierNum(minKeyFrameInlierNum){}
 
         void step(const KeyFrame::Ptr &frame);
 
     private:
-        bool isKeyFrame(const KeyFrame::Ptr &frame);
+        bool isKeyFrame();
 
 
     };

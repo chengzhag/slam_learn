@@ -29,9 +29,9 @@ namespace sky {
 #endif
         //添加关键帧和地图点
         map->addFrame(frame);
-        for (auto &point:lastFrameMap->mapPoints) {
-            map->addMapPoint(point);
-        }
+        //for (auto &point:lastFrameMap->mapPoints) {
+        //    map->addMapPoint(point);
+        //}
         //TODO:筛选地图点
         //BA ba;
         //ba(map, {BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
