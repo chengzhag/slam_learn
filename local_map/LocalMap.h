@@ -8,6 +8,8 @@
 #include "Map.h"
 #include "Matcher.h"
 #include "Triangulater.h"
+#include <boost/thread.hpp>
+#include "MapViewer.h"
 
 namespace sky {
 
@@ -15,17 +17,39 @@ namespace sky {
 
     private:
         Matcher matcher;
+        boost::thread thread;
+        KeyFrame::Ptr refFrame, currFrame;
+
+        MapViewer mapViewer;
 
     public:
         typedef shared_ptr<LocalMap> Ptr;
         Map::Ptr map;
+        boost::mutex mapMutex;
 
         LocalMap() {}
 
+        void init(const Map::Ptr &map);
+
         void addFrame(const KeyFrame::Ptr &frame);
 
-        KeyFrame::Ptr getLastFrame();
+        inline KeyFrame::Ptr getLastFrame() {
+            boost::mutex::scoped_lock lock(mapMutex);
+            return map->getLastFrame();
+        }
 
+    private:
+        void threadFunc();
+
+        void prepareKeyFrame();
+
+        void filtMapPoints();
+
+        void triangulate();
+
+        void ba();
+
+        void filtKeyFrames();
     };
 
 

@@ -56,15 +56,15 @@ Triangulater.maxProjDis: 20
 # tracking
 
 # 初始化两帧的最大间隔
-Initializer.maxFrameInterval: 5
+Initializer.maxFrameInterval: 20
 # 初始化两帧的最小间隔
-Initializer.minFrameInterval: 2
+Initializer.minFrameInterval: 3
 # 初始化地图的最小点数
 Initializer.minMapPointNum: 100
 
 # 关键帧的最小间距
-Tracker.minKeyFrameDis: 0.9
+Tracker.minKeyFrameDis: 1
 # 关键帧的最大间距
 Tracker.maxKeyFrameDis: 10
 # 关键帧的最少地图点
-Tracker.minKeyFrameInlierNum: 50
+Tracker.minKeyFrameInlierNum: 30

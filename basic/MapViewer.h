@@ -58,11 +58,12 @@ namespace sky {
             if (updateWait) {
                 viewer.registerKeyboardCallback(boost::bind(&MapViewer::keyboardEventOccurred, this, _1));
             }
+            wait4keyMutex.lock();
         }
 
 #endif
 
-        void update(Map::Ptr &map);
+        void update(const Map::Ptr &map);
 
         ~MapViewer() {}
 
@@ -72,7 +73,7 @@ namespace sky {
 
         void keyboardEventOccurred(const pcl::visualization::KeyboardEvent &event);
 
-        void addFrame(KeyFrame::Ptr &frame, string camName = "");
+        void addFrame(const KeyFrame::Ptr &frame, string camName = "");
 #endif
     };
 

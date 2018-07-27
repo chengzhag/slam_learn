@@ -4,7 +4,7 @@
 
 #include "VO.h"
 
-namespace sky{
+namespace sky {
 
     void VO::step(const Mat &image) {
         KeyFrame::Ptr keyFrame(new KeyFrame(camera, image, feature2D));
@@ -13,7 +13,7 @@ namespace sky{
             case 0: {
                 if (initializer->step(keyFrame)) {
                     //保存初始化的地图
-                    localMap->map = initializer->initialMap;
+                    localMap->init(initializer->initialMap);
                     state = 1;
                     initializer = nullptr;
                 }

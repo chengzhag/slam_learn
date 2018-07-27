@@ -6,7 +6,7 @@
 
 namespace sky {
 
-    void MapViewer::update(Map::Ptr &map) {
+    void MapViewer::update(const Map::Ptr &map) {
 #ifdef CLOUDVIEWER_DEBUG
         if (!map)
             return;
@@ -44,9 +44,8 @@ namespace sky {
 
     void MapViewer::threadFunc() {
         while (!viewer.wasStopped()) {
-            updateMutex.lock();
+            boost::mutex::scoped_lock lock(updateMutex);
             viewer.spinOnce();
-            updateMutex.unlock();
             boost::this_thread::sleep(boost::posix_time::milliseconds(15));
         }
     }
@@ -54,13 +53,17 @@ namespace sky {
     void MapViewer::keyboardEventOccurred(const pcl::visualization::KeyboardEvent &event) {
         if (event.getKeySym() == "Return" && event.keyDown()) {
             wait4keyMutex.unlock();
+        } else if (event.getKeySym() == "space" && event.keyDown()) {
+            wait4keyMutex.unlock();
+            updateWait = !updateWait;
         }
     }
 
 #endif
 
 #ifdef CLOUDVIEWER_DEBUG
-    void MapViewer::addFrame(KeyFrame::Ptr &frame, string camName) {
+
+    void MapViewer::addFrame(const KeyFrame::Ptr &frame, string camName) {
         //添加一帧的位姿图标
         Eigen::Matrix4f camPose;
         //auto T_c_w = frame->Tcw.inverse();
@@ -77,5 +80,6 @@ namespace sky {
                        1, 1, 1,
                        camName);*/
     }
+
 #endif
 }

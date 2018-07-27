@@ -8,7 +8,10 @@ namespace sky {
 
     void Tracker::step(const KeyFrame::Ptr &frame) {
         this->frame = frame;
-        if (solver3D2D.solve(localMap->map, frame)) {
+        boost::mutex::scoped_lock lock(localMap->mapMutex);
+        bool solverPass=solver3D2D.solve(localMap->map, frame);
+        lock.unlock();
+        if (solverPass) {
             //判断是否插入关键帧
             if (isKeyFrame()) {
 #ifdef DEBUG

@@ -9,36 +9,100 @@
 #include <opencv2/cvv.hpp>
 
 namespace sky {
+    void LocalMap::init(const Map::Ptr &map){
+        boost::mutex::scoped_lock lock(mapMutex);
+        this->map = map;
+        mapViewer.update(this->map);
+        lock.unlock();
+    }
 
     void LocalMap::addFrame(const KeyFrame::Ptr &frame) {
-        //匹配上一个关键帧，后三角化
-        auto lastFrame = map->getLastFrame();
-        matcher.match(lastFrame->descriptors, frame->descriptors);
-        cvv::debugDMatch(lastFrame->image, lastFrame->keyPoints, frame->image, frame->keyPoints, matcher.matches,
-                         CVVISUAL_LOCATION,
-                         "match used in triangulation");
-        Triangulater triangulater;
-        auto lastFrameMap = triangulater.triangulate(
-                lastFrame, frame, matcher.matches);
-
-        //BA ba;
-        //ba(lastFrameMap, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
+        currFrame = frame;
+        //在加入keyFrame前等待上一次线程结束
+        if (thread.joinable()) {
 #ifdef DEBUG
-        cout << "LocalMap: Adding keyFrame... " << frame->getDis2(lastFrame)
+            cout << "LocalMap: Waiting for thread to finish..." << endl;
+#endif
+            thread.join();
+        }
+
+        refFrame = getLastFrame();
+#ifdef DEBUG
+        cout << "LocalMap: Adding keyFrame... " << frame->getDis2(refFrame)
              << " from last keyFrame" << endl;
 #endif
+
+        //开始线程
+        thread = boost::thread(boost::bind(&LocalMap::threadFunc, this));
+
+    }
+
+
+    void LocalMap::threadFunc() {
+        prepareKeyFrame();
+        filtMapPoints();
+        triangulate();
+        ba();
+        filtKeyFrames();
+
+        boost::mutex::scoped_lock lock(mapMutex);
+        mapViewer.update(map);
+        lock.unlock();
+    }
+
+    void LocalMap::prepareKeyFrame() {
+#ifdef DEBUG
+        cout << "LocalMap: prepareKeyFrame... " << endl;
+#endif
+        //匹配上一个关键帧
+        matcher.match(refFrame->descriptors, currFrame->descriptors);
+        cvv::debugDMatch(refFrame->image, refFrame->keyPoints,
+                         currFrame->image, currFrame->keyPoints,
+                         matcher.matches,
+                         CVVISUAL_LOCATION,
+                         "match used in triangulation");
+    }
+
+    void LocalMap::filtMapPoints() {
+#ifdef DEBUG
+        cout << "LocalMap: filtMapPoints... " << endl;
+#endif
+    }
+
+    void LocalMap::triangulate() {
+#ifdef DEBUG
+        cout << "LocalMap: triangulate... " << endl;
+#endif
+        //三角化
+        Triangulater triangulater;
+        auto triangulateMap = triangulater.triangulate(
+                refFrame, currFrame, matcher.matches);
+
+        //BA ba;
+        //ba(triangulateMap, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
+
         //添加关键帧和地图点
-        map->addFrame(frame);
-        //for (auto &point:lastFrameMap->mapPoints) {
-        //    map->addMapPoint(point);
-        //}
-        //TODO:筛选地图点
+        boost::mutex::scoped_lock lock(mapMutex);
+        map->addFrame(currFrame);
+        for (auto &point:triangulateMap->mapPoints) {
+            map->addMapPoint(point);
+        }
+        lock.unlock();
+    }
+
+    void LocalMap::ba() {
+#ifdef DEBUG
+        cout << "LocalMap: ba... " << endl;
+#endif
         //BA ba;
         //ba(map, {BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
     }
 
-    KeyFrame::Ptr LocalMap::getLastFrame() {
-        return map->getLastFrame();
+    void LocalMap::filtKeyFrames() {
+#ifdef DEBUG
+        cout << "LocalMap: filtKeyFrames... " << endl;
+#endif
+
     }
 
 }
