@@ -17,12 +17,12 @@ namespace sky {
 
     private:
         int inlierNum;
-        double inlierRatio;
+        float inlierRatio;
 
         int max3Dnum, min3Dnum;
-        double max3Ddis;
+        float max3Ddis;
         int minInlierNum;
-        double minInlierRatio;
+        float minInlierRatio;
 
         Mat descriptorsMap;
         vector<cv::Point3f> points3D;
@@ -35,20 +35,24 @@ namespace sky {
 
         Solver3D2D(
                 int minInlierNum = Config::get<int>("Solver3D2D.minInlierNum"),
-                double minInlierRatio = Config::get<double>("Solver3D2D.minInlierRatio"),
+                float minInlierRatio = Config::get<float>("Solver3D2D.minInlierRatio"),
                 int max3Dnum = Config::get<int>("Solver3D2D.max3Dnum"),
                 int min3Dnum = Config::get<int>("Solver3D2D.min3Dnum"),
-                double max3Ddis = Config::get<double>("Solver3D2D.max3Ddis")
+                float max3Ddis = Config::get<float>("Solver3D2D.max3Ddis")
         ) :
                 minInlierNum(minInlierNum),
                 minInlierRatio(minInlierRatio),
                 max3Dnum(max3Dnum), min3Dnum(min3Dnum), max3Ddis(max3Ddis) {}
 
-        bool solve(Map::Ptr map, KeyFrame::Ptr keyFrame2);
+        bool solve(const Map::Ptr &map, const KeyFrame::Ptr &keyFrame2);
 
-        double getInlierRatio();
+        inline float getInlierRatio() {
+            return inlierRatio;
+        }
 
-        int getInlierNum();
+        inline int getInlierNum() {
+            return inlierNum;
+        }
 
     private:
 

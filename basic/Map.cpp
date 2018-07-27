@@ -6,12 +6,12 @@
 
 namespace sky {
 
-    void Map::addFrame(KeyFrame::Ptr frame) {
+    void Map::addFrame(const KeyFrame::Ptr &frame) {
         if (frame)
             keyFrames.push_back(frame);
     }
 
-    void Map::addMapPoint(MapPoint::Ptr mapPoint) {
+    void Map::addMapPoint(const MapPoint::Ptr &mapPoint) {
         if (mapPoint)
             mapPoints.push_back(mapPoint);
     }

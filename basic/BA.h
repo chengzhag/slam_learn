@@ -14,6 +14,7 @@
 #include "common_include.h"
 #include <unordered_map>
 #include <unordered_set>
+#include "utility.h"
 
 namespace sky {
 
@@ -26,10 +27,9 @@ namespace sky {
             Mode_Fix_Intrinsic
         } Mode;
 
-        typedef unordered_set<int, std::hash<int>> ModeSet;
+        typedef unordered_set<Mode, std::hash<int>> ModeSet;
 
-    protected:
-
+    private:
         ModeSet modeSet;
 
         Map::Ptr map;
@@ -85,8 +85,8 @@ namespace sky {
             }
         };
 
-        bool hasMode(Mode mode) {
-            return modeSet.find(mode) != modeSet.end();
+        inline bool hasMode(Mode mode) {
+            return setHas(modeSet, mode);
         }
 
         void loadMap();

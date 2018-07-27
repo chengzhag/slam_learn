@@ -6,11 +6,14 @@
 #include <opencv2/cvv.hpp>
 #include "BA.h"
 #include <algorithm>
+#include "utility.h"
 
 namespace sky {
 
     Map::Ptr
-    Triangulater::triangulate(KeyFrame::Ptr keyFrame1, KeyFrame::Ptr keyFrame2, vector<cv::DMatch> &matches,
+    Triangulater::triangulate(const KeyFrame::Ptr &keyFrame1,
+                              const KeyFrame::Ptr &keyFrame2,
+                              const vector<cv::DMatch> &matches,
                               Mat inlierMask) {
 #ifdef DEBUG
         cout << "Triangulater: triangulatePoints... " << endl;
@@ -41,7 +44,7 @@ namespace sky {
         return map;
     }
 
-    void Triangulater::convAndAddMappoints(Map::Ptr map, const Mat &inlierMask,
+    void Triangulater::convAndAddMappoints(const Map::Ptr &map, const Mat &inlierMask,
                                            const Mat &points4D, const vector<cv::DMatch> &matches) {
 #ifdef DEBUG
         cout << "Triangulater: convAndAddMappoints... ";
@@ -174,7 +177,7 @@ namespace sky {
 
     }
 
-    bool Triangulater::isGoodPoint(MapPoint::Ptr mapPoint) {
+    bool Triangulater::isGoodPoint(const MapPoint::Ptr &mapPoint) {
         //检查是否在距离范围内
         auto dis2keyFrame2 = keyFrame2->getDis2(mapPoint);
         auto disB12 = keyFrame2->getDis2(keyFrame1);

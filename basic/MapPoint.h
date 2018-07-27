@@ -18,7 +18,6 @@ namespace sky {
     class MapPoint {
 
     public:
-
         typedef shared_ptr<MapPoint> Ptr;
         Mat descriptor; // Descriptor for matching
         unordered_map<KeyFramePtr, cv::Point2d> observedFrames;//观测帧和像素坐标

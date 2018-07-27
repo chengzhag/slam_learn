@@ -36,9 +36,11 @@ namespace sky {
                 localMap(localMap), tracker(new Tracker(localMap)),
                 initializer(new Initializer) {}
 
-        void step(Mat &image);
+        void step(const Mat &image);
 
-        int getState();
+        inline int getState() {
+            return state;
+        }
 
     };
 

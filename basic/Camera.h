@@ -19,7 +19,7 @@ namespace sky {
                 fx(fx), fy(fy), cx(cx), cy(cy) {}
 
         template<typename T>
-        void setIntrinsic(cv::Matx<T, 1, 4> intrinsic) {
+        void setIntrinsic(const cv::Matx<T, 1, 4> intrinsic) {
             fx=intrinsic(0);
             fy=intrinsic(1);
             cx=intrinsic(2);

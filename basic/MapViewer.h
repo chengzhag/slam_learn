@@ -62,7 +62,7 @@ namespace sky {
 
 #endif
 
-        void update(Map::Ptr map);
+        void update(Map::Ptr &map);
 
         ~MapViewer() {}
 
@@ -72,7 +72,7 @@ namespace sky {
 
         void keyboardEventOccurred(const pcl::visualization::KeyboardEvent &event);
 
-        void addFrame(KeyFrame::Ptr frame, string camName = "");
+        void addFrame(KeyFrame::Ptr &frame, string camName = "");
 #endif
     };
 

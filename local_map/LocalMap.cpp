@@ -10,7 +10,7 @@
 
 namespace sky {
 
-    void LocalMap::addFrame(KeyFrame::Ptr frame) {
+    void LocalMap::addFrame(const KeyFrame::Ptr &frame) {
         //匹配上一个关键帧，后三角化
         auto lastFrame = map->getLastFrame();
         matcher.match(lastFrame->descriptors, frame->descriptors);

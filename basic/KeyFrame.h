@@ -10,10 +10,14 @@
 #include "Camera.h"
 #include <opencv2/opencv.hpp>
 #include <unordered_map>
+#include "utility.h"
 
 namespace sky {
 
     class KeyFrame {
+    private:
+        unordered_map<int, MapPoint::Ptr> mapPoints;//在descriptors或keyPoints中的序号和对应的地图点
+
     public:
         typedef shared_ptr<KeyFrame> Ptr;
         SE3 Tcw;      // transform from world to camera
@@ -21,9 +25,9 @@ namespace sky {
         Mat image;
         vector<cv::KeyPoint> keyPoints;
         Mat descriptors;
-        unordered_map<int, MapPoint::Ptr> mapPoints;//在descriptors或keyPoints中的序号和对应的地图点
 
-        KeyFrame(const Camera::Ptr camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D);
+
+        KeyFrame(const Camera::Ptr &camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D);
 
         Vector3d getCamCenterEigen() const;
 
@@ -43,7 +47,7 @@ namespace sky {
         }
 
         template<typename T>
-        void setTcw(cv::Matx<T, 2, 3> angleAxisAndTranslation) {
+        void setTcw(const cv::Matx<T, 2, 3> &angleAxisAndTranslation) {
             Tcw.so3() = SO3(angleAxisAndTranslation(0, 0),
                             angleAxisAndTranslation(0, 1),
                             angleAxisAndTranslation(0, 2));
@@ -55,11 +59,11 @@ namespace sky {
         //将3D点投影到帧，如果在帧里，返回真
         bool proj2frame(const Vector3d &pt_world, Vector2d &pixelColRow);
 
-        inline bool proj2frame(MapPoint::Ptr mapPoint, Vector2d &pixelColRow) {
+        inline bool proj2frame(const MapPoint::Ptr &mapPoint, Vector2d &pixelColRow) {
             return proj2frame(mapPoint->pos, pixelColRow);
         }
 
-        inline bool proj2frame(MapPoint::Ptr mapPoint, cv::Point2d &pixelColRow) {
+        inline bool proj2frame(const MapPoint::Ptr &mapPoint, cv::Point2d &pixelColRow) {
             Vector2d pixelVec;
             bool r = proj2frame(mapPoint->pos, pixelVec);
             pixelColRow.x = pixelVec[0];
@@ -73,33 +77,43 @@ namespace sky {
             return proj2frame(pt_world, pixelColRow);
         }
 
-        inline bool isInFrame(MapPoint::Ptr mapPoint) {
+        inline bool isInFrame(const MapPoint::Ptr &mapPoint) {
             return isInFrame(mapPoint->pos);
         }
 
 
         //计算帧到某坐标的距离
-        float getDis2(Sophus::Vector3d &coor);
+        float getDis2(const Sophus::Vector3d &coor);
 
-        //计算到某帧的距离
-        float getDis2(KeyFrame::Ptr keyFrame);
+        inline float getDis2(const KeyFrame::Ptr &keyFrame) {
+            return getDis2(keyFrame->Tcw.translation());
+        }
 
-        //计算到某地图点的距离
-        float getDis2(MapPoint::Ptr mapPoint);
+        inline float getDis2(const MapPoint::Ptr &mapPoint) {
+            return getDis2(mapPoint->pos);
+        }
 
 
         //在descriptors或keyPoints中的序号
-        bool hasMapPoint(int i);
+        inline bool hasMapPoint(int i) {
+            return mapHas(mapPoints, i);
+        }
 
         MapPoint::Ptr getMapPoint(int i);
 
         bool setMapPoint(int i, MapPoint::Ptr &mapPoint);
 
-        cv::Point2f getKeyPointCoor(int i);
+        inline cv::Point2f getKeyPointCoor(int i) {
+            return keyPoints[i].pt;
+        }
 
-        Mat getKeyPointDesciptor(int i);
+        inline Mat getKeyPointDesciptor(int i) {
+            return descriptors.row(i);
+        }
 
-        void addMapPoint(int i, MapPoint::Ptr &mapPoint);
+        inline void addMapPoint(int i, MapPoint::Ptr &mapPoint) {
+            mapPoints[i] = mapPoint;
+        }
     };
 
 }

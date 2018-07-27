@@ -6,7 +6,7 @@
 
 namespace sky {
 
-    void MapViewer::update(Map::Ptr map) {
+    void MapViewer::update(Map::Ptr &map) {
 #ifdef CLOUDVIEWER_DEBUG
         if (!map)
             return;
@@ -60,7 +60,7 @@ namespace sky {
 #endif
 
 #ifdef CLOUDVIEWER_DEBUG
-    void MapViewer::addFrame(KeyFrame::Ptr frame, string camName) {
+    void MapViewer::addFrame(KeyFrame::Ptr &frame, string camName) {
         //添加一帧的位姿图标
         Eigen::Matrix4f camPose;
         //auto T_c_w = frame->Tcw.inverse();

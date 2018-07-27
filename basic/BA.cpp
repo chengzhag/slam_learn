@@ -19,8 +19,8 @@ namespace sky {
             auto angleAxis = frame->getAngleAxisWcMatxCV<double>();
             auto t = frame->Tcw.translation();
             frameExtrinsics[frame] = cv::Matx23d(angleAxis(0), angleAxis(1), angleAxis(2),
-                                             t[0], t[1], t[2]);
-            if (cameraIntrinsics.find(frame->camera) == cameraIntrinsics.end())
+                                                 t[0], t[1], t[2]);
+            if (!mapHas(cameraIntrinsics, frame->camera))
                 cameraIntrinsics[frame->camera] = cv::Matx14d(
                         frame->camera->fx, frame->camera->fy, frame->camera->cx, frame->camera->cy);
         }
@@ -88,7 +88,7 @@ namespace sky {
                 problem.SetParameterBlockConstant(mapPointPos.second.val);
 
             for (auto &observedFrame:mapPointPos.first->observedFrames) {
-                if (frameExtrinsics.find(observedFrame.first) != frameExtrinsics.end()) {
+                if (mapHas(frameExtrinsics, observedFrame.first)) {
                     ceres::CostFunction *costFunction =
                             new ceres::AutoDiffCostFunction<ReprojectCost, 2, 4, 6, 3>(
                                     new ReprojectCost(observedFrame.second));

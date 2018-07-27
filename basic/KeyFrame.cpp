@@ -8,7 +8,7 @@
 
 namespace sky {
 
-    KeyFrame::KeyFrame(const Camera::Ptr camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D) :
+    KeyFrame::KeyFrame(const Camera::Ptr &camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D) :
             camera(camera), image(image) {
 #ifdef DEBUG
         cout << "KeyFrame: detectAndCompute... ";
@@ -56,24 +56,12 @@ namespace sky {
                && pixelColRow(1, 0) < image.rows;
     }
 
-    float KeyFrame::getDis2(Sophus::Vector3d &coor) {
+    float KeyFrame::getDis2(const Sophus::Vector3d &coor) {
         Sophus::Vector3d coorFrom = Tcw.translation();
         float dis = 0;
         for (int i = 0; i < 3; ++i)
             dis += pow(coorFrom[i] - coor[i], 2);
         return sqrt(dis);
-    }
-
-    float KeyFrame::getDis2(KeyFrame::Ptr keyFrame) {
-        return getDis2(keyFrame->Tcw.translation());
-    }
-
-    float KeyFrame::getDis2(MapPoint::Ptr mapPoint) {
-        return getDis2(mapPoint->pos);
-    }
-
-    bool KeyFrame::hasMapPoint(int i) {
-        return mapPoints.find(i) != mapPoints.end();
     }
 
     MapPoint::Ptr KeyFrame::getMapPoint(int i) {
@@ -92,18 +80,6 @@ namespace sky {
             return true;
         }
         return false;
-    }
-
-    cv::Point2f KeyFrame::getKeyPointCoor(int i) {
-        return keyPoints[i].pt;
-    }
-
-    Mat KeyFrame::getKeyPointDesciptor(int i) {
-        return descriptors.row(i);
-    }
-
-    void KeyFrame::addMapPoint(int i, MapPoint::Ptr &mapPoint) {
-        mapPoints[i] = mapPoint;
     }
 
 }

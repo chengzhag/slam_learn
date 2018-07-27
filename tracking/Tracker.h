@@ -32,10 +32,10 @@ namespace sky {
                 maxKeyFrameDis(maxKeyFrameDis)
         {}
 
-        void step(KeyFrame::Ptr frame);
+        void step(const KeyFrame::Ptr &frame);
 
     private:
-        bool isKeyFrame(KeyFrame::Ptr frame);
+        bool isKeyFrame(const KeyFrame::Ptr &frame);
 
 
     };

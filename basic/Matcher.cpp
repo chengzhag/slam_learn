@@ -7,11 +7,7 @@
 
 namespace sky {
 
-    size_t Matcher::getMatchesNum() {
-        return matches.size();
-    }
-
-    void Matcher::match(Mat descriptors1, Mat descriptors2) {
+    void Matcher::match(const Mat &descriptors1, const Mat &descriptors2) {
         if (testRatio == 0) {
             auto matcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
 #ifdef DEBUG

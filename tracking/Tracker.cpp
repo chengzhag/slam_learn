@@ -6,7 +6,7 @@
 
 namespace sky {
 
-    void Tracker::step(KeyFrame::Ptr frame) {
+    void Tracker::step(const KeyFrame::Ptr &frame) {
         if (solver3D2D.solve(localMap->map, frame)) {
             //判断是否插入关键帧
             if (isKeyFrame(frame)) {
@@ -18,7 +18,7 @@ namespace sky {
         }
     }
 
-    bool Tracker::isKeyFrame(KeyFrame::Ptr frame) {
+    bool Tracker::isKeyFrame(const KeyFrame::Ptr &frame) {
         auto dis2LastFrame = frame->getDis2(localMap->getLastFrame());
         if (dis2LastFrame < minKeyFrameDis) {
 #ifdef DEBUG

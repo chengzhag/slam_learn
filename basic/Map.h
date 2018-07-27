@@ -19,9 +19,9 @@ namespace sky {
 
         Map() {}
 
-        void addFrame(KeyFrame::Ptr frame);
+        void addFrame(const KeyFrame::Ptr &frame);
 
-        void addMapPoint(MapPoint::Ptr mapPoint);
+        void addMapPoint(const MapPoint::Ptr &mapPoint);
 
         KeyFrame::Ptr getLastFrame();
 

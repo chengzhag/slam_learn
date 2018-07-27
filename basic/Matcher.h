@@ -28,9 +28,11 @@ namespace sky {
                 disThresMin(disThresMin),
                 testRatio(testRatio) {}
 
-        void match(Mat descriptors1, Mat descriptors2);
+        void match(const Mat &descriptors1, const Mat &descriptors2);
 
-        size_t getMatchesNum();
+        inline size_t getMatchesNum() {
+            return matches.size();
+        }
 
     };
 

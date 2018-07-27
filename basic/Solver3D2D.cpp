@@ -8,7 +8,7 @@
 
 namespace sky {
 
-    bool Solver3D2D::solve(Map::Ptr map, KeyFrame::Ptr keyFrame2) {
+    bool Solver3D2D::solve(const Map::Ptr &map, const KeyFrame::Ptr &keyFrame2) {
         //重置中间变量
         points3D.clear();
         descriptorsMap = Mat();
@@ -19,7 +19,7 @@ namespace sky {
 #ifdef DEBUG
         cout << "Solver3D2D: finding mapPoints in the last frame... ";
 #endif
-        auto keyFrame1 = map->keyFrames.back();
+        auto keyFrame1 = map->getLastFrame();
 
         Mat descriptorsMap;
         vector<MapPoint::Ptr> pointsInView;
@@ -104,14 +104,6 @@ namespace sky {
         //BA ba;
         //ba(mapLastFrame, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});
         return true;
-    }
-
-    double Solver3D2D::getInlierRatio() {
-        return inlierRatio;
-    }
-
-    int Solver3D2D::getInlierNum() {
-        return inlierNum;
     }
 
     void Solver3D2D::solvePose() {

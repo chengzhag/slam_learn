@@ -8,7 +8,7 @@
 
 namespace sky {
 
-    bool Initializer::step(KeyFrame::Ptr frame) {
+    bool Initializer::step(const KeyFrame::Ptr &frame) {
         if (frameInterval == -1) {
 #ifdef DEBUG
             cout << "Initializer: Initialization already ready!" << endl;

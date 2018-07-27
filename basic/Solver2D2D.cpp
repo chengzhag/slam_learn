@@ -9,7 +9,7 @@
 
 namespace sky {
 
-    bool Solver2D2D::solve(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2, bool saveResult) {
+    bool Solver2D2D::solve(const KeyFrame::Ptr &keyFrame1, const KeyFrame::Ptr &keyFrame2, bool saveResult) {
         //重置中间变量
         inlierMask = Mat();
 
@@ -41,14 +41,6 @@ namespace sky {
             return false;
         }
         return true;
-    }
-
-    double Solver2D2D::getInlierRatio() {
-        return inlierRatio;
-    }
-
-    int Solver2D2D::getInlierNum() {
-        return inlierNum;
     }
 
     Map::Ptr Solver2D2D::triangulate() {

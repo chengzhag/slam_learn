@@ -32,7 +32,7 @@ namespace sky {
                 minFrameInterval(minFrameInterval),
                 minMapPointNum(minMapPointNum) {}
 
-        bool step(KeyFrame::Ptr frame);
+        bool step(const KeyFrame::Ptr &frame);
 
     };
 

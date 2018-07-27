@@ -28,21 +28,17 @@ namespace sky {
                 maxProjDis(maxProjDis) {}
 
         Map::Ptr
-        triangulate(KeyFrame::Ptr keyFrame1, KeyFrame::Ptr keyFrame2, vector<cv::DMatch> &matches,
+        triangulate(const KeyFrame::Ptr &keyFrame1,
+                    const KeyFrame::Ptr &keyFrame2,
+                    const vector<cv::DMatch> &matches,
                     Mat inlierMask = Mat());
 
     private:
 
-        void convAndAddMappoints(Map::Ptr map, const Mat &inlierMask,
+        void convAndAddMappoints(const Map::Ptr &map, const Mat &inlierMask,
                                  const Mat &points4D, const vector<cv::DMatch> &matches);
 
-        bool isGoodPoint(MapPoint::Ptr mapPoint);
-
-        template<typename T>
-        T point2dis(cv::Point_<T> p1, cv::Point_<T> p2) {
-            auto diff = p1 - p2;
-            return cv::sqrt(diff.x * diff.x + diff.y * diff.y);
-        }
+        bool isGoodPoint(const MapPoint::Ptr &mapPoint);
 
     };
 }

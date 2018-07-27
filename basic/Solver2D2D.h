@@ -18,10 +18,10 @@ namespace sky {
 
     private:
         int inlierNum;
-        double inlierRatio;
+        float inlierRatio;
 
         int minInlierNum;
-        double minInlierRatio;
+        float minInlierRatio;
 
         KeyFrame::Ptr keyFrame1, keyFrame2;
 
@@ -31,23 +31,24 @@ namespace sky {
         typedef shared_ptr<Solver2D2D> Ptr;
 
         Solver2D2D(int minInlierNum = Config::get<int>("Solver2D2D.minInlierNum"),
-                   double minInlierRatio = Config::get<double>("Solver2D2D.minInlierRatio")
+                   float minInlierRatio = Config::get<float>("Solver2D2D.minInlierRatio")
         ) :
                 minInlierNum(minInlierNum),
-                minInlierRatio(minInlierRatio)
-        {}
+                minInlierRatio(minInlierRatio) {}
 
-        bool solve(KeyFrame::Ptr &keyFrame1, KeyFrame::Ptr &keyFrame2, bool saveResult = true);
+        bool solve(const KeyFrame::Ptr &keyFrame1, const KeyFrame::Ptr &keyFrame2, bool saveResult = true);
 
-        double getInlierRatio();
+        inline float getInlierRatio() {
+            return inlierRatio;
+        }
 
-        int getInlierNum();
+        inline int getInlierNum() {
+            return inlierNum;
+        }
 
         Map::Ptr triangulate();
 
-
     private:
-
         void solvePose(bool saveResult);
 
 

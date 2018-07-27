@@ -6,7 +6,7 @@
 
 namespace sky{
 
-    void VO::step(Mat &image) {
+    void VO::step(const Mat &image) {
         KeyFrame::Ptr keyFrame(new KeyFrame(camera, image, feature2D));
         switch (state) {
             //初始化状态
@@ -25,10 +25,6 @@ namespace sky{
                 break;
             }
         }
-    }
-
-    int VO::getState() {
-        return state;
     }
 
 }

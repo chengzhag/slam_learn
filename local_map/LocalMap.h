@@ -13,16 +13,16 @@ namespace sky {
 
     class LocalMap {
 
-    protected:
+    private:
         Matcher matcher;
 
     public:
-        Map::Ptr map;
         typedef shared_ptr<LocalMap> Ptr;
+        Map::Ptr map;
 
         LocalMap() {}
 
-        void addFrame(KeyFrame::Ptr frame);
+        void addFrame(const KeyFrame::Ptr &frame);
 
         KeyFrame::Ptr getLastFrame();
 
