@@ -10,7 +10,7 @@
 #include "LocalMap.h"
 #include "Tracker.h"
 #include <opencv2/features2d/features2d.hpp>
-//#include <opencv2/xfeatures2d.hpp>
+#include <opencv2/xfeatures2d.hpp>
 
 namespace sky {
 
@@ -31,10 +31,17 @@ namespace sky {
 
         VO(Camera::Ptr camera,
            LocalMap::Ptr localMap,
-           cv::Ptr<cv::Feature2D> feature2D = cv::ORB::create(Config::get<int>("ORB.nfeatures"))) :
-                camera(camera), feature2D(feature2D),
-                localMap(localMap), tracker(new Tracker(localMap)),
-                initializer(new Initializer) {}
+           string featureType = Config::get<string>("VO.featureType")
+        ) :
+                camera(camera),
+                localMap(localMap),
+                tracker(new Tracker(localMap)),
+                initializer(new Initializer) {
+            if (featureType == "ORB")
+                feature2D = cv::ORB::create(Config::get<int>("VO.nfeatures"));
+            else if (featureType == "SIFT")
+                feature2D = cv::xfeatures2d::SIFT::create(Config::get<int>("VO.nfeatures"), 3, 0.04, 10);
+        }
 
         void step(const Mat &image);
 

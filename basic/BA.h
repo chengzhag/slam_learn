@@ -23,6 +23,7 @@ namespace sky {
     public:
         typedef enum mode {
             Mode_Fix_First_Frame,
+            Mode_Fix_First_2Frames,
             Mode_Fix_Points,
             Mode_Fix_Intrinsic
         } Mode;

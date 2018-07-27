@@ -62,8 +62,6 @@ int main(int argc, char **argv) {
     LocalMap::Ptr localMap(new LocalMap);
     VO vo(camera,
           localMap
-            //ORB::create(Config::get<int>("ORB.nfeatures"))
-            //xfeatures2d::SIFT::create(Config::get<int>("ORB.nfeatures"), 3, 0.04, 10)
     );
 
 

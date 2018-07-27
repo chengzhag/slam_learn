@@ -10,12 +10,14 @@
 #include "Triangulater.h"
 #include <boost/thread.hpp>
 #include "MapViewer.h"
+#include "Config.h"
 
 namespace sky {
 
     class LocalMap {
 
     private:
+        float maxInlierPointDis;
         Matcher matcher;
         boost::thread thread;
         KeyFrame::Ptr refFrame, currFrame;
@@ -27,7 +29,8 @@ namespace sky {
         Map::Ptr map;
         boost::mutex mapMutex;
 
-        LocalMap() {}
+        LocalMap(float maxInlierPointDis = Config::get<float>("LocalMap.maxInlierPointDis")) :
+                maxInlierPointDis(maxInlierPointDis) {}
 
         void init(const Map::Ptr &map);
 
@@ -43,13 +46,13 @@ namespace sky {
 
         void prepareKeyFrame();
 
-        void filtMapPoints();
-
-        bool isGoodPoint(const MapPoint::Ptr &mapPoint);
-
         void triangulate();
 
         void ba();
+
+        void filtMapPoints();
+
+        bool isGoodPoint(const MapPoint::Ptr &mapPoint);
 
         void filtKeyFrames();
     };

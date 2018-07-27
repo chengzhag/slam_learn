@@ -16,17 +16,19 @@ namespace sky {
 
     private:
         float disThresRatio, disThresMin, testRatio;
-
+        cv::Ptr<cv::DescriptorMatcher> matcher;
     public:
         vector<cv::DMatch> matches;
 
         Matcher(float disThresRatio = Config::get<float>("Matcher.disThresRatio"),
                 float disThresMin = Config::get<float>("Matcher.disThresMin"),
-                float testRatio = Config::get<float>("Matcher.testRatio")
+                float testRatio = Config::get<float>("Matcher.testRatio"),
+                string matcherType = Config::get<string>("Matcher.matcherType")
         ) :
                 disThresRatio(disThresRatio),
                 disThresMin(disThresMin),
-                testRatio(testRatio) {}
+                testRatio(testRatio),
+                matcher(cv::DescriptorMatcher::create(matcherType)) {}
 
         void match(const Mat &descriptors1, const Mat &descriptors2);
 

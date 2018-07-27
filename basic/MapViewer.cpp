@@ -30,8 +30,9 @@ namespace sky {
         //viewer.removeAllShapes();
         boost::mutex::scoped_lock lock(updateMutex);
         viewer.removeAllCoordinateSystems();
+        int i = 0;
         for (auto &frame:map->keyFrames) {
-            addFrame(frame);
+            addFrame(frame, "frame" + to_string(++i));
         }
         lock.unlock();
 
@@ -47,6 +48,7 @@ namespace sky {
         while (!viewer.wasStopped()) {
             boost::mutex::scoped_lock lock(updateMutex);
             viewer.spinOnce();
+            lock.unlock();
             boost::this_thread::sleep_for(boost::chrono::milliseconds(15));
         }
     }

@@ -40,9 +40,10 @@ namespace sky {
 
     void LocalMap::threadFunc() {
         prepareKeyFrame();
-        filtMapPoints();
         triangulate();
         ba();
+        //BA可能导致一些外点，不如把筛选过程放到BA后
+        filtMapPoints();
         filtKeyFrames();
 
         boost::mutex::scoped_lock lock(mapMutex);
@@ -84,6 +85,11 @@ namespace sky {
             if (mapPoint->observedFrames.size() < 3)
                 return false;
 
+        //根据到每个观测帧的最大距离来判断
+        for (auto &observedFrame:mapPoint->observedFrames) {
+            if (observedFrame.first->getDis2(mapPoint) > maxInlierPointDis)
+                return false;
+        }
         return true;
     }
 
@@ -112,8 +118,10 @@ namespace sky {
 #ifdef DEBUG
         cout << "LocalMap: ba... " << endl;
 #endif
+        boost::mutex::scoped_lock lock(mapMutex);
         BA ba;
-        ba(map, {BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
+        ba(map, {BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_2Frames});
+        lock.unlock();
     }
 
     void LocalMap::filtKeyFrames() {

@@ -65,8 +65,17 @@ namespace sky {
 #endif*/
         for (auto &frameExtrinsic:frameExtrinsics)
             problem.AddParameterBlock(frameExtrinsic.second.val, 6);
+        auto itKeyFrame = map->keyFrames.begin();
         if (hasMode(Mode_Fix_First_Frame))
-            problem.SetParameterBlockConstant(frameExtrinsics[map->keyFrames.front()].val);
+            problem.SetParameterBlockConstant(frameExtrinsics[*itKeyFrame].val);
+        if (hasMode(Mode_Fix_First_2Frames)) {
+            if (++itKeyFrame == map->keyFrames.end()) {
+                cerr << "BA: Failed! Only one frame in the map! " << endl;
+                return;
+            }
+            problem.SetParameterBlockConstant(frameExtrinsics[*itKeyFrame].val);
+        }
+
 
 /*#ifdef DEBUG
         cout << "\tloading cameraIntrinsics..." << endl;
@@ -161,6 +170,15 @@ namespace sky {
     }
 
     void BA::operator()(Map::Ptr map, ModeSet modeSet) {
+        if (!map) {
+            cerr << "BA: Failed! map is empty! " << endl;
+        }
+        if (map->keyFrames.size() == 0) {
+            cerr << "BA: Failed! map has no keyFrame! " << endl;
+        }
+        if (map->mapPoints.size() == 0) {
+            cerr << "BA: Failed! map has no mapPoint! " << endl;
+        }
         this->map = map;
         KeyFrame:
         this->modeSet = modeSet;

@@ -9,7 +9,6 @@ namespace sky {
 
     void Matcher::match(const Mat &descriptors1, const Mat &descriptors2) {
         if (testRatio == 0) {
-            auto matcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
 #ifdef DEBUG
             cout << "Matcher: matching... ";
 #endif
@@ -47,7 +46,6 @@ namespace sky {
         } else {
 
             vector<vector<cv::DMatch>> knnMatches;
-            auto matcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
 #ifdef DEBUG
             cout << "Matcher: matching... ";
 #endif

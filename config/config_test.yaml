@@ -14,8 +14,10 @@ Camera.cy: 185.2157
 # Camera.cx: 325.1
 # Camera.cy: 249.7
 
-# ORB描述子提取的数量
-ORB.nfeatures: 2000
+# 描述子提取的数量
+VO.nfeatures: 2000
+# 特征点算法
+VO.featureType: SIFT
 
 # MapViewer的背景颜色
 MapViewer.backgroundColor.r: 0.8
@@ -31,7 +33,9 @@ Matcher.disThresMin: 30
 # 如果testRatio不为0，通过knnMatch获得距离最近的两个match
 # 测试第一个match的距离是否小于第二个match的距离的testRatio倍
 # 0 <= testRati < 1
-Matcher.testRatio: 0.75
+Matcher.testRatio: 0.9
+# 特征匹配方式
+Matcher.matcherType: BruteForce
 
 # 用于解对极约束的最少点数
 Solver2D2D.minInlierNum: 100
@@ -53,9 +57,11 @@ Solver3D2D.minInlierRatio: 0.3
 Triangulater.maxDisRatio: 30
 Triangulater.minDisRatio: 1
 # 重投影误差最大值
-Triangulater.maxProjDis: 20
+Triangulater.maxProjDis: 50
 
 # local_map
+# 地图点到每个观测帧的最大距离
+LocalMap.maxInlierPointDis: 100
 
 # tracking
 
@@ -71,6 +77,6 @@ Tracker.minKeyFrameDis: 1
 # 关键帧的最大间距
 Tracker.maxKeyFrameDis: 10
 # 关键帧的最少地图点
-Tracker.minKeyFrameInlierNum: 30
+Tracker.minKeyFrameInlierNum: 50
 # 关键帧之间的最小间隔帧数
 Tracker.minKeyFrameInterval: 3
