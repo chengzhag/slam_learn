@@ -1,14 +1,18 @@
 %YAML:1.0
 # 路径
 datasetDir: dataset/data_odometry_gray/dataset/sequences/00/image_0
-
-# basic
+# datasetDir: /home/pidan1231239/projects_temp/datasets/tum/rgbd_dataset_freiburg1_xyz/rgb
 
 # 相机内参
 Camera.fx: 718.856
 Camera.fy: 718.856
 Camera.cx: 607.1928
 Camera.cy: 185.2157
+
+# Camera.fx: 517.3
+# Camera.fy: 516.5
+# Camera.cx: 325.1
+# Camera.cy: 249.7
 
 # ORB描述子提取的数量
 ORB.nfeatures: 2000
@@ -55,9 +59,9 @@ Triangulater.maxProjDis: 20
 
 # tracking
 
-# 初始化两帧的最大间隔
+# 初始化两帧的最大间隔帧数
 Initializer.maxFrameInterval: 20
-# 初始化两帧的最小间隔
+# 初始化两帧的最小间隔帧数
 Initializer.minFrameInterval: 3
 # 初始化地图的最小点数
 Initializer.minMapPointNum: 100
@@ -68,3 +72,5 @@ Tracker.minKeyFrameDis: 1
 Tracker.maxKeyFrameDis: 10
 # 关键帧的最少地图点
 Tracker.minKeyFrameInlierNum: 30
+# 关键帧之间的最小间隔帧数
+Tracker.minKeyFrameInterval: 3

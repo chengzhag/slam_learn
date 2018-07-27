@@ -9,7 +9,7 @@
 #include <opencv2/cvv.hpp>
 
 namespace sky {
-    void LocalMap::init(const Map::Ptr &map){
+    void LocalMap::init(const Map::Ptr &map) {
         boost::mutex::scoped_lock lock(mapMutex);
         this->map = map;
         mapViewer.update(this->map);
@@ -67,6 +67,24 @@ namespace sky {
 #ifdef DEBUG
         cout << "LocalMap: filtMapPoints... " << endl;
 #endif
+        boost::mutex::scoped_lock lock(mapMutex);
+        for (auto it = map->mapPoints.begin(); it != map->mapPoints.end();) {
+            if (isGoodPoint(*it))
+                ++it;
+            else
+                it = map->mapPoints.erase(it);
+        }
+    }
+
+    bool LocalMap::isGoodPoint(const MapPoint::Ptr &mapPoint) {
+/*#ifdef DEBUG
+        cout << "\t" << mapPoint->observedFrames.size() << " observedFrames" << endl;
+#endif*/
+        if (map->keyFrames.size() >= 3)
+            if (mapPoint->observedFrames.size() < 3)
+                return false;
+
+        return true;
     }
 
     void LocalMap::triangulate() {
@@ -94,8 +112,8 @@ namespace sky {
 #ifdef DEBUG
         cout << "LocalMap: ba... " << endl;
 #endif
-        //BA ba;
-        //ba(map, {BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
+        BA ba;
+        ba(map, {BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
     }
 
     void LocalMap::filtKeyFrames() {

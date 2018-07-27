@@ -45,6 +45,8 @@ namespace sky {
 
         void filtMapPoints();
 
+        bool isGoodPoint(const MapPoint::Ptr &mapPoint);
+
         void triangulate();
 
         void ba();

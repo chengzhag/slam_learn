@@ -77,7 +77,8 @@ namespace sky {
         }
 
         //建立BA用局部地图
-        Map::Ptr mapLastFrame(new Map);//用于最后帧BA的地图
+        //TODO:以下建图没有考虑到当前帧可能不是KeyFrame，导致MapPoint的observedFrames存有非KeyFrame
+/*        Map::Ptr mapLastFrame(new Map);//用于最后帧BA的地图
         mapLastFrame->addFrame(keyFrame2);
         //cout << indexInliers << endl;
         //cout << indexInliers.type() << endl;
@@ -96,13 +97,13 @@ namespace sky {
             //cout << "\tadding observedFrame to mapPoint, corresponding to keyPoint "
             //        << indexKeyPoint << " of " << keyFrame2->keyPoints.size()
             //     << endl;
-            mapPointInlier->addObervedFrame(keyFrame2, keyFrame2->getKeyPointCoor(indexKeyPoint));
+            mapPointInlier->addObservedFrame(keyFrame2, keyFrame2->getKeyPointCoor(indexKeyPoint));
             mapLastFrame->addMapPoint(mapPointInlier);
         }
 
         //BA当前相机位姿，固定点云和其他帧不动
-        //BA ba;
-        //ba(mapLastFrame, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});
+        BA ba;
+        ba(mapLastFrame, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});*/
         return true;
     }
 

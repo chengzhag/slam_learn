@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
 #endif*/
         vo.step(image);
 
-        boost::this_thread::sleep(boost::posix_time::milliseconds(30));
+        boost::this_thread::sleep_for(boost::chrono::milliseconds(30));
     }
 
 

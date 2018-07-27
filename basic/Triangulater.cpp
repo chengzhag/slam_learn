@@ -67,7 +67,7 @@ namespace sky {
                 mapPoint = keyFrame1->getMapPoint(iMapPoint1);
 
                 //创建临时mapPoint拷贝并加入关键帧，再作isGoodPoint判断
-                MapPoint::Ptr testMapPoint(new MapPoint(mapPoint));
+                /*MapPoint::Ptr testMapPoint(new MapPoint(mapPoint));
                 testMapPoint->addObervedFrame(
                         keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
 
@@ -75,8 +75,17 @@ namespace sky {
                     continue;
 
                 //更新mapPoint观测帧
-                mapPoint->addObervedFrame(
+                mapPoint->addObservedFrame(
+                        keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));*/
+
+                mapPoint->addObservedFrame(
                         keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
+
+                if (!isGoodPoint(mapPoint)) {
+                    mapPoint->deleteObservedFrame(keyFrame2);
+                    continue;
+                }
+
                 //更新描述子
                 mapPoint->descriptor = descriptor;
 
@@ -118,8 +127,8 @@ namespace sky {
             if (i < 5)
                 cout << mapPoint->pos << endl << endl;
 #endif*/
-                mapPoint->addObervedFrame(keyFrame1, keyFrame1->getKeyPointCoor(iMapPoint1));
-                mapPoint->addObervedFrame(keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
+                mapPoint->addObservedFrame(keyFrame1, keyFrame1->getKeyPointCoor(iMapPoint1));
+                mapPoint->addObservedFrame(keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
 
                 if (!isGoodPoint(mapPoint))
                     continue;

@@ -16,7 +16,7 @@ namespace sky {
 
     private:
         float minKeyFrameDis, maxKeyFrameDis;
-        int minKeyFrameInlierNum;
+        int minKeyFrameInlierNum, minKeyFrameInterval, frameInterval = 0;
         LocalMap::Ptr localMap;
         Solver3D2D solver3D2D;
         KeyFrame::Ptr frame;
@@ -28,12 +28,14 @@ namespace sky {
                 LocalMap::Ptr localMap,
                 float minKeyFrameDis = Config::get<float>("Tracker.minKeyFrameDis"),
                 float maxKeyFrameDis = Config::get<float>("Tracker.maxKeyFrameDis"),
-                int minKeyFrameInlierNum = Config::get<int>("Tracker.minKeyFrameInlierNum")
+                int minKeyFrameInlierNum = Config::get<int>("Tracker.minKeyFrameInlierNum"),
+                int minKeyFrameInterval = Config::get<int>("Tracker.minKeyFrameInterval")
         ) :
                 localMap(localMap),
                 minKeyFrameDis(minKeyFrameDis),
                 maxKeyFrameDis(maxKeyFrameDis),
-                minKeyFrameInlierNum(minKeyFrameInlierNum){}
+                minKeyFrameInlierNum(minKeyFrameInlierNum),
+                minKeyFrameInterval(minKeyFrameInterval) {}
 
         void step(const KeyFrame::Ptr &frame);
 

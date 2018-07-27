@@ -87,21 +87,23 @@ namespace sky {
             if (hasMode(Mode_Fix_Points))
                 problem.SetParameterBlockConstant(mapPointPos.second.val);
 
-            for (auto &observedFrame:mapPointPos.first->observedFrames) {
-                if (mapHas(frameExtrinsics, observedFrame.first)) {
-                    ceres::CostFunction *costFunction =
-                            new ceres::AutoDiffCostFunction<ReprojectCost, 2, 4, 6, 3>(
-                                    new ReprojectCost(observedFrame.second));
-                    problem.AddResidualBlock(
-                            costFunction,
-                            lossFunction,
-                            cameraIntrinsics[observedFrame.first->camera].val,            // Intrinsic
-                            frameExtrinsics[observedFrame.first].val,  // View Rotation and Translation
-                            mapPointPos.second.val          // Point in 3D space
-                    );
-                }
+            mapPointPos.first->forObservedFrames(
+                    [&](auto &observedFrame) {
+                        if (mapHas(frameExtrinsics, observedFrame.first)) {
+                            ceres::CostFunction *costFunction =
+                                    new ceres::AutoDiffCostFunction<ReprojectCost, 2, 4, 6, 3>(
+                                            new ReprojectCost(observedFrame.second));
+                            problem.AddResidualBlock(
+                                    costFunction,
+                                    lossFunction,
+                                    cameraIntrinsics[observedFrame.first->camera].val,            // Intrinsic
+                                    frameExtrinsics[observedFrame.first].val,  // View Rotation and Translation
+                                    mapPointPos.second.val          // Point in 3D space
+                            );
+                        }
+                    }
+            );
 
-            }
         }
 
 /*#ifdef DEBUG

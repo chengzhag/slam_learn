@@ -34,6 +34,7 @@ namespace sky {
             addFrame(frame);
         }
         lock.unlock();
+
         if (updateWait) {
             wait4keyMutex.lock();
         }
@@ -46,7 +47,7 @@ namespace sky {
         while (!viewer.wasStopped()) {
             boost::mutex::scoped_lock lock(updateMutex);
             viewer.spinOnce();
-            boost::this_thread::sleep(boost::posix_time::milliseconds(15));
+            boost::this_thread::sleep_for(boost::chrono::milliseconds(15));
         }
     }
 

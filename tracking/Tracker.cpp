@@ -7,9 +7,10 @@
 namespace sky {
 
     void Tracker::step(const KeyFrame::Ptr &frame) {
+        ++frameInterval;
         this->frame = frame;
         boost::mutex::scoped_lock lock(localMap->mapMutex);
-        bool solverPass=solver3D2D.solve(localMap->map, frame);
+        bool solverPass = solver3D2D.solve(localMap->map, frame);
         lock.unlock();
         if (solverPass) {
             //判断是否插入关键帧
@@ -23,6 +24,13 @@ namespace sky {
     }
 
     bool Tracker::isKeyFrame() {
+        if (frameInterval < minKeyFrameInterval) {
+#ifdef DEBUG
+            cout << "Tracker: Not a keyFrame. Num of frames to the last keyFrame " << frameInterval
+                 << " is less than minKeyFrameInterval " << minKeyFrameInterval << endl;
+#endif
+            return false;
+        }
         auto dis2LastFrame = frame->getDis2(localMap->getLastFrame());
         if (dis2LastFrame < minKeyFrameDis) {
 #ifdef DEBUG
@@ -46,6 +54,7 @@ namespace sky {
 #endif
             return false;
         }
+        frameInterval = 0;
         return true;
     }
 

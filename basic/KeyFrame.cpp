@@ -68,7 +68,7 @@ namespace sky {
         if (hasMapPoint(i))
             return mapPoints[i];
         else {
-            cerr << "MapPoint: getMapPoint failed! KeyPoint "
+            cerr << "KeyFrame: getMapPoint failed! KeyPoint "
                  << i << " has no corresponding mapPoint" << endl;
             return nullptr;
         }
