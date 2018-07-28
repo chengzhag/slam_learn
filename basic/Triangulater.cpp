@@ -186,7 +186,7 @@ namespace sky {
 
     }
 
-    bool Triangulater::isGoodPoint(const MapPoint::Ptr &mapPoint) {
+    bool Triangulater::isGoodPoint(const MapPoint::Ptr &mapPoint) const {
         //检查是否在距离范围内
         auto dis2keyFrame2 = keyFrame2->getDis2(mapPoint);
         auto disB12 = keyFrame2->getDis2(keyFrame1);

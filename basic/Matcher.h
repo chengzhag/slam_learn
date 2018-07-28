@@ -32,7 +32,7 @@ namespace sky {
 
         void match(const Mat &descriptors1, const Mat &descriptors2);
 
-        inline size_t getMatchesNum() {
+        inline size_t getMatchesNum() const {
             return matches.size();
         }
 

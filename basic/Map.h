@@ -23,7 +23,7 @@ namespace sky {
 
         void addMapPoint(const MapPoint::Ptr &mapPoint);
 
-        KeyFrame::Ptr getLastFrame();
+        KeyFrame::Ptr getLastFrame() const;
 
     };
 

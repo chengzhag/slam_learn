@@ -38,11 +38,11 @@ namespace sky {
 
         bool solve(const KeyFrame::Ptr &keyFrame1, const KeyFrame::Ptr &keyFrame2, bool saveResult = true);
 
-        inline float getInlierRatio() {
+        inline float getInlierRatio() const {
             return inlierRatio;
         }
 
-        inline int getInlierNum() {
+        inline int getInlierNum() const {
             return inlierNum;
         }
 

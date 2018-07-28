@@ -10,20 +10,20 @@
 namespace sky {
 
     template<typename T>
-    T point2dis(cv::Point_<T> p1, cv::Point_<T> p2) {
+    T point2dis(const cv::Point_<T> &p1, const cv::Point_<T> &p2) {
         auto diff = p1 - p2;
         return cv::sqrt(diff.x * diff.x + diff.y * diff.y);
     }
 
     template<class K, class T, class H, class P, class A,
             template<class, class, class, class, class> class M>
-    inline bool mapHas(M<K, T, H, P, A> map, K key) {
+    inline bool mapHas(const M<K, T, H, P, A> &map, const K &key) {
         return map.find(key) != map.end();
     };
 
     template<class K, class H, class P, class A,
             template<class, class, class, class> class S>
-    inline bool setHas(S<K, H, P, A> set, K key) {
+    inline bool setHas(const S<K, H, P, A> &set, const K &key) {
         return set.find(key) != set.end();
     };
 }

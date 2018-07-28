@@ -16,10 +16,10 @@ namespace sky {
             mapPoints.push_back(mapPoint);
     }
 
-    KeyFrame::Ptr Map::getLastFrame() {
+    KeyFrame::Ptr Map::getLastFrame() const {
         if (!keyFrames.empty())
             return keyFrames.back();
-        else{
+        else {
             cerr << "Map: Cannot get lastFrame! No Frame in the map" << endl;
             return nullptr;
         }

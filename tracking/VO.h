@@ -45,7 +45,7 @@ namespace sky {
 
         void step(const Mat &image);
 
-        inline int getState() {
+        inline int getState() const {
             return state;
         }
 

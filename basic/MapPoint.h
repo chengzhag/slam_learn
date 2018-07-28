@@ -74,11 +74,11 @@ namespace sky {
             observedFrames.erase(observedFrame);
         }
 
-        inline bool hasObservedFrame(const KeyFramePtr &observedFrame) {
+        inline bool hasObservedFrame(const KeyFramePtr &observedFrame) const {
             return mapHas(observedFrames, observedFrame);
         }
 
-        bool getPixelCoor(const KeyFramePtr &observedFrame, cv::Point2d &pixelCoor);
+        bool getPixelCoor(const KeyFramePtr &observedFrame, cv::Point2d &pixelCoor) const;
 
         template<typename L>
         void forObservedFrames(L func) {

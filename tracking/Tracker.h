@@ -40,7 +40,7 @@ namespace sky {
         void step(const KeyFrame::Ptr &frame);
 
     private:
-        bool isKeyFrame();
+        bool isKeyFrame() const;
 
 
     };

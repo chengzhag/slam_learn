@@ -26,7 +26,10 @@ namespace sky {
             thread.join();
         }
 
+        boost::mutex::scoped_lock lock(mapMutex);
         refFrame = getLastFrame();
+        lock.unlock();
+
 #ifdef DEBUG
         cout << "LocalMap: Adding keyFrame... " << frame->getDis2(refFrame)
              << " from last keyFrame" << endl;
@@ -75,6 +78,7 @@ namespace sky {
             else
                 it = map->mapPoints.erase(it);
         }
+        lock.unlock();
     }
 
     bool LocalMap::isGoodPoint(const MapPoint::Ptr &mapPoint) {

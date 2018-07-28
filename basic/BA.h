@@ -86,7 +86,7 @@ namespace sky {
             }
         };
 
-        inline bool hasMode(Mode mode) {
+        inline bool hasMode(Mode mode) const {
             return setHas(modeSet, mode);
         }
 

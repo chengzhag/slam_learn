@@ -19,11 +19,13 @@ namespace sky {
                 cout << "Tracker: Adding keyframe..." << endl;
 #endif
                 localMap->addFrame(frame);
+                frameInterval = 0;
             }
         }
     }
 
-    bool Tracker::isKeyFrame() {
+    bool Tracker::isKeyFrame() const {
+        //关键帧之间的最小间隔帧数
         if (frameInterval < minKeyFrameInterval) {
 #ifdef DEBUG
             cout << "Tracker: Not a keyFrame. Num of frames to the last keyFrame " << frameInterval
@@ -31,7 +33,11 @@ namespace sky {
 #endif
             return false;
         }
+
+        //关键帧的最小、最大间距
+        boost::mutex::scoped_lock lock(localMap->mapMutex);
         auto dis2LastFrame = frame->getDis2(localMap->getLastFrame());
+        lock.unlock();
         if (dis2LastFrame < minKeyFrameDis) {
 #ifdef DEBUG
             cout << "Tracker: Not a keyFrame. Distance to the last keyFrame " << dis2LastFrame
@@ -54,7 +60,6 @@ namespace sky {
 #endif
             return false;
         }
-        frameInterval = 0;
         return true;
     }
 

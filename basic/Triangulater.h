@@ -38,7 +38,7 @@ namespace sky {
         void convAndAddMappoints(const Map::Ptr &map, const Mat &inlierMask,
                                  const Mat &points4D, const vector<cv::DMatch> &matches);
 
-        bool isGoodPoint(const MapPoint::Ptr &mapPoint);
+        bool isGoodPoint(const MapPoint::Ptr &mapPoint) const;
 
     };
 }

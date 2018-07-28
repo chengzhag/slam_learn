@@ -36,8 +36,7 @@ namespace sky {
 
         void addFrame(const KeyFrame::Ptr &frame);
 
-        inline KeyFrame::Ptr getLastFrame() {
-            boost::mutex::scoped_lock lock(mapMutex);
+        inline KeyFrame::Ptr getLastFrame() const {
             return map->getLastFrame();
         }
 

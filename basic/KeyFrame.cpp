@@ -23,28 +23,28 @@ namespace sky {
         return Tcw.inverse().translation();
     }
 
-    cv::Mat KeyFrame::getTcwMatCV(int rtype) {
+    cv::Mat KeyFrame::getTcwMatCV(int rtype) const {
         cv::Mat TcwCV, TcwCVR;
         cv::eigen2cv(Tcw.matrix(), TcwCV);
         TcwCV.convertTo(TcwCVR, rtype);
         return TcwCVR;
     }
 
-    cv::Mat KeyFrame::getTcw34MatCV(int rtype) {
+    cv::Mat KeyFrame::getTcw34MatCV(int rtype) const {
         auto TcwCV = getTcwMatCV(rtype);
         Mat Tcw34;
         TcwCV(cv::Range(0, 3), cv::Range(0, 4)).convertTo(Tcw34, rtype);
         return Tcw34;
     }
 
-    cv::Mat KeyFrame::getTwcMatCV(int rtype) {
+    cv::Mat KeyFrame::getTwcMatCV(int rtype) const {
         cv::Mat TwcCV, TwcCVR;
         cv::eigen2cv(Tcw.inverse().matrix(), TwcCV);
         TwcCV.convertTo(TwcCVR, rtype);
         return TwcCVR;
     }
 
-    bool KeyFrame::proj2frame(const Vector3d &pt_world, Vector2d &pixelColRow) {
+    bool KeyFrame::proj2frame(const Vector3d &pt_world, Vector2d &pixelColRow) const {
         Vector3d p_cam = camera->world2camera(pt_world, Tcw);
         pixelColRow = camera->world2pixel(pt_world, Tcw);
         // cout<<"pt_world = "<<endl<<pt_world<<endl;
@@ -56,7 +56,7 @@ namespace sky {
                && pixelColRow(1, 0) < image.rows;
     }
 
-    float KeyFrame::getDis2(const Sophus::Vector3d &coor) {
+    float KeyFrame::getDis2(const Sophus::Vector3d &coor) const {
         Sophus::Vector3d coorFrom = Tcw.translation();
         float dis = 0;
         for (int i = 0; i < 3; ++i)
@@ -64,9 +64,13 @@ namespace sky {
         return sqrt(dis);
     }
 
-    MapPoint::Ptr KeyFrame::getMapPoint(int i) {
-        if (hasMapPoint(i))
-            return mapPoints[i];
+    MapPoint::Ptr KeyFrame::getMapPoint(int i) const {
+        auto it = mapPoints.find(i);
+        if (it != mapPoints.end()) {
+            return it->second;
+        }
+/*        if (hasMapPoint(i))
+            return mapPoints[i];*/
         else {
             cerr << "KeyFrame: getMapPoint failed! KeyPoint "
                  << i << " has no corresponding mapPoint" << endl;
