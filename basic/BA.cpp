@@ -6,6 +6,34 @@
 
 namespace sky {
 
+    BA::BA() {
+        ceres_config_options.minimizer_progress_to_stdout = false;
+        ceres_config_options.logging_type = ceres::SILENT;
+        ceres_config_options.num_threads = 4;
+        ceres_config_options.preconditioner_type = ceres::JACOBI;
+        ceres_config_options.linear_solver_type = ceres::SPARSE_SCHUR;
+        ceres_config_options.sparse_linear_algebra_library_type = ceres::EIGEN_SPARSE;
+    }
+
+    void BA::operator()(Map::Ptr map, ModeSet modeSet) {
+        if (!map) {
+            cerr << "BA: Failed! map is empty! " << endl;
+        }
+        if (map->keyFrames.size() == 0) {
+            cerr << "BA: Failed! map has no keyFrame! " << endl;
+        }
+        if (map->mapPoints.size() == 0) {
+            cerr << "BA: Failed! map has no mapPoint! " << endl;
+        }
+        this->map = map;
+        KeyFrame:
+        this->modeSet = modeSet;
+        loadMap();
+        bundleAdjustment();
+        writeMap();
+        clear();
+    }
+
     void BA::loadMap() {
 #ifdef DEBUG
         cout << "BA: loadMap... ";
@@ -158,34 +186,6 @@ namespace sky {
         cameraIntrinsics.clear();
         frameExtrinsics.clear();
         mapPointsPos.clear();
-    }
-
-    BA::BA() {
-        ceres_config_options.minimizer_progress_to_stdout = false;
-        ceres_config_options.logging_type = ceres::SILENT;
-        ceres_config_options.num_threads = 1;
-        ceres_config_options.preconditioner_type = ceres::JACOBI;
-        ceres_config_options.linear_solver_type = ceres::SPARSE_SCHUR;
-        ceres_config_options.sparse_linear_algebra_library_type = ceres::EIGEN_SPARSE;
-    }
-
-    void BA::operator()(Map::Ptr map, ModeSet modeSet) {
-        if (!map) {
-            cerr << "BA: Failed! map is empty! " << endl;
-        }
-        if (map->keyFrames.size() == 0) {
-            cerr << "BA: Failed! map has no keyFrame! " << endl;
-        }
-        if (map->mapPoints.size() == 0) {
-            cerr << "BA: Failed! map has no mapPoint! " << endl;
-        }
-        this->map = map;
-        KeyFrame:
-        this->modeSet = modeSet;
-        loadMap();
-        bundleAdjustment();
-        writeMap();
-        clear();
     }
 
 }

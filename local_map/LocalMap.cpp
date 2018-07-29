@@ -46,8 +46,8 @@ namespace sky {
         triangulate();
         ba();
         //BA可能导致一些外点，不如把筛选过程放到BA后
-        filtMapPoints();
         filtKeyFrames();
+        filtMapPoints();
 
         boost::mutex::scoped_lock lock(mapMutex);
         mapViewer.update(map);
@@ -67,36 +67,6 @@ namespace sky {
                          "match used in triangulation");
     }
 
-    void LocalMap::filtMapPoints() {
-#ifdef DEBUG
-        cout << "LocalMap: filtMapPoints... " << endl;
-#endif
-        boost::mutex::scoped_lock lock(mapMutex);
-        for (auto it = map->mapPoints.begin(); it != map->mapPoints.end();) {
-            if (isGoodPoint(*it))
-                ++it;
-            else
-                it = map->mapPoints.erase(it);
-        }
-        lock.unlock();
-    }
-
-    bool LocalMap::isGoodPoint(const MapPoint::Ptr &mapPoint) {
-/*#ifdef DEBUG
-        cout << "\t" << mapPoint->observedFrames.size() << " observedFrames" << endl;
-#endif*/
-        if (map->keyFrames.size() >= 3)
-            if (mapPoint->observedFrames.size() < 3)
-                return false;
-
-        //根据到每个观测帧的最大距离来判断
-        for (auto &observedFrame:mapPoint->observedFrames) {
-            if (observedFrame.first->getDis2(mapPoint) > maxInlierPointDis)
-                return false;
-        }
-        return true;
-    }
-
     void LocalMap::triangulate() {
 #ifdef DEBUG
         cout << "LocalMap: triangulate... " << endl;
@@ -110,10 +80,12 @@ namespace sky {
         //ba(triangulateMap, {BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
 
         //添加关键帧和地图点
+        newMapPoints.clear();
         boost::mutex::scoped_lock lock(mapMutex);
         map->addFrame(currFrame);
         for (auto &point:triangulateMap->mapPoints) {
             map->addMapPoint(point);
+            newMapPoints.insert(point);
         }
         lock.unlock();
     }
@@ -132,7 +104,63 @@ namespace sky {
 #ifdef DEBUG
         cout << "LocalMap: filtKeyFrames... " << endl;
 #endif
+        int iFrames = 0;
+        boost::mutex::scoped_lock lock(mapMutex);
+        for (auto it = map->keyFrames.rbegin(); it != map->keyFrames.rend();) {
+            if (isGoodFrame(*it) && iFrames < maxKeyFrames) {
+                ++it;
+                ++iFrames;
+            } else {
+                it = list<KeyFrame::Ptr>::reverse_iterator(map->keyFrames.erase((++it).base()));
+            }
+        }
+        lock.unlock();
+    }
 
+    bool LocalMap::isGoodFrame(const KeyFrame::Ptr &keyFrame) const {
+
+        return true;
+    }
+
+    void LocalMap::filtMapPoints() {
+#ifdef DEBUG
+        cout << "LocalMap: filtMapPoints... " << endl;
+#endif
+        boost::mutex::scoped_lock lock(mapMutex);
+        for (auto it = map->mapPoints.begin(); it != map->mapPoints.end();) {
+            if (isGoodPoint(*it))
+                ++it;
+            else
+                it = map->mapPoints.erase(it);
+        }
+        lock.unlock();
+    }
+
+    bool LocalMap::isGoodPoint(const MapPoint::Ptr &mapPoint) const {
+/*#ifdef DEBUG
+        cout << "\t" << !setHas(newMapPoints, mapPoint) << "\t"
+             << mapPoint->observedFrames.size() << " observedFrames" << endl;
+#endif*/
+        if (map->keyFrames.size() >= 4)
+            if (!setHas(newMapPoints, mapPoint)
+                && mapPoint->observedFrames.size() < 3)
+                return false;
+
+        //根据到每个观测帧的最大距离来判断
+        for (auto &observedFrame:mapPoint->observedFrames) {
+            if (observedFrame.first->getDis2(mapPoint) > maxInlierPointDis)
+                return false;
+        }
+
+        //如果不被当前LocalMap中的关键帧观测，则过滤
+        for (auto &keyFrame:map->keyFrames) {
+            if (mapPoint->hasObservedFrame(keyFrame))
+                break;
+            if (keyFrame == map->keyFrames.back())
+                return false;
+        }
+
+        return true;
     }
 
 }

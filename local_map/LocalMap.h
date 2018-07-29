@@ -11,6 +11,7 @@
 #include <boost/thread.hpp>
 #include "MapViewer.h"
 #include "Config.h"
+#include <unordered_set>
 
 namespace sky {
 
@@ -18,6 +19,7 @@ namespace sky {
 
     private:
         float maxInlierPointDis;
+        int maxKeyFrames;
         Matcher matcher;
         boost::thread thread;
         KeyFrame::Ptr refFrame, currFrame;
@@ -29,8 +31,11 @@ namespace sky {
         Map::Ptr map;
         boost::mutex mapMutex;
 
-        LocalMap(float maxInlierPointDis = Config::get<float>("LocalMap.maxInlierPointDis")) :
-                maxInlierPointDis(maxInlierPointDis) {}
+        LocalMap(float maxInlierPointDis = Config::get<float>("LocalMap.maxInlierPointDis"),
+                 int maxKeyFrames = Config::get<float>("LocalMap.maxKeyFrames")
+        ) :
+                maxInlierPointDis(maxInlierPointDis),
+                maxKeyFrames(maxKeyFrames){}
 
         void init(const Map::Ptr &map);
 
@@ -49,11 +54,15 @@ namespace sky {
 
         void ba();
 
-        void filtMapPoints();
-
-        bool isGoodPoint(const MapPoint::Ptr &mapPoint);
+        unordered_set<MapPoint::Ptr> newMapPoints;
 
         void filtKeyFrames();
+
+        bool isGoodFrame(const KeyFrame::Ptr &keyFrame) const;
+
+        void filtMapPoints();
+
+        bool isGoodPoint(const MapPoint::Ptr &mapPoint) const;
     };
 
 
