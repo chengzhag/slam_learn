@@ -26,7 +26,6 @@ namespace sky {
             cerr << "BA: Failed! map has no mapPoint! " << endl;
         }
         this->map = map;
-        KeyFrame:
         this->modeSet = modeSet;
         loadMap();
         bundleAdjustment();
@@ -94,7 +93,7 @@ namespace sky {
         for (auto &frameExtrinsic:frameExtrinsics)
             problem.AddParameterBlock(frameExtrinsic.second.val, 6);
         auto itKeyFrame = map->keyFrames.begin();
-        if (hasMode(Mode_Fix_First_Frame))
+        if (hasMode(Mode_Fix_First_Frame) || hasMode(Mode_Fix_First_2Frames))
             problem.SetParameterBlockConstant(frameExtrinsics[*itKeyFrame].val);
         if (hasMode(Mode_Fix_First_2Frames)) {
             if (++itKeyFrame == map->keyFrames.end()) {

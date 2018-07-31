@@ -49,7 +49,7 @@ namespace sky {
     private:
 
         class ReprojectCost {
-            cv::Point2d observation;
+            const cv::Point2d observation;
         public:
             ReprojectCost(const cv::Point2d &observation) : observation(observation) {}
 
