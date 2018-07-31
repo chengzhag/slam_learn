@@ -43,8 +43,28 @@ namespace sky {
         return true;
     }
 
+    void Solver2D2D::viewInliersInCVV() const {
+        //可视化用于解对极约束的点
+#ifdef CVVISUAL_DEBUGMODE
+        vector<cv::DMatch> inlierMatches;
+        vector<cv::KeyPoint> inlierKeyPoints1, inlierKeyPoints2;
+        for (int i = 0; i < matches.size(); ++i) {
+            if (!inlierMask.at<uint8_t>(i, 0))
+                continue;
+            inlierMatches.push_back(matches[i]);
+            inlierMatches.back().trainIdx = inlierKeyPoints1.size();
+            inlierMatches.back().queryIdx = inlierKeyPoints2.size();
+            inlierKeyPoints1.push_back(keyFrame1->keyPoints[matches[i].queryIdx]);
+            inlierKeyPoints2.push_back(keyFrame2->keyPoints[matches[i].trainIdx]);
+        }
+        cvv::debugDMatch(keyFrame1->image, inlierKeyPoints1, keyFrame2->image, inlierKeyPoints2, inlierMatches,
+                         CVVISUAL_LOCATION,
+                         "match used in triangulation");
+
+#endif
+    }
+
     Map::Ptr Solver2D2D::triangulate() {
-        Triangulater triangulater;
         return triangulater.triangulate(keyFrame1, keyFrame2, matches, inlierMask);
     }
 
@@ -66,24 +86,6 @@ namespace sky {
         cout << nPointsFindEssentialMat << " valid points of " << matchPoints1.size()
              << " , " << (float) nPointsFindEssentialMat * 100 / matchPoints1.size() << "% "
              << " are used" << endl;
-#endif
-        //可视化用于解对极约束的点
-#ifdef CVVISUAL_DEBUGMODE
-        vector<cv::DMatch> inlierMatches;
-            vector<cv::KeyPoint> inlierKeyPoints1, inlierKeyPoints2;
-            for (int i = 0; i < matches.size(); ++i) {
-                if (!inlierMask.at<uint8_t>(i, 0))
-                    continue;
-                inlierMatches.push_back(matches[i]);
-                inlierMatches.back().trainIdx = inlierKeyPoints1.size();
-                inlierMatches.back().queryIdx = inlierKeyPoints2.size();
-                inlierKeyPoints1.push_back(keyFrame1->keyPoints[matches[i].queryIdx]);
-                inlierKeyPoints2.push_back(keyFrame2->keyPoints[matches[i].trainIdx]);
-            }
-            cvv::debugDMatch(keyFrame1->image, inlierKeyPoints1, keyFrame2->image, inlierKeyPoints2, inlierMatches,
-                             CVVISUAL_LOCATION,
-                             "match used in triangulation");
-
 #endif
 
         //解frame2的R、t并计算se3

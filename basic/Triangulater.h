@@ -17,6 +17,7 @@ namespace sky {
     private:
         float maxDisRatio, minDisRatio, maxProjDis;
         KeyFrame::Ptr keyFrame1, keyFrame2;
+        Map::Ptr map;
 
     public:
 
@@ -32,6 +33,8 @@ namespace sky {
                     const KeyFrame::Ptr &keyFrame2,
                     const vector<cv::DMatch> &matches,
                     Mat inlierMask = Mat());
+
+        void viewReprojInCVV() const;
 
     private:
 

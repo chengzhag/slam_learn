@@ -7,6 +7,8 @@
 namespace sky {
 
     void Tracker::step(const KeyFrame::Ptr &frame) {
+        static bool showedCVV = true;
+
         ++frameInterval;
         this->frame = frame;
         boost::mutex::scoped_lock lock(localMap->mapMutex);
@@ -18,9 +20,24 @@ namespace sky {
 #ifdef DEBUG
                 cout << "Tracker: Adding keyframe..." << endl;
 #endif
+                localMap->waitForThread();
+                //如果到添加关键帧前还没有显示过，则显示
+                if(!showedCVV){
+                    localMap->viewMatchInCVV();
+                    localMap->viewReprojInCVV();
+                    showedCVV = true;
+                }
                 localMap->addFrame(frame);
                 frameInterval = 0;
+                showedCVV = false;
             }
+        }
+
+        //如果后面没有关键帧添加，可以等上一关键帧添加结束显示
+        if (!showedCVV && !localMap->isAdding()) {
+            localMap->viewMatchInCVV();
+            localMap->viewReprojInCVV();
+            showedCVV = true;
         }
     }
 

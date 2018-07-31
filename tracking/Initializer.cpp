@@ -49,6 +49,10 @@ namespace sky {
                 return false;
             }
 
+            solver2D2D.viewInliersInCVV();
+            solver2D2D.viewReprojInCVV();
+
+
             BA ba;
             ba(initialMap, {BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
 

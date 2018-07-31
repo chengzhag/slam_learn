@@ -21,7 +21,7 @@ namespace sky {
         this->keyFrame1 = keyFrame1;
         this->keyFrame2 = keyFrame2;
 
-        Map::Ptr map(new Map);
+        map = Map::Ptr(new Map);
         map->addFrame(keyFrame1);
         map->addFrame(keyFrame2);
 
@@ -43,6 +43,15 @@ namespace sky {
 
         return map;
     }
+
+    void Triangulater::viewReprojInCVV() const {
+#ifdef CVVISUAL_DEBUGMODE
+        if (!map)
+            return;
+        map->viewFrameProjInCVV(keyFrame2);
+#endif
+    }
+
 
     void Triangulater::convAndAddMappoints(const Map::Ptr &map, const Mat &inlierMask,
                                            const Mat &points4D, const vector<cv::DMatch> &matches) {
@@ -164,25 +173,6 @@ namespace sky {
         }
 #endif*/
 
-#ifdef CVVISUAL_DEBUGMODE
-        //通过匹配点的方式可视化重投影误差
-        vector<cv::KeyPoint> rawPoints, projPoints;
-        vector<cv::DMatch> projMatches;
-        int i = 0;
-        for (auto &mapPoint:map->mapPoints) {
-            auto &rawPos1 = mapPoint->observedFrames[keyFrame2];
-            cv::Point2d projPos1;
-            keyFrame2->proj2frame(mapPoint, projPos1);
-
-            rawPoints.push_back(cv::KeyPoint(rawPos1, 1));
-            projPoints.push_back(cv::KeyPoint(projPos1, 1));
-            projMatches.push_back(cv::DMatch(i, i, point2dis(rawPos1, projPos1)));
-            ++i;
-        }
-        cvv::debugDMatch(keyFrame2->image, rawPoints, keyFrame2->image, projPoints, projMatches,
-                         CVVISUAL_LOCATION,
-                         "Reprojection");
-#endif
 
     }
 

@@ -25,6 +25,7 @@ namespace sky {
 
         KeyFrame::Ptr getLastFrame() const;
 
+        bool viewFrameProjInCVV(const KeyFrame::Ptr &frame) const;
     };
 
 }

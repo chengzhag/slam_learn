@@ -19,12 +19,7 @@ namespace sky {
     void LocalMap::addFrame(const KeyFrame::Ptr &frame) {
         currFrame = frame;
         //在加入keyFrame前等待上一次线程结束
-        if (thread.joinable()) {
-#ifdef DEBUG
-            cout << "LocalMap: Waiting for thread to finish..." << endl;
-#endif
-            thread.join();
-        }
+        waitForThread();
 
         boost::mutex::scoped_lock lock(mapMutex);
         refFrame = getLastFrame();
@@ -40,6 +35,13 @@ namespace sky {
 
     }
 
+    void LocalMap::viewMatchInCVV() const {
+        cvv::debugDMatch(refFrame->image, refFrame->keyPoints,
+                         currFrame->image, currFrame->keyPoints,
+                         matcher.matches,
+                         CVVISUAL_LOCATION,
+                         "match used in triangulation");
+    }
 
     void LocalMap::threadFunc() {
         prepareKeyFrame();
@@ -60,11 +62,6 @@ namespace sky {
 #endif
         //匹配上一个关键帧
         matcher.match(refFrame->descriptors, currFrame->descriptors);
-        cvv::debugDMatch(refFrame->image, refFrame->keyPoints,
-                         currFrame->image, currFrame->keyPoints,
-                         matcher.matches,
-                         CVVISUAL_LOCATION,
-                         "match used in triangulation");
     }
 
     void LocalMap::triangulate() {
@@ -72,7 +69,6 @@ namespace sky {
         cout << "LocalMap: triangulate... " << endl;
 #endif
         //三角化
-        Triangulater triangulater;
         auto triangulateMap = triangulater.triangulate(
                 refFrame, currFrame, matcher.matches);
 

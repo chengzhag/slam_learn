@@ -24,6 +24,7 @@ namespace sky {
         float minInlierRatio;
 
         KeyFrame::Ptr keyFrame1, keyFrame2;
+        Triangulater triangulater;
 
         Mat inlierMask;
 
@@ -37,6 +38,12 @@ namespace sky {
                 minInlierRatio(minInlierRatio) {}
 
         bool solve(const KeyFrame::Ptr &keyFrame1, const KeyFrame::Ptr &keyFrame2, bool saveResult = true);
+
+        void viewInliersInCVV() const;
+
+        inline void viewReprojInCVV() const {
+            triangulater.viewReprojInCVV();
+        }
 
         inline float getInlierRatio() const {
             return inlierRatio;

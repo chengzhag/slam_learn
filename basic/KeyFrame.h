@@ -14,6 +14,9 @@
 
 namespace sky {
 
+    class Map;
+    typedef shared_ptr<Map> MapPtr;
+
     class KeyFrame {
     private:
         unordered_map<int, MapPoint::Ptr> mapPoints;//在descriptors或keyPoints中的序号和对应的地图点

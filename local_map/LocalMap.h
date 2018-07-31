@@ -23,6 +23,7 @@ namespace sky {
         Matcher matcher;
         boost::thread thread;
         KeyFrame::Ptr refFrame, currFrame;
+        Triangulater triangulater;
 
         MapViewer mapViewer;
 
@@ -35,11 +36,30 @@ namespace sky {
                  int maxKeyFrames = Config::get<float>("LocalMap.maxKeyFrames")
         ) :
                 maxInlierPointDis(maxInlierPointDis),
-                maxKeyFrames(maxKeyFrames){}
+                maxKeyFrames(maxKeyFrames) {}
 
         void init(const Map::Ptr &map);
 
         void addFrame(const KeyFrame::Ptr &frame);
+
+        inline bool isAdding() const {
+            return thread.joinable();
+        }
+
+        inline void waitForThread() {
+            if (isAdding()) {
+#ifdef DEBUG
+                cout << "LocalMap: Waiting for thread to finish..." << endl;
+#endif
+                thread.join();
+            }
+        }
+
+        void viewMatchInCVV() const;
+
+        inline void viewReprojInCVV() const {
+            triangulater.viewReprojInCVV();
+        }
 
         inline KeyFrame::Ptr getLastFrame() const {
             return map->getLastFrame();

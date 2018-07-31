@@ -3,6 +3,7 @@
 //
 
 #include "Map.h"
+#include <opencv2/cvv.hpp>
 
 namespace sky {
 
@@ -24,6 +25,30 @@ namespace sky {
             return nullptr;
         }
 
+    }
+
+    bool Map::viewFrameProjInCVV(const KeyFrame::Ptr &frame) const {
+#ifdef CVVISUAL_DEBUGMODE
+        //通过匹配点的方式可视化重投影误差
+        vector<cv::KeyPoint> rawPoints, projPoints;
+        vector<cv::DMatch> projMatches;
+        int i = 0;
+        for (const MapPoint::Ptr &mapPoint:mapPoints) {
+            if(mapPoint->hasObservedFrame(frame)){
+                auto &rawPos = mapPoint->observedFrames[frame];
+                cv::Point2d projPos;
+                frame->proj2frame(mapPoint, projPos);
+
+                rawPoints.push_back(cv::KeyPoint(rawPos, 1));
+                projPoints.push_back(cv::KeyPoint(projPos, 1));
+                projMatches.push_back(cv::DMatch(i, i, point2dis(rawPos, projPos)));
+                ++i;
+            }
+        }
+        cvv::debugDMatch(frame->image, rawPoints, frame->image, projPoints, projMatches,
+                         CVVISUAL_LOCATION,
+                         "Reprojection");
+#endif
     }
 
 }
