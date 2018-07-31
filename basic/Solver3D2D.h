@@ -26,6 +26,7 @@ namespace sky {
 
         Mat descriptorsMap;
         vector<cv::Point3f> points3D;
+        Map::Ptr map;
         KeyFrame::Ptr keyFrame2;
 
         Mat indexInliers;
@@ -42,7 +43,14 @@ namespace sky {
         ) :
                 minInlierNum(minInlierNum),
                 minInlierRatio(minInlierRatio),
-                max3Dnum(max3Dnum), min3Dnum(min3Dnum), max3Ddis(max3Ddis) {}
+                max3Dnum(max3Dnum), min3Dnum(min3Dnum), max3Ddis(max3Ddis) {
+            cout << "Solver3D2D: Initializing..." << endl;
+            coutVariable(minInlierNum);
+            coutVariable(minInlierRatio);
+            coutVariable(max3Dnum);
+            coutVariable(min3Dnum);
+            coutVariable(max3Ddis);
+        }
 
         bool solve(const Map::Ptr &map, const KeyFrame::Ptr &keyFrame2);
 

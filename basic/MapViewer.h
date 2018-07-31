@@ -41,6 +41,10 @@ namespace sky {
                 updateWait(updateWait),
                 viewer("3D Viewer"),
                 cloud(new pcl::PointCloud<pcl::PointXYZRGB>) {
+#ifdef DEBUG
+            cout << "MapViewer: Initializing..." << endl;
+            coutVariable(updateWait);
+#endif
 
             viewer.setBackgroundColor(
                     Config::get<double>("MapViewer.backgroundColor.r"),
@@ -69,11 +73,13 @@ namespace sky {
 
     private:
 #ifdef CLOUDVIEWER_DEBUG
+
         void threadFunc();
 
         void keyboardEventOccurred(const pcl::visualization::KeyboardEvent &event);
 
         void addFrame(const KeyFrame::Ptr &frame, string camName = "");
+
 #endif
     };
 

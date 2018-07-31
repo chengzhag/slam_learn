@@ -31,6 +31,10 @@ namespace sky {
         }
     };
 
+
+#define name2str(name) (#name)
+#define coutVariable(v) (cout<<"\t"<<name2str(v)<<" = "<<v<<endl)
+
 }
 
 

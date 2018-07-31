@@ -35,7 +35,11 @@ namespace sky {
                    float minInlierRatio = Config::get<float>("Solver2D2D.minInlierRatio")
         ) :
                 minInlierNum(minInlierNum),
-                minInlierRatio(minInlierRatio) {}
+                minInlierRatio(minInlierRatio) {
+            cout << "Solver2D2D: Initializing..." << endl;
+            coutVariable(minInlierNum);
+            coutVariable(minInlierRatio);
+        }
 
         bool solve(const KeyFrame::Ptr &keyFrame1, const KeyFrame::Ptr &keyFrame2, bool saveResult = true);
 

@@ -31,19 +31,24 @@ namespace sky {
 
         VO(Camera::Ptr camera,
            LocalMap::Ptr localMap,
-           string featureType = Config::get<string>("VO.featureType")
+           string featureType = Config::get<string>("VO.featureType"),
+           int nfeatures = Config::get<int>("VO.nfeatures")
         ) :
                 camera(camera),
                 localMap(localMap),
                 tracker(new Tracker(localMap)),
                 initializer(new Initializer) {
+            cout << "VO: Initializing..." << endl;
+            coutVariable(featureType);
+            coutVariable(nfeatures);
+
             if (featureType == "ORB")
-                feature2D = cv::ORB::create(Config::get<int>("VO.nfeatures"));
+                feature2D = cv::ORB::create(nfeatures);
             else if (featureType == "SIFT")
-                feature2D = cv::xfeatures2d::SIFT::create(Config::get<int>("VO.nfeatures"), 3, 0.04, 10);
+                feature2D = cv::xfeatures2d::SIFT::create(nfeatures, 3, 0.04, 10);
         }
 
-        void step(const Mat &image);
+        bool step(const Mat &image);
 
         inline int getState() const {
             return state;

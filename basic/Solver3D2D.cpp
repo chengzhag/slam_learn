@@ -13,6 +13,7 @@ namespace sky {
         points3D.clear();
         descriptorsMap = Mat();
         indexInliers = Mat();
+        this->map = map;
 
 
         this->keyFrame2 = keyFrame2;

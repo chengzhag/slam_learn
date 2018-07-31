@@ -54,6 +54,10 @@ namespace sky {
         boost::mutex::scoped_lock lock(mapMutex);
         mapViewer.update(map);
         lock.unlock();
+
+#ifdef DEBUG
+        cout << "LocalMap: End adding! " << endl;
+#endif
     }
 
     void LocalMap::prepareKeyFrame() {
@@ -137,14 +141,22 @@ namespace sky {
         cout << "\t" << !setHas(newMapPoints, mapPoint) << "\t"
              << mapPoint->observedFrames.size() << " observedFrames" << endl;
 #endif*/
-        if (map->keyFrames.size() >= 4)
+/*        if (map->keyFrames.size() >= 4)
             if (!setHas(newMapPoints, mapPoint)
                 && mapPoint->observedFrames.size() < 3)
+                return false;*/
+
+        for (auto &observedFrame:mapPoint->observedFrames) {
+            //根据到每个观测帧的最大距离来判断
+            if (observedFrame.first->getDis2(mapPoint) > maxInlierPointDis)
                 return false;
 
-        //根据到每个观测帧的最大距离来判断
-        for (auto &observedFrame:mapPoint->observedFrames) {
-            if (observedFrame.first->getDis2(mapPoint) > maxInlierPointDis)
+            //根据重投影误差删除外点
+            cv::Point2d reprojCoor;
+            if(!observedFrame.first->proj2frame(mapPoint, reprojCoor))
+                return false;
+            auto reprojErr = point2dis(observedFrame.second, reprojCoor);
+            if (reprojErr > triangulater.maxReprojErr)
                 return false;
         }
 

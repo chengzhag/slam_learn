@@ -30,7 +30,12 @@ namespace sky {
                     int minMapPointNum = Config::get<int>("Initializer.minMapPointNum")) :
                 maxFrameInterval(maxFrameInterval),
                 minFrameInterval(minFrameInterval),
-                minMapPointNum(minMapPointNum) {}
+                minMapPointNum(minMapPointNum) {
+            cout << "Initializer: Initializing..." << endl;
+            coutVariable(maxFrameInterval);
+            coutVariable(minFrameInterval);
+            coutVariable(minMapPointNum);
+        }
 
         bool step(const KeyFrame::Ptr &frame);
 

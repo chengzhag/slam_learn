@@ -189,14 +189,14 @@ namespace sky {
         cv::Point2d projPos1;
         if (!keyFrame1->proj2frame(mapPoint, projPos1))
             return false;
-        if (point2dis(rawPos1, projPos1) > maxProjDis)
+        if (point2dis(rawPos1, projPos1) > maxReprojErr)
             return false;
 
         auto &rawPos2 = mapPoint->observedFrames[keyFrame1];
         cv::Point2d projPos2;
         if (!keyFrame2->proj2frame(mapPoint, projPos2))
             return false;
-        if (point2dis(rawPos2, projPos2) > maxProjDis)
+        if (point2dis(rawPos2, projPos2) > maxReprojErr)
             return false;
 
 

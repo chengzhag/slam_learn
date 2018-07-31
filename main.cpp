@@ -52,12 +52,7 @@ int main(int argc, char **argv) {
         sort(imagesDir.begin(), imagesDir.end());
     }
 
-    Camera::Ptr camera = Camera::Ptr(new Camera(
-            Config::get<float>("Camera.fx"),
-            Config::get<float>("Camera.fy"),
-            Config::get<float>("Camera.cx"),
-            Config::get<float>("Camera.cy")
-    ));
+    Camera::Ptr camera = Camera::Ptr(new Camera);
 
     LocalMap::Ptr localMap(new LocalMap);
     VO vo(camera,
@@ -73,7 +68,13 @@ int main(int argc, char **argv) {
 /*#ifdef CVVISUAL_DEBUGMODE
         cvv::showImage(image, CVVISUAL_LOCATION, "Adding image: " + imageDir, "");
 #endif*/
-        vo.step(image);
+        if (!vo.step(image)) {
+#ifdef DEBUG
+            cerr << "SLAM: VO lost! " << endl;
+#endif
+            cvv::finalShow();
+            break;
+        }
 
         boost::this_thread::sleep_for(boost::chrono::milliseconds(30));
     }

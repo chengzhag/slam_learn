@@ -36,7 +36,11 @@ namespace sky {
                  int maxKeyFrames = Config::get<float>("LocalMap.maxKeyFrames")
         ) :
                 maxInlierPointDis(maxInlierPointDis),
-                maxKeyFrames(maxKeyFrames) {}
+                maxKeyFrames(maxKeyFrames) {
+            cout << "LocalMap: Initializing..." << endl;
+            coutVariable(maxInlierPointDis);
+            coutVariable(maxKeyFrames);
+        }
 
         void init(const Map::Ptr &map);
 

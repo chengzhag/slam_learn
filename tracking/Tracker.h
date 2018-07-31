@@ -35,9 +35,15 @@ namespace sky {
                 minKeyFrameDis(minKeyFrameDis),
                 maxKeyFrameDis(maxKeyFrameDis),
                 minKeyFrameInlierNum(minKeyFrameInlierNum),
-                minKeyFrameInterval(minKeyFrameInterval) {}
+                minKeyFrameInterval(minKeyFrameInterval) {
+            cout << "Tracker: Initializing..." << endl;
+            coutVariable(minKeyFrameDis);
+            coutVariable(maxKeyFrameDis);
+            coutVariable(minKeyFrameInlierNum);
+            coutVariable(minKeyFrameInterval);
+        }
 
-        void step(const KeyFrame::Ptr &frame);
+        bool step(const KeyFrame::Ptr &frame);
 
     private:
         bool isKeyFrame() const;

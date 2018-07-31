@@ -31,7 +31,7 @@ MapViewer.updateWait: 1
 Matcher.disThresRatio: 5
 # 特征阈值的最小值，防止阈值过小选出的点不够
 # Matcher.disThresMin: 30
-Matcher.disThresMin: 100
+Matcher.disThresMin: 200
 # 如果testRatio不为0，通过knnMatch获得距离最近的两个match
 # 测试第一个match的距离是否小于第二个match的距离的testRatio倍
 # 0 <= testRati < 1
@@ -48,7 +48,7 @@ Solver2D2D.minInlierRatio: 0.3
 # 用于解PnP选取的最多局部地图点
 Solver3D2D.max3Dnum: 500
 # 用于解PnP选取的最少局部地图点
-Solver3D2D.min3Dnum: 30
+Solver3D2D.min3Dnum: 50
 # 用于解PnP选取的局部地图点距离范围
 Solver3D2D.max3Ddis: 30
 # 用于解PnP的最少点数
@@ -60,11 +60,11 @@ Solver3D2D.minInlierRatio: 0.3
 Triangulater.maxDisRatio: 30
 Triangulater.minDisRatio: 1
 # 重投影误差最大值
-Triangulater.maxProjDis: 50
+Triangulater.maxReprojErr: 50
 
 # local_map
 # 地图点到每个观测帧的最大距离
-LocalMap.maxInlierPointDis: 100
+LocalMap.maxInlierPointDis: 50
 # 关键帧最大数量，超过此数量删除旧关键帧
 LocalMap.maxKeyFrames: 6
 

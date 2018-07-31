@@ -7,6 +7,7 @@
 
 #include "common_include.h"
 #include "opencv2/opencv.hpp"
+#include "Config.h"
 
 namespace sky {
 
@@ -15,8 +16,20 @@ namespace sky {
         typedef shared_ptr<Camera> Ptr;
         float fx, fy, cx, cy;
 
-        Camera(float fx, float fy, float cx, float cy) :
-                fx(fx), fy(fy), cx(cx), cy(cy) {}
+        Camera(float fx = Config::get<float>("Camera.fx"),
+               float fy = Config::get<float>("Camera.fy"),
+               float cx = Config::get<float>("Camera.cx"),
+               float cy = Config::get<float>("Camera.cy")
+        ) :
+                fx(fx), fy(fy), cx(cx), cy(cy) {
+#ifdef DEBUG
+            cout << "Camera: Initializing..." << endl;
+            coutVariable(fx);
+            coutVariable(fy);
+            coutVariable(cx);
+            coutVariable(cy);
+#endif
+        }
 
         template<typename T>
         void setIntrinsic(const cv::Matx<T, 1, 4> &intrinsic) {

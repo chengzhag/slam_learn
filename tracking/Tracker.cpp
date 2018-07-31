@@ -6,13 +6,22 @@
 
 namespace sky {
 
-    void Tracker::step(const KeyFrame::Ptr &frame) {
+    bool Tracker::step(const KeyFrame::Ptr &frame) {
         static bool showedCVV = true;
 
         ++frameInterval;
         this->frame = frame;
         boost::mutex::scoped_lock lock(localMap->mapMutex);
         bool solverPass = solver3D2D.solve(localMap->map, frame);
+        if (!solverPass) {
+#ifdef CVVISUAL_DEBUGMODE
+#ifdef DEBUG
+            cerr << "Tracker: solverPass failed! showing reprojection of last keyFrame... " << endl;
+#endif
+            localMap->map->viewFrameProjInCVV(localMap->getLastFrame());
+#endif
+            return false;
+        }
         lock.unlock();
         if (solverPass) {
             //判断是否插入关键帧
@@ -22,7 +31,7 @@ namespace sky {
 #endif
                 localMap->waitForThread();
                 //如果到添加关键帧前还没有显示过，则显示
-                if(!showedCVV){
+                if (!showedCVV) {
                     localMap->viewMatchInCVV();
                     localMap->viewReprojInCVV();
                     showedCVV = true;
@@ -39,6 +48,8 @@ namespace sky {
             localMap->viewReprojInCVV();
             showedCVV = true;
         }
+
+        return true;
     }
 
     bool Tracker::isKeyFrame() const {

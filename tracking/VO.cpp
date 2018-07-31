@@ -6,7 +6,7 @@
 
 namespace sky {
 
-    void VO::step(const Mat &image) {
+    bool VO::step(const Mat &image) {
         KeyFrame::Ptr keyFrame(new KeyFrame(camera, image, feature2D));
         switch (state) {
             //初始化状态
@@ -21,10 +21,19 @@ namespace sky {
             }
                 //追踪状态
             case 1: {
-                tracker->step(keyFrame);
+                if (!tracker->step(keyFrame)) {
+                    state = 2;
+                    cerr << "VO: Failed Tracking! " << endl;
+                    return false;
+                }
+                break;
+            }
+            case 2: {
+
                 break;
             }
         }
+        return true;
     }
 
 }

@@ -28,7 +28,15 @@ namespace sky {
                 disThresRatio(disThresRatio),
                 disThresMin(disThresMin),
                 testRatio(testRatio),
-                matcher(cv::DescriptorMatcher::create(matcherType)) {}
+                matcher(cv::DescriptorMatcher::create(matcherType)) {
+#ifdef DEBUG
+            cout << "Matcher: Initializing..." << endl;
+            coutVariable(disThresRatio);
+            coutVariable(disThresMin);
+            coutVariable(testRatio);
+            coutVariable(matcherType);
+#endif
+        }
 
         void match(const Mat &descriptors1, const Mat &descriptors2);
 

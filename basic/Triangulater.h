@@ -15,18 +15,25 @@ namespace sky {
 
     class Triangulater {
     private:
-        float maxDisRatio, minDisRatio, maxProjDis;
         KeyFrame::Ptr keyFrame1, keyFrame2;
         Map::Ptr map;
 
     public:
+        float maxDisRatio, minDisRatio, maxReprojErr;
 
         Triangulater(
                 float maxDisRatio = Config::get<float>("Triangulater.maxDisRatio"),
-                float maxProjDis = Config::get<float>("Triangulater.maxProjDis")
+                float minDisRatio = Config::get<float>("Triangulater.minDisRatio"),
+                float maxReprojErr = Config::get<float>("Triangulater.maxReprojErr")
         ) :
                 maxDisRatio(maxDisRatio),
-                maxProjDis(maxProjDis) {}
+                minDisRatio(minDisRatio),
+                maxReprojErr(maxReprojErr) {
+            cout << "Triangulater: Initializing..." << endl;
+            coutVariable(maxDisRatio);
+            coutVariable(minDisRatio);
+            coutVariable(maxReprojErr);
+        }
 
         Map::Ptr
         triangulate(const KeyFrame::Ptr &keyFrame1,
