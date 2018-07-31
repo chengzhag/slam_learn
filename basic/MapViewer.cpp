@@ -28,17 +28,19 @@ namespace sky {
         viewer.updatePointCloud(cloud, "Triangulated Point Cloud");
 
         //viewer.removeAllShapes();
-        boost::mutex::scoped_lock lock(updateMutex);
+        boost::mutex::scoped_lock lockUpdate(updateMutex);
         viewer.removeAllCoordinateSystems();
         int i = 0;
         for (auto &frame:map->keyFrames) {
             addFrame(frame, "frame" + to_string(++i));
         }
-        lock.unlock();
+        lockUpdate.unlock();
 
-        if (updateWait) {
-            wait4keyMutex.lock();
+        if(updateWait){
+            while (!wait4keyDown);
+            wait4keyDown = false;
         }
+
 #endif
     }
 
@@ -55,9 +57,10 @@ namespace sky {
 
     void MapViewer::keyboardEventOccurred(const pcl::visualization::KeyboardEvent &event) {
         if (event.getKeySym() == "Return" && event.keyDown()) {
-            wait4keyMutex.unlock();
-        } else if (event.getKeySym() == "space" && event.keyDown()) {
-            wait4keyMutex.unlock();
+            wait4keyDown = true;
+        }
+        if (event.getKeySym() == "space" && event.keyDown()) {
+            wait4keyDown = true;
             updateWait = !updateWait;
         }
     }

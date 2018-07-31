@@ -30,8 +30,8 @@ namespace sky {
         pcl::visualization::PCLVisualizer viewer;
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
         boost::thread thread;
-        boost::mutex updateMutex, wait4keyMutex;
-        bool updateWait;
+        boost::mutex updateMutex;
+        bool updateWait,wait4keyDown=false;
 #endif
 
     public:
@@ -62,7 +62,6 @@ namespace sky {
             if (updateWait) {
                 viewer.registerKeyboardCallback(boost::bind(&MapViewer::keyboardEventOccurred, this, _1));
             }
-            wait4keyMutex.lock();
         }
 
 #endif
