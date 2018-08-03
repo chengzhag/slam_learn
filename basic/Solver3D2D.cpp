@@ -23,9 +23,16 @@ namespace sky {
         auto keyFrame1 = map->getLastFrame();
 
         Mat descriptorsMap;
-        vector<MapPoint::Ptr> pointsInView;
 
         for (MapPoint::Ptr &point:map->mapPoints) {
+            if (keyFrame1->isInFrame(point->pos)
+                && keyFrame1->getDis2(point) <= max3Ddis) {
+                points3D.push_back(point->getPosPoint3_CV<float>());
+                descriptorsMap.push_back(point->descriptor);
+            }
+        }
+
+/*        for (MapPoint::Ptr &point:map->mapPoints) {
             if (keyFrame1->isInFrame(point->pos)
                 && keyFrame1->getDis2(point) <= max3Ddis) {
                 pointsInView.push_back(point);
@@ -40,7 +47,7 @@ namespace sky {
             points3D.push_back(point->getPosPoint3_CV<float>());
             descriptorsMap.push_back(point->descriptor);
             ++i;
-        }
+        }*/
 
 #ifdef DEBUG
         cout << points3D.size() << " points found" << endl;
@@ -132,6 +139,7 @@ namespace sky {
         );
 
         inlierNum = indexInliers.rows;
+        keyFrame2->inlierPnPnum = inlierNum;
         inlierRatio = (double) inlierNum / getMatchesNum();
 #ifdef DEBUG
         cout << inlierNum << " valid points of " << points2DPnP.size()

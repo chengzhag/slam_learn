@@ -15,7 +15,7 @@ namespace sky {
     class Tracker {
 
     private:
-        float minKeyFrameDis, maxKeyFrameDis;
+        float minKeyFrameDis, maxKeyFrameDis,maxKeyFrameTrackRatio;
         int minKeyFrameInlierNum, minKeyFrameInterval, frameInterval = 0;
         LocalMap::Ptr localMap;
         Solver3D2D solver3D2D;
@@ -28,17 +28,20 @@ namespace sky {
                 LocalMap::Ptr localMap,
                 float minKeyFrameDis = Config::get<float>("Tracker.minKeyFrameDis"),
                 float maxKeyFrameDis = Config::get<float>("Tracker.maxKeyFrameDis"),
+                float maxKeyFrameTrackRatio = Config::get<float>("Tracker.maxKeyFrameTrackRatio"),
                 int minKeyFrameInlierNum = Config::get<int>("Tracker.minKeyFrameInlierNum"),
                 int minKeyFrameInterval = Config::get<int>("Tracker.minKeyFrameInterval")
         ) :
                 localMap(localMap),
                 minKeyFrameDis(minKeyFrameDis),
                 maxKeyFrameDis(maxKeyFrameDis),
+                maxKeyFrameTrackRatio(maxKeyFrameTrackRatio),
                 minKeyFrameInlierNum(minKeyFrameInlierNum),
                 minKeyFrameInterval(minKeyFrameInterval) {
             cout << "Tracker: Initializing..." << endl;
             coutVariable(minKeyFrameDis);
             coutVariable(maxKeyFrameDis);
+            coutVariable(maxKeyFrameTrackRatio);
             coutVariable(minKeyFrameInlierNum);
             coutVariable(minKeyFrameInterval);
         }

@@ -42,6 +42,10 @@ namespace sky {
             coutVariable(maxKeyFrames);
         }
 
+        ~LocalMap(){
+            waitForThread();
+        }
+
         void init(const Map::Ptr &map);
 
         void addFrame(const KeyFrame::Ptr &frame);

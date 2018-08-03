@@ -28,6 +28,7 @@ namespace sky {
         Mat image;
         vector<cv::KeyPoint> keyPoints;
         Mat descriptors;
+        int inlierPnPnum;
 
 
         KeyFrame(const Camera::Ptr &camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D);
