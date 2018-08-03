@@ -20,6 +20,8 @@ namespace sky {
 #endif
             localMap->map->viewFrameProjInCVV(localMap->getLastFrame());
 #endif
+            lock.unlock();
+            localMap->waitForThread();
             return false;
         }
         lock.unlock();
