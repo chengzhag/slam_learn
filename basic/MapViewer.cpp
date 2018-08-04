@@ -6,7 +6,7 @@
 
 namespace sky {
 
-    void MapViewer::update(const Map::Ptr &map) {
+    void MapViewer::update(const Map::Ptr &map, bool drawNorms) {
 #ifdef CLOUDVIEWER_DEBUG
         if (!map)
             return;
@@ -14,8 +14,9 @@ namespace sky {
         cout << "MapViewer: Visualizing " << map->keyFrames.size() << " keyFrames and " << map->mapPoints.size()
              << " mapPoints" << endl;
 #endif
+        //更新点云
         cloud->clear();
-        for (auto point:map->mapPoints) {
+        for (auto &point:map->mapPoints) {
             pcl::PointXYZRGB pointXYZ(point->rgb[0], point->rgb[1], point->rgb[2]);
             pointXYZ.x = point->pos(0);
             pointXYZ.y = point->pos(1);
@@ -27,16 +28,34 @@ namespace sky {
         cloud->is_dense = true;
         viewer.updatePointCloud(cloud, "Triangulated Point Cloud");
 
-        //viewer.removeAllShapes();
+        //更新其他
         boost::mutex::scoped_lock lockUpdate(updateMutex);
-        viewer.removeAllCoordinateSystems();
         int i = 0;
+        //更新法线
+        if (drawNorms) {
+            viewer.removeAllShapes();
+            for (auto &point:map->mapPoints) {
+                auto pointStart = point->pos;
+                auto pointTo = point->pos + point->norm;
+                viewer.addLine(pcl::PointXYZ(pointStart[0], pointStart[1], pointStart[2]),
+                               pcl::PointXYZ(pointTo[0], pointTo[1], pointTo[2]),
+                               1, 1, 1,
+                               "normal" + to_string(++i));
+
+            }
+
+        }
+
+        //更新帧姿态
+        viewer.removeAllCoordinateSystems();
+        i = 0;
         for (auto &frame:map->keyFrames) {
             addFrame(frame, "frame" + to_string(++i));
         }
         lockUpdate.unlock();
 
-        if(updateWait){
+        //暂停
+        if (updateWait) {
             while (!wait4keyDown);
             wait4keyDown = false;
         }

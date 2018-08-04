@@ -31,7 +31,7 @@ namespace sky {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
         boost::thread thread;
         boost::mutex updateMutex;
-        bool updateWait,wait4keyDown=false;
+        bool updateWait, wait4keyDown = false;
 #endif
 
     public:
@@ -66,7 +66,7 @@ namespace sky {
 
 #endif
 
-        void update(const Map::Ptr &map);
+        void update(const Map::Ptr &map, bool drawNorms = false);
 
         ~MapViewer() {}
 
