@@ -37,6 +37,7 @@ namespace sky {
 
             if (!solver2D2D.solve(keyFrame1, frame)) {
                 cout << "Initializer: Initialization not ready. Solver2D2D failed!" << endl;
+                return false;
             }
 
             initialMap = solver2D2D.triangulate();

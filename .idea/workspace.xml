@@ -14,11 +14,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d03b25aa-01f9-4cb3-b1c6-c95429c4b77e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/basic/MapViewer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/basic/MapViewer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/MapViewer.h" beforeDir="false" afterPath="$PROJECT_DIR$/basic/MapViewer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/Solver3D2D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/basic/Solver3D2D.cpp" afterDir="false" />
-    </list>
+    <list default="true" id="d03b25aa-01f9-4cb3-b1c6-c95429c4b77e" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/cmake-build-debugwithcvv/" />
     <ignored path="$PROJECT_DIR$/cmake-build-debugwithcloudviewer/" />
@@ -140,7 +136,7 @@
                   </provider>
                 </entry>
               </file>
-              <file leaf-file-name="Solver3D2D.cpp" pinned="false" current-in-tab="false">
+              <file leaf-file-name="Solver3D2D.cpp" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/basic/Solver3D2D.cpp">
                   <provider selected="true" editor-type-id="text-editor">
                     <state relative-caret-position="270">
@@ -152,11 +148,11 @@
                   </provider>
                 </entry>
               </file>
-              <file leaf-file-name="MapViewer.cpp" pinned="false" current-in-tab="true">
+              <file leaf-file-name="MapViewer.cpp" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/basic/MapViewer.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="495">
-                      <caret line="39" column="19" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
+                    <state relative-caret-position="405">
+                      <caret line="42" column="58" selection-start-line="42" selection-start-column="58" selection-end-line="42" selection-end-column="58" />
                     </state>
                   </provider>
                 </entry>
@@ -266,8 +262,8 @@
               <file leaf-file-name="MapViewer.h" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/basic/MapViewer.h">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="516">
-                      <caret line="68" column="55" lean-forward="true" selection-start-line="68" selection-start-column="41" selection-end-line="68" selection-end-column="55" />
+                    <state relative-caret-position="261">
+                      <caret line="51" column="53" selection-start-line="51" selection-start-column="53" selection-end-line="51" selection-end-column="53" />
                       <folding>
                         <element signature="e#109#125#0" expanded="true" />
                       </folding>
@@ -465,12 +461,12 @@
       <workItem from="1533024291052" duration="8668000" />
       <workItem from="1533040577270" duration="4091000" />
       <workItem from="1533206782223" duration="24636000" />
-      <workItem from="1533296312746" duration="11513000" />
+      <workItem from="1533296312746" duration="11655000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="257191000" />
+    <option name="totallyTimeSpent" value="257333000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -924,16 +920,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/basic/MapViewer.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="516">
-          <caret line="68" column="55" lean-forward="true" selection-start-line="68" selection-start-column="41" selection-end-line="68" selection-end-column="55" />
-          <folding>
-            <element signature="e#109#125#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tracking/Tracker.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
@@ -944,6 +930,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/basic/MapViewer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="51" column="53" selection-start-line="51" selection-start-column="53" selection-end-line="51" selection-end-column="53" />
+          <folding>
+            <element signature="e#109#125#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/MapViewer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="42" column="58" selection-start-line="42" selection-start-column="58" selection-end-line="42" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/basic/Solver3D2D.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
@@ -951,13 +954,6 @@
           <folding>
             <element signature="e#46#69#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/MapViewer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="39" column="19" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
         </state>
       </provider>
     </entry>
