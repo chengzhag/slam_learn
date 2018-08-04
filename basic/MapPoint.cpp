@@ -26,7 +26,7 @@ namespace sky {
             pixelCoor = it->second;
             return true;
         } else {
-            cerr << "MapPoint: getPixelPos failed! No such observedFrame " << endl;
+            cerr << "[" << boost::this_thread::get_id() << "]ERROR: "   << "MapPoint: getPixelPos failed! No such observedFrame " << endl;
             return false;
         }
     }

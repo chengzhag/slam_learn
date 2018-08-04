@@ -33,4 +33,7 @@ using cv::Mat;
 #include <map>
 
 using namespace std;
+
+//boost
+#include <boost/thread.hpp>
 #endif //SFM_LEARN_COMMON_INCLUDE_H

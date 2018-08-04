@@ -25,7 +25,7 @@ namespace sky {
 
         KeyFrame::Ptr getLastFrame() const;
 
-        bool viewFrameProjInCVV(const KeyFrame::Ptr &frame) const;
+        bool viewFrameProjInCVV(const KeyFrame::Ptr &frame, string message = "Reprojection") const;
     };
 
 }

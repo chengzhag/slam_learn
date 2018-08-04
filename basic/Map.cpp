@@ -22,13 +22,13 @@ namespace sky {
         if (!keyFrames.empty())
             return keyFrames.back();
         else {
-            cerr << "Map: Cannot get lastFrame! No Frame in the map" << endl;
+            cerr << "[" << boost::this_thread::get_id() << "]ERROR: "   << "Map: Cannot get lastFrame! No Frame in the map" << endl;
             return nullptr;
         }
 
     }
 
-    bool Map::viewFrameProjInCVV(const KeyFrame::Ptr &frame) const {
+    bool Map::viewFrameProjInCVV(const KeyFrame::Ptr &frame, string message) const {
 #ifdef CVVISUAL_DEBUGMODE
         //通过匹配点的方式可视化重投影误差
         vector<cv::KeyPoint> rawPoints, projPoints;
@@ -48,7 +48,7 @@ namespace sky {
         }
         cvv::debugDMatch(frame->image, rawPoints, frame->image, projPoints, projMatches,
                          CVVISUAL_LOCATION,
-                         "Reprojection");
+                         message.c_str());
 #endif
     }
 

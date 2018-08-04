@@ -41,10 +41,16 @@ namespace sky {
         unordered_map<MapPoint::Ptr, cv::Matx13d> mapPointsPos;
 
     public:
-        BA();
+        BA(ModeSet modeSet = {Mode_Fix_First_Frame, Mode_Fix_Intrinsic});
 
-        void operator()(Map::Ptr map,
-                        ModeSet modeSet = {Mode_Fix_First_Frame, Mode_Fix_Intrinsic});
+
+        void loadMap(Map::Ptr map);
+
+        void ba(){
+            bundleAdjustment();
+        }
+
+        void writeMap();
 
     private:
 
@@ -90,11 +96,7 @@ namespace sky {
             return setHas(modeSet, mode);
         }
 
-        void loadMap();
-
         void bundleAdjustment();
-
-        void writeMap();
 
         void clear();
 

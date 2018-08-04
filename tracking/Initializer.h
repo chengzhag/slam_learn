@@ -31,10 +31,10 @@ namespace sky {
                 maxFrameInterval(maxFrameInterval),
                 minFrameInterval(minFrameInterval),
                 minMapPointNum(minMapPointNum) {
-            cout << "Initializer: Initializing..." << endl;
-            coutVariable(maxFrameInterval);
-            coutVariable(minFrameInterval);
-            coutVariable(minMapPointNum);
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "Initializer: Initializing..." << endl;
+            printVariable(maxFrameInterval);
+            printVariable(minFrameInterval);
+            printVariable(minMapPointNum);
         }
 
         bool step(const KeyFrame::Ptr &frame);

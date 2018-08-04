@@ -42,8 +42,8 @@ namespace sky {
                 viewer("3D Viewer"),
                 cloud(new pcl::PointCloud<pcl::PointXYZRGB>) {
 #ifdef DEBUG
-            cout << "MapViewer: Initializing..." << endl;
-            coutVariable(updateWait);
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "MapViewer: Initializing..." << endl;
+            printVariable(updateWait);
 #endif
 
             viewer.setBackgroundColor(

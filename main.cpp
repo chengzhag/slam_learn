@@ -16,14 +16,15 @@ using namespace sky;
 
 int main(int argc, char **argv) {
     if (argc != 2) {
-        cout << "usage: run_vo parameter_file" << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Usage: run_vo parameter_file" << endl;
         return 1;
     }
     Config::setParameterFile(argv[1]);
 
     string imagesFolder(Config::get<string>("datasetDir"));
 #ifdef DEBUG
-    std::cout << "Reading images from: " + imagesFolder << std::endl;
+    std::cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Reading images from: " + imagesFolder
+              << std::endl;
 #endif
     vector<string> imagesDir;
 
@@ -32,7 +33,8 @@ int main(int argc, char **argv) {
 
         path dirPath(imagesFolder);
         if (not exists(dirPath) or not is_directory(dirPath)) {
-            cerr << "Cannot open directory: " << imagesFolder << endl;
+            cerr << "[" << boost::this_thread::get_id() << "]ERROR: " << "Cannot open directory: " << imagesFolder
+                 << endl;
             return false;
         }
 
@@ -45,7 +47,8 @@ int main(int argc, char **argv) {
         }
 
         if (imagesDir.size() <= 0) {
-            cerr << "Unable to find valid files in images directory (\"" << imagesFolder << "\")." << endl;
+            cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
+                 << "Unable to find valid files in images directory (\"" << imagesFolder << "\")." << endl;
             return false;
         }
 
@@ -63,14 +66,15 @@ int main(int argc, char **argv) {
     for (auto &imageDir:imagesDir) {
         Mat image = imread(imageDir);
 #ifdef DEBUG
-        cout << endl << "==============Adding image: " + imageDir << "==============" << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "==============Adding image: " + imageDir
+             << "==============" << endl;
 #endif
 /*#ifdef CVVISUAL_DEBUGMODE
         cvv::showImage(image, CVVISUAL_LOCATION, "Adding image: " + imageDir, "");
 #endif*/
         if (!vo.step(image)) {
 #ifdef DEBUG
-            cerr << "SLAM: VO lost! " << endl;
+            cerr << "[" << boost::this_thread::get_id() << "]ERROR: " << "SLAM: VO lost! " << endl;
 #endif
             cvv::finalShow();
             break;
@@ -79,7 +83,7 @@ int main(int argc, char **argv) {
         boost::this_thread::sleep_for(boost::chrono::milliseconds(30));
     }
 
-    while(1)
+    while (1)
         boost::this_thread::sleep_for(boost::chrono::milliseconds(30));
 
     return 0;

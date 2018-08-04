@@ -11,7 +11,8 @@ namespace sky {
     bool Initializer::step(const KeyFrame::Ptr &frame) {
         if (frameInterval == -1) {
 #ifdef DEBUG
-            cout << "Initializer: Initialization already ready!" << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Initializer: Initialization already ready!"
+                 << endl;
 #endif
             return true;
         }
@@ -21,7 +22,8 @@ namespace sky {
             ++frameInterval;
             if (frameInterval > maxFrameInterval) {
 #ifdef DEBUG
-                cout << "Initializer: Initialization not ready. FrameInterval " << frameInterval
+                cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                     << "Initializer: Initialization not ready. FrameInterval " << frameInterval
                      << " is larger than maxFrameInterval " << maxFrameInterval << ". Reseting keyFrame1... " << endl;
 #endif
                 frameInterval = 0;
@@ -29,14 +31,16 @@ namespace sky {
                 return false;
             } else if (frameInterval < minFrameInterval) {
 #ifdef DEBUG
-                cout << "Initializer: Initialization not ready. FrameInterval " << frameInterval
+                cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                     << "Initializer: Initialization not ready. FrameInterval " << frameInterval
                      << " is less than minFrameInterval " << minFrameInterval << endl;
 #endif
                 return false;
             }
 
             if (!solver2D2D.solve(keyFrame1, frame)) {
-                cout << "Initializer: Initialization not ready. Solver2D2D failed!" << endl;
+                cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                     << "Initializer: Initialization not ready. Solver2D2D failed!" << endl;
                 return false;
             }
 
@@ -44,7 +48,8 @@ namespace sky {
 
             if (initialMap->mapPoints.size() < minMapPointNum) {
 #ifdef DEBUG
-                cout << "Initializer: Initialization not ready. mapPointNum " << initialMap->mapPoints.size()
+                cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                     << "Initializer: Initialization not ready. mapPointNum " << initialMap->mapPoints.size()
                      << " is less than minMapPointNum " << minMapPointNum << endl;
 #endif
                 return false;
@@ -54,13 +59,15 @@ namespace sky {
             solver2D2D.viewReprojInCVV();
 
 
-            BA ba;
-            ba(initialMap, {BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
+            BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
+            ba.loadMap(initialMap);
+            ba.ba();
+            ba.writeMap();
 
             keyFrame2 = frame;
             frameInterval = -1;
 #ifdef DEBUG
-            cout << "Initializer: Initialization ready!" << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Initializer: Initialization ready!" << endl;
 #endif
             return true;
 

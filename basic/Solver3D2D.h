@@ -45,12 +45,12 @@ namespace sky {
                 minInlierNum(minInlierNum),
                 minInlierRatio(minInlierRatio),
                 max3Dnum(max3Dnum), min3Dnum(min3Dnum), max3Ddis(max3Ddis) {
-            cout << "Solver3D2D: Initializing..." << endl;
-            coutVariable(minInlierNum);
-            coutVariable(minInlierRatio);
-            coutVariable(max3Dnum);
-            coutVariable(min3Dnum);
-            coutVariable(max3Ddis);
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "Solver3D2D: Initializing..." << endl;
+            printVariable(minInlierNum);
+            printVariable(minInlierRatio);
+            printVariable(max3Dnum);
+            printVariable(min3Dnum);
+            printVariable(max3Ddis);
         }
 
         bool solve(const Map::Ptr &map, const KeyFrame::Ptr &keyFrame2);

@@ -6,7 +6,8 @@
 
 namespace sky {
 
-    BA::BA() {
+    BA::BA(ModeSet modeSet) :
+            modeSet(modeSet) {
         ceres_config_options.minimizer_progress_to_stdout = false;
         ceres_config_options.logging_type = ceres::SILENT;
         ceres_config_options.num_threads = 4;
@@ -15,28 +16,19 @@ namespace sky {
         ceres_config_options.sparse_linear_algebra_library_type = ceres::EIGEN_SPARSE;
     }
 
-    void BA::operator()(Map::Ptr map, ModeSet modeSet) {
+    void BA::loadMap(Map::Ptr map) {
+        clear();
+        this->map = map;
         if (!map) {
-            cerr << "BA: Failed! map is empty! " << endl;
+            cerr << "[" << boost::this_thread::get_id() << "]ERROR: " << "BA: Failed! map is empty! " << endl;
         }
         if (map->keyFrames.size() == 0) {
-            cerr << "BA: Failed! map has no keyFrame! " << endl;
+            cerr << "[" << boost::this_thread::get_id() << "]ERROR: " << "BA: Failed! map has no keyFrame! " << endl;
         }
         if (map->mapPoints.size() == 0) {
-            cerr << "BA: Failed! map has no mapPoint! " << endl;
+            cerr << "[" << boost::this_thread::get_id() << "]ERROR: " << "BA: Failed! map has no mapPoint! " << endl;
         }
-        this->map = map;
-        this->modeSet = modeSet;
-        loadMap();
-        bundleAdjustment();
-        writeMap();
-        clear();
-    }
 
-    void BA::loadMap() {
-#ifdef DEBUG
-        cout << "BA: loadMap... ";
-#endif
         //加载mapPointsPos
         for (auto &mapPoints:map->mapPoints) {
             mapPointsPos[mapPoints] = mapPoints->getPosMatx13<double>();
@@ -52,44 +44,20 @@ namespace sky {
                         frame->camera->fx, frame->camera->fy, frame->camera->cx, frame->camera->cy);
         }
 #ifdef DEBUG
-        cout << mapPointsPos.size() << " map points, ";
-/*            int i = 0;
-            for (auto &mapPoints:mapPointsPos) {
-                cout << mapPoints.second << endl;
-                ++i;
-                if (i >= 5)break;
-            }
-            cout << "..." << endl;*/
-
-        cout << frameExtrinsics.size() << " keyFrames, ";
-/*            i = 0;
-            for (auto &frame:frameExtrinsics) {
-                cout << frame.second << endl;
-                ++i;
-                if (i >= 5)break;
-            }
-            cout << "..." << endl;*/
-
-        cout << cameraIntrinsics.size() << " cameras, " << endl;
-/*            i = 0;
-            for (auto &camera:cameraIntrinsics) {
-                cout << camera.second << endl;
-                ++i;
-                if (i >= 5)break;
-            }
-            cout << "..." << endl;*/
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "BA: Map loaded. "
+             << mapPointsPos.size() << " map points, "
+             << frameExtrinsics.size() << " keyFrames, "
+             << cameraIntrinsics.size() << " cameras. " << endl;
 #endif
+
     }
 
     void BA::bundleAdjustment() {
 #ifdef DEBUG
-        cout << "BA: bundleAdjustment... " << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "BA: Bundle Adjustment... " << endl;
 #endif
         ceres::Problem problem;
 
-/*#ifdef DEBUG
-        cout << "\tloading frameExtrinsics..." << endl;
-#endif*/
         for (auto &frameExtrinsic:frameExtrinsics)
             problem.AddParameterBlock(frameExtrinsic.second.val, 6);
         auto itKeyFrame = map->keyFrames.begin();
@@ -97,25 +65,21 @@ namespace sky {
             problem.SetParameterBlockConstant(frameExtrinsics[*itKeyFrame].val);
         if (hasMode(Mode_Fix_First_2Frames)) {
             if (++itKeyFrame == map->keyFrames.end()) {
-                cerr << "BA: Failed! Only one frame in the map! " << endl;
+                cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
+                     << "BA: Bundle Adjustment Failed! Only one frame in the map! "
+                     << endl;
                 return;
             }
             problem.SetParameterBlockConstant(frameExtrinsics[*itKeyFrame].val);
         }
 
 
-/*#ifdef DEBUG
-        cout << "\tloading cameraIntrinsics..." << endl;
-#endif*/
         for (auto &cameraIntrinsic:cameraIntrinsics) {
             problem.AddParameterBlock(cameraIntrinsic.second.val, 4);
             if (hasMode(Mode_Fix_Intrinsic))
                 problem.SetParameterBlockConstant(cameraIntrinsic.second.val);
         }
 
-/*#ifdef DEBUG
-        cout << "\tloading mapPointsPos..." << endl;
-#endif*/
         ceres::LossFunction *lossFunction = new ceres::HuberLoss(4);
         for (auto &mapPointPos:mapPointsPos) {
 
@@ -142,22 +106,26 @@ namespace sky {
 
         }
 
-/*#ifdef DEBUG
-        cout << "\tsolving BA..." << endl;
-#endif*/
 
         ceres::Solver::Summary summary;
         ceres::Solve(ceres_config_options, &problem, &summary);
 
         if (!summary.IsSolutionUsable()) {
-            std::cout << "BA: Bundle Adjustment failed." << std::endl;
+            std::cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "BA: Bundle Adjustment failed."
+                      << std::endl;
         } else {
             // Display statistics about the minimization
-            std::cout << "BA: Bundle Adjustment statistics (approximated RMSE):\n"
+            std::cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                      << "BA: Bundle Adjustment statistics (approximated RMSE):\n"
+                      << "[" << boost::this_thread::get_id() << "]DEBUG: "
                       << "    #views: " << frameExtrinsics.size() << "\n"
+                      << "[" << boost::this_thread::get_id() << "]DEBUG: "
                       << "    #residuals: " << summary.num_residuals << "\n"
+                      << "[" << boost::this_thread::get_id() << "]DEBUG: "
                       << "    Initial RMSE: " << std::sqrt(summary.initial_cost / summary.num_residuals) << "\n"
+                      << "[" << boost::this_thread::get_id() << "]DEBUG: "
                       << "    Final RMSE: " << std::sqrt(summary.final_cost / summary.num_residuals) << "\n"
+                      << "[" << boost::this_thread::get_id() << "]DEBUG: "
                       << "    Time (s): " << summary.total_time_in_seconds << "\n";
         }
     }

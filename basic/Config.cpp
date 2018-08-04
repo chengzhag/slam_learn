@@ -13,7 +13,7 @@ namespace sky{
         config_->file_ = cv::FileStorage( filename.c_str(), cv::FileStorage::READ );
         if ( config_->file_.isOpened() == false )
         {
-            std::cerr<<"parameter file "<<filename<<" does not exist."<<std::endl;
+            std::cerr << "[" << boost::this_thread::get_id() << "]ERROR: "  <<"parameter file "<<filename<<" does not exist."<<std::endl;
             config_->file_.release();
             return;
         }

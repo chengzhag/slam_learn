@@ -38,12 +38,12 @@ namespace sky {
                 maxKeyFrameTrackRatio(maxKeyFrameTrackRatio),
                 minKeyFrameInlierNum(minKeyFrameInlierNum),
                 minKeyFrameInterval(minKeyFrameInterval) {
-            cout << "Tracker: Initializing..." << endl;
-            coutVariable(minKeyFrameDis);
-            coutVariable(maxKeyFrameDis);
-            coutVariable(maxKeyFrameTrackRatio);
-            coutVariable(minKeyFrameInlierNum);
-            coutVariable(minKeyFrameInterval);
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "Tracker: Initializing..." << endl;
+            printVariable(minKeyFrameDis);
+            printVariable(maxKeyFrameDis);
+            printVariable(maxKeyFrameTrackRatio);
+            printVariable(minKeyFrameInlierNum);
+            printVariable(minKeyFrameInterval);
         }
 
         bool step(const KeyFrame::Ptr &frame);

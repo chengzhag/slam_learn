@@ -30,11 +30,11 @@ namespace sky {
                 testRatio(testRatio),
                 matcher(cv::DescriptorMatcher::create(matcherType)) {
 #ifdef DEBUG
-            cout << "Matcher: Initializing..." << endl;
-            coutVariable(disThresRatio);
-            coutVariable(disThresMin);
-            coutVariable(testRatio);
-            coutVariable(matcherType);
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "Matcher: Initializing..." << endl;
+            printVariable(disThresRatio);
+            printVariable(disThresMin);
+            printVariable(testRatio);
+            printVariable(matcherType);
 #endif
         }
 

@@ -27,13 +27,14 @@ namespace sky {
             if (!Config::config_->file_[key].empty())
                 return T(Config::config_->file_[key]);
             else
-                cerr << "Config: Cannot find '" + key + "' in configure file" << endl;
+                cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
+                     << "Config: Cannot find '" + key + "' in configure file" << endl;
         }
     };
 
 
 #define name2str(name) (#name)
-#define coutVariable(v) (cout<<"\t"<<name2str(v)<<" = "<<v<<endl)
+#define printVariable(v) (cout << "[" << boost::this_thread::get_id() << "]DEBUG: "  <<"\t"<<name2str(v)<<" = "<<v<<endl)
 
 }
 

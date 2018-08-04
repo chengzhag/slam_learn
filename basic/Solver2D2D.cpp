@@ -19,8 +19,8 @@ namespace sky {
         match(keyFrame1->descriptors, keyFrame2->descriptors);
         if (getMatchesNum() < minInlierNum) {
 #ifdef DEBUG
-            cout << "Solver2D2D: Failed! matchesNum " << getMatchesNum()
-                 << " is less than minInlierNum " << minInlierNum << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver2D2D: Failed! matchesNum "
+                 << getMatchesNum() << " is less than minInlierNum " << minInlierNum << endl;
 #endif
             return false;
         }
@@ -28,15 +28,15 @@ namespace sky {
 
         if (inlierNum < minInlierNum) {
 #ifdef DEBUG
-            cout << "Solver2D2D: Failed! inlierNum " << inlierNum
-                 << " is less than minInlierNum " << minInlierNum << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver2D2D: Failed! inlierNum "
+                 << inlierNum << " is less than minInlierNum " << minInlierNum << endl;
 #endif
             return false;
         }
         if (inlierRatio < minInlierRatio) {
 #ifdef DEBUG
-            cout << "Solver2D2D: Failed! inlierRatio " << inlierRatio
-                 << " is less than minInlierRatio " << minInlierRatio << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver2D2D: Failed! inlierRatio "
+                 << inlierRatio << " is less than minInlierRatio " << minInlierRatio << endl;
 #endif
             return false;
         }
@@ -75,21 +75,13 @@ namespace sky {
             matchPoints2.push_back(keyFrame2->getKeyPointCoor(match.trainIdx));
         }
 
-        cout << "Solver2D2D: findEssentialMat... ";
         Mat essentialMatrix;
         essentialMatrix = findEssentialMat(matchPoints1, matchPoints2,
                                            keyFrame2->camera->getFocalLength(),
                                            keyFrame2->camera->getPrincipalPoint(),
                                            cv::RANSAC, 0.999, 1.0, inlierMask);
-#ifdef DEBUG
-        int nPointsFindEssentialMat = countNonZero(inlierMask);
-        cout << nPointsFindEssentialMat << " valid points of " << matchPoints1.size()
-             << " , " << (float) nPointsFindEssentialMat * 100 / matchPoints1.size() << "% "
-             << " are used" << endl;
-#endif
 
         //解frame2的R、t并计算se3
-        cout << "Solver2D2D: recoverPose... ";
         Mat R, t;
         recoverPose(essentialMatrix, matchPoints1, matchPoints2,
                     keyFrame2->camera->getKMatxCV(), R, t, inlierMask);
@@ -105,14 +97,11 @@ namespace sky {
         inlierNum = countNonZero(inlierMask);
         inlierRatio = (double) inlierNum / getMatchesNum();
 #ifdef DEBUG
-        cout << inlierNum << " valid points of " << matchPoints1.size()
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver2D2D: Pose solved. " << inlierNum
+             << " valid points of "
+             << matchPoints1.size()
              << " , " << inlierRatio * 100 << "% "
              << " are used" << endl;
-/*        cout << "2D-2D frame2 R: " << R.size << endl << R << endl;
-        cout << "2D-2D frame2 t: " << t.size << endl << t << endl;
-        cout << "2D-2D frame2 SE3: " << endl << keyFrame2->Tcw << endl;
-        cout << "2D-2D frame2 Tcw: " << endl << keyFrame2->getTcwMatCV() << endl << endl;
-        cout << "2D-2D frame2 ProjMat: " << endl << keyFrame2->getTcw34MatCV() << endl << endl;*/
 #endif
     }
 

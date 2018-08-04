@@ -11,8 +11,9 @@ namespace sky {
         if (!map)
             return;
 #ifdef DEBUG
-        cout << "MapViewer: Visualizing " << map->keyFrames.size() << " keyFrames and " << map->mapPoints.size()
-             << " mapPoints" << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+             << "MapViewer: Visualizing " << map->keyFrames.size() << " keyFrames and "
+             << map->mapPoints.size() << " mapPoints" << endl;
 #endif
         //更新点云
         cloud->clear();

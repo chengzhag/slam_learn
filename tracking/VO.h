@@ -38,9 +38,9 @@ namespace sky {
                 localMap(localMap),
                 tracker(new Tracker(localMap)),
                 initializer(new Initializer) {
-            cout << "VO: Initializing..." << endl;
-            coutVariable(featureType);
-            coutVariable(nfeatures);
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "VO: Initializing..." << endl;
+            printVariable(featureType);
+            printVariable(nfeatures);
 
             if (featureType == "ORB")
                 feature2D = cv::ORB::create(nfeatures);

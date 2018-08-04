@@ -27,12 +27,14 @@ namespace sky {
         lock.unlock();
 
 #ifdef DEBUG
-        cout << "LocalMap: Adding keyFrame... " << disBetween(frame, refFrame)
-             << " from last keyFrame" << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: Adding keyFrame... "
+             << disBetween(frame, refFrame) << " from last keyFrame" << endl;
 #endif
 
         //开始线程
-        thread = boost::thread(boost::bind(&LocalMap::threadFunc, this));
+        thread = shared_ptr<boost::thread>(
+                new boost::thread(boost::bind(&LocalMap::threadFunc, this))
+        );
 
     }
 
@@ -57,13 +59,13 @@ namespace sky {
         lock.unlock();
 
 #ifdef DEBUG
-        cout << "LocalMap: End adding! " << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: End adding! " << endl;
 #endif
     }
 
     void LocalMap::prepareKeyFrame() {
 #ifdef DEBUG
-        cout << "LocalMap: prepareKeyFrame... " << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: prepareKeyFrame... " << endl;
 #endif
         //匹配上一个关键帧
         matcher.match(refFrame->descriptors, currFrame->descriptors);
@@ -71,7 +73,7 @@ namespace sky {
 
     void LocalMap::triangulate() {
 #ifdef DEBUG
-        cout << "LocalMap: triangulate... " << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: triangulate... " << endl;
 #endif
         //三角化
         auto triangulateMap = triangulater.triangulate(
@@ -88,22 +90,33 @@ namespace sky {
             map->addMapPoint(point);
             newMapPoints.insert(point);
         }
+#ifdef DEBUG
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: "
+             << triangulateMap->mapPoints.size() << " points added to localMap. " << endl;
+#endif
         lock.unlock();
     }
 
     void LocalMap::ba() {
 #ifdef DEBUG
-        cout << "LocalMap: ba... " << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: ba... " << endl;
 #endif
+        BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_2Frames});
+
         boost::mutex::scoped_lock lock(mapMutex);
-        BA ba;
-        ba(map, {BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_2Frames});
+        ba.loadMap(map);
+        lock.unlock();
+
+        ba.ba();
+
+        lock.lock();
+        ba.writeMap();
         lock.unlock();
     }
 
     void LocalMap::filtKeyFrames() {
 #ifdef DEBUG
-        cout << "LocalMap: filtKeyFrames... " << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: filtKeyFrames... " << endl;
 #endif
         int iFrames = 0;
         boost::mutex::scoped_lock lock(mapMutex);
@@ -125,7 +138,7 @@ namespace sky {
 
     void LocalMap::filtMapPoints() {
 #ifdef DEBUG
-        cout << "LocalMap: filtMapPoints... " << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: filtMapPoints... " << endl;
 #endif
         boost::mutex::scoped_lock lock(mapMutex);
         for (auto it = map->mapPoints.begin(); it != map->mapPoints.end();) {
@@ -139,7 +152,7 @@ namespace sky {
 
     bool LocalMap::isGoodPoint(const MapPoint::Ptr &mapPoint) const {
 /*#ifdef DEBUG
-        cout << "\t" << !setHas(newMapPoints, mapPoint) << "\t"
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "\t" << !setHas(newMapPoints, mapPoint) << "\t"
              << mapPoint->observedFrames.size() << " observedFrames" << endl;
 #endif*/
         if (map->keyFrames.size() >= 4)

@@ -36,9 +36,9 @@ namespace sky {
         ) :
                 minInlierNum(minInlierNum),
                 minInlierRatio(minInlierRatio) {
-            cout << "Solver2D2D: Initializing..." << endl;
-            coutVariable(minInlierNum);
-            coutVariable(minInlierRatio);
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "Solver2D2D: Initializing..." << endl;
+            printVariable(minInlierNum);
+            printVariable(minInlierRatio);
         }
 
         bool solve(const KeyFrame::Ptr &keyFrame1, const KeyFrame::Ptr &keyFrame2, bool saveResult = true);

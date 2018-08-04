@@ -10,13 +10,7 @@ namespace sky {
 
     KeyFrame::KeyFrame(const Camera::Ptr &camera, const Mat &image, cv::Ptr<cv::Feature2D> feature2D) :
             camera(camera), image(image) {
-#ifdef DEBUG
-        cout << "KeyFrame: detectAndCompute... ";
-#endif
         feature2D->detectAndCompute(image, cv::noArray(), keyPoints, descriptors);
-#ifdef DEBUG
-        cout << keyPoints.size() << " keypoints found" << endl;
-#endif
     }
 
     Vector3d KeyFrame::getCamCenterEigen() const {
@@ -52,7 +46,7 @@ namespace sky {
 /*        if (hasMapPoint(i))
             return mapPoints[i];*/
         else {
-            cerr << "KeyFrame: getMapPoint failed! KeyPoint "
+            cerr << "[" << boost::this_thread::get_id() << "]ERROR: " << "KeyFrame: getMapPoint failed! KeyPoint "
                  << i << " has no corresponding mapPoint" << endl;
             return nullptr;
         }

@@ -14,12 +14,18 @@ namespace sky {
         this->frame = frame;
 
         bool isAdding = localMap->isAdding();
+#ifdef DEBUG
+        if (isAdding)
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "Tracker: Still adding keyFrame... " << endl;
+#endif
         boost::mutex::scoped_lock lock(localMap->mapMutex);
         bool solverPass = solver3D2D.solve(localMap->map, frame);
         //如果tracking丢失，且关键帧添加未完成，等待上一个关键帧的处理,以获得更多地图点
         if (!solverPass && isAdding) {
 #ifdef DEBUG
-            cout << "Tracker: solverPass failed! waiting for adding more mapPoints... " << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "Tracker: Solver3D2D failed! Waiting for adding more mapPoints... " << endl;
 #endif
             lock.unlock();
             localMap->waitForThread();
@@ -30,20 +36,21 @@ namespace sky {
         if (!solverPass) {
 #ifdef CVVISUAL_DEBUGMODE
 #ifdef DEBUG
-            cerr << "Tracker: solverPass failed! showing reprojection of last keyFrame... " << endl;
+            cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
+                 << "Tracker: Solver3D2D failed! Showing reprojection of last keyFrame... " << endl;
 #endif
-            localMap->map->viewFrameProjInCVV(localMap->getLastFrame());
+            localMap->map->viewFrameProjInCVV(localMap->getLastFrame(),
+                                              "Tracker: Solver3D2D failed! LocalMap proj to crrFrame");
 #endif
             lock.unlock();
             return false;
-        }
-        lock.unlock();
-        //如果跟踪成功，判定是否为关键帧
-        if (solverPass) {
+        } else {
+            lock.unlock();
+            //if(solver3D2D.getInlierNum()<
             //判断是否插入关键帧
             if (isKeyFrame()) {
 #ifdef DEBUG
-                cout << "Tracker: Adding keyframe..." << endl;
+                cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Tracker: Adding keyframe..." << endl;
 #endif
                 localMap->waitForThread();
                 //如果到添加关键帧前还没有显示过，则显示
@@ -83,21 +90,24 @@ namespace sky {
         //关键帧的最小、最大间距
         if (dis2LastFrame < minKeyFrameDis) {
 #ifdef DEBUG
-            cout << "Tracker: Not a keyFrame. Distance to the last keyFrame " << dis2LastFrame
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "Tracker: Not a keyFrame. Distance to the last keyFrame " << dis2LastFrame
                  << " is less than minKeyFrameDis " << minKeyFrameDis << endl;
 #endif
             return false;
         }
-        if (dis2LastFrame > 2*maxKeyFrameDis) {
+        if (dis2LastFrame > 2 * maxKeyFrameDis) {
 #ifdef DEBUG
-            cout << "Tracker: Not a keyFrame. Distance to the last keyFrame " << dis2LastFrame
-                 << " is more than 2*maxKeyFrameDis " << 2*maxKeyFrameDis << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "Tracker: Not a keyFrame. Distance to the last keyFrame " << dis2LastFrame
+                 << " is more than 2*maxKeyFrameDis " << 2 * maxKeyFrameDis << endl;
 #endif
             return false;
         }
         if (dis2LastFrame > maxKeyFrameDis) {
 #ifdef DEBUG
-            cout << "Tracker: Is a keyFrame. Distance to the last keyFrame " << dis2LastFrame
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "Tracker: Is a keyFrame. Distance to the last keyFrame " << dis2LastFrame
                  << " is more than maxKeyFrameDis " << maxKeyFrameDis << endl;
 #endif
             return true;
@@ -110,12 +120,13 @@ namespace sky {
         else
             lastKeyFrameTrackingNum = localMapPointNum;
         auto trackRatio2LastFrame = (float) solver3D2D.getInlierNum() / lastKeyFrameTrackingNum;
-        coutVariable(lastKeyFrameTrackingNum);
-        coutVariable(solver3D2D.getInlierNum());
-        coutVariable(trackRatio2LastFrame);
+/*        printVariable(lastKeyFrameTrackingNum);
+        printVariable(solver3D2D.getInlierNum());
+        printVariable(trackRatio2LastFrame);*/
         if (trackRatio2LastFrame < maxKeyFrameTrackRatio) {
 #ifdef DEBUG
-            cout << "Tracker: Is a keyFrame. TrackRatio2LastFrame " << trackRatio2LastFrame
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Tracker: Is a keyFrame. TrackRatio2LastFrame "
+                 << trackRatio2LastFrame
                  << " is less than maxKeyFrameTrackRatio " << maxKeyFrameTrackRatio << endl;
 #endif
             return true;
@@ -124,7 +135,8 @@ namespace sky {
         //关键帧之间的最小间隔帧数
         if (frameInterval < minKeyFrameInterval) {
 #ifdef DEBUG
-            cout << "Tracker: Not a keyFrame. Num of frames to the last keyFrame " << frameInterval
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "Tracker: Not a keyFrame. Num of frames to the last keyFrame " << frameInterval
                  << " is less than minKeyFrameInterval " << minKeyFrameInterval << endl;
 #endif
             return false;
@@ -133,7 +145,8 @@ namespace sky {
         //关键帧之间的最小间隔帧数
         if (solver3D2D.getInlierNum() < minKeyFrameInlierNum) {
 #ifdef DEBUG
-            cout << "Tracker: Not a keyFrame. InlierNum " << solver3D2D.getInlierNum()
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Tracker: Not a keyFrame. InlierNum "
+                 << solver3D2D.getInlierNum()
                  << " is less than minKeyFrameInlierNum " << minKeyFrameInlierNum << endl;
 #endif
             return false;

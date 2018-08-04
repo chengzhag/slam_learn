@@ -21,7 +21,7 @@ namespace sky {
         float maxInlierPointDis;
         int maxKeyFrames;
         Matcher matcher;
-        boost::thread thread;
+        shared_ptr<boost::thread> thread;
         KeyFrame::Ptr refFrame, currFrame;
         Triangulater triangulater;
 
@@ -37,12 +37,12 @@ namespace sky {
         ) :
                 maxInlierPointDis(maxInlierPointDis),
                 maxKeyFrames(maxKeyFrames) {
-            cout << "LocalMap: Initializing..." << endl;
-            coutVariable(maxInlierPointDis);
-            coutVariable(maxKeyFrames);
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: Initializing..." << endl;
+            printVariable(maxInlierPointDis);
+            printVariable(maxKeyFrames);
         }
 
-        ~LocalMap(){
+        ~LocalMap() {
             waitForThread();
         }
 
@@ -51,15 +51,16 @@ namespace sky {
         void addFrame(const KeyFrame::Ptr &frame);
 
         inline bool isAdding() const {
-            return thread.joinable();
+            if (thread) {
+                thread->timed_join(boost::posix_time::microseconds(0));
+                return thread->joinable();
+            }
+            return false;
         }
 
         inline void waitForThread() {
-            if (isAdding()) {
-#ifdef DEBUG
-                cout << "LocalMap: Waiting for thread to finish..." << endl;
-#endif
-                thread.join();
+            if (thread) {
+                thread->join();
             }
         }
 

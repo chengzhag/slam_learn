@@ -16,9 +16,6 @@ namespace sky {
                               const KeyFrame::Ptr &keyFrame2,
                               const vector<cv::DMatch> &matches,
                               Mat inlierMask) {
-#ifdef DEBUG
-        cout << "Triangulater: triangulatePoints... " << endl;
-#endif
         this->keyFrame1 = keyFrame1;
         this->keyFrame2 = keyFrame2;
 
@@ -49,16 +46,14 @@ namespace sky {
 #ifdef CVVISUAL_DEBUGMODE
         if (!map)
             return;
-        map->viewFrameProjInCVV(keyFrame2);
+        map->viewFrameProjInCVV(keyFrame2, "Triangulater: Proj triangulated points to crrFrame");
 #endif
     }
 
 
     void Triangulater::convAndAddMappoints(const Map::Ptr &map, const Mat &inlierMask,
                                            const Mat &points4D, const vector<cv::DMatch> &matches) {
-#ifdef DEBUG
-        cout << "Triangulater: convAndAddMappoints... " << points4D.cols << " raw 3D points, ";
-#endif
+        int numOldMapPoint = 0;
         for (int i = 0; i < points4D.cols; ++i) {
             MapPoint::Ptr mapPoint;
 
@@ -73,7 +68,9 @@ namespace sky {
             Mat descriptor = keyFrame2->getKeyPointDesciptor(iMapPoint2);
 
             //如果是上一帧加到地图中的点，更新描述子、加入观测帧后跳过
+
             if (keyFrame1->hasMapPoint(iMapPoint1)) {
+                ++numOldMapPoint;
                 mapPoint = keyFrame1->getMapPoint(iMapPoint1);
 
                 //创建临时mapPoint拷贝并加入关键帧，再作isGoodPoint判断
@@ -88,16 +85,23 @@ namespace sky {
                 mapPoint->addObservedFrame(
                         keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));*/
 
+                auto normOld = mapPoint->norm;
+
                 mapPoint->addObservedFrame(
                         keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
 
+
                 if (!isGoodPoint(mapPoint)) {
                     mapPoint->deleteObservedFrame(keyFrame2);
+                    mapPoint->norm = normOld;
                     continue;
                 }
 
                 //更新描述子
                 mapPoint->descriptor = descriptor;
+
+                //记录当前帧加入地图的mapPoint和特征点下标
+                keyFrame2->addMapPoint(iMapPoint2, mapPoint);
 
             } else {
 
@@ -135,7 +139,7 @@ namespace sky {
 
 /*#ifdef DEBUG
             if (i < 5)
-                cout << mapPoint->pos << endl << endl;
+                cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << mapPoint->pos << endl << endl;
 #endif*/
                 mapPoint->addObservedFrame(keyFrame1, keyFrame1->getKeyPointCoor(iMapPoint1));
                 mapPoint->addObservedFrame(keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
@@ -144,44 +148,45 @@ namespace sky {
                     continue;
 
                 map->addMapPoint(mapPoint);
-            }
 
-            //记录当前帧加入地图的mapPoint和特征点下标
-            keyFrame2->addMapPoint(iMapPoint2, mapPoint);
+                //记录当前帧加入地图的mapPoint和特征点下标
+                keyFrame2->addMapPoint(iMapPoint2, mapPoint);
+            }
 
         }
 #ifdef DEBUG
-        cout << map->mapPoints.size() << " 3D points triangulated" << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+             << "Triangulater: convAndAddMappoints done. "
+             << numOldMapPoint << " points are old. "
+             << map->mapPoints.size() << " of " << points4D.cols - numOldMapPoint << " new points are good. " << endl;
 #endif
 
 /*#ifdef DEBUG
-        cout << "Triangulater: Showing rawPos and projPos of mapPoints... " << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "Triangulater: Showing rawPos and projPos of mapPoints... " << endl;
         for (auto &mapPoint:map->mapPoints) {
-            cout.width(6);
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "  .width(6);
 
             auto &rawPos1 = mapPoint->observedFrames[keyFrame1];
             cv::Point2d projPos1;
             keyFrame1->proj2frame(mapPoint, projPos1);
-            cout << setiosflags(ios::fixed) << setprecision(2)
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << setiosflags(ios::fixed) << setprecision(2)
                  << "rawPos1: " << rawPos1 << "\tprojPos1: " << projPos1 << "\tdis: " << point2dis(rawPos1, projPos1);
 
             auto &rawPos2 = mapPoint->observedFrames[keyFrame1];
             cv::Point2d projPos2;
             keyFrame2->proj2frame(mapPoint, projPos2);
-            cout << setiosflags(ios::fixed) << setprecision(2)
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << setiosflags(ios::fixed) << setprecision(2)
                  << "\trawPos2: " << rawPos2 << "\tprojPos2: " << projPos2 << "\tdis: " << disBetween(rawPos2, projPos2)
                  << endl;
         }
 #endif*/
-
-
     }
 
     bool Triangulater::isGoodPoint(const MapPoint::Ptr &mapPoint) const {
         //检查是否在距离范围内
         auto dis2keyFrame2 = disBetween(keyFrame2, mapPoint);
         auto disB12 = disBetween(keyFrame2, keyFrame1);
-        //coutVariable(dis2keyFrame2);
+        printVariable(dis2keyFrame2);
         if (dis2keyFrame2 > maxDisRatio * disB12
             || dis2keyFrame2 < minDisRatio * disB12)
             return false;
@@ -191,7 +196,7 @@ namespace sky {
         cv::Point2d projPos1;
         if (!proj2frame(mapPoint, keyFrame1, projPos1))
             return false;
-        //coutVariable(disBetween(rawPos1, projPos1));
+        printVariable(disBetween(rawPos1, projPos1));
         if (disBetween(rawPos1, projPos1) > maxReprojErr)
             return false;
 
@@ -199,7 +204,7 @@ namespace sky {
         cv::Point2d projPos2;
         if (!proj2frame(mapPoint, keyFrame2, projPos2))
             return false;
-        //coutVariable(disBetween(rawPos2, projPos2));
+        printVariable(disBetween(rawPos2, projPos2));
         if (disBetween(rawPos2, projPos2) > maxReprojErr)
             return false;
 

@@ -23,7 +23,7 @@ namespace sky {
             case 1: {
                 if (!tracker->step(keyFrame)) {
                     state = 2;
-                    cerr << "VO: Failed Tracking! " << endl;
+                    cerr << "[" << boost::this_thread::get_id() << "]ERROR: "   << "VO: Failed Tracking! " << endl;
                     return false;
                 }
                 break;

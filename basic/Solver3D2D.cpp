@@ -18,11 +18,7 @@ namespace sky {
         indexInliers = Mat();
         this->map = map;
 
-
         this->keyFrame2 = keyFrame2;
-#ifdef DEBUG
-        cout << "Solver3D2D: finding mapPoints in the last frame... ";
-#endif
         auto keyFrame1 = map->getLastFrame();
 
         Mat descriptorsMap;
@@ -35,7 +31,7 @@ namespace sky {
                 Vector3d n = keyFrame1->getCamCenterEigen() - point->pos;
                 n.normalize();
                 auto angle = acos(n.transpose() * (point->norm / point->norm.norm()));
-                //coutVariable(angle);
+                //printVariable(angle);
                 if (angle > M_PI / 6)
                     continue;
 
@@ -45,29 +41,14 @@ namespace sky {
             }
         }
 
-/*        for (MapPoint::Ptr &point:map->mapPoints) {
-            if (keyFrame1->isInFrame(point->pos)
-                && keyFrame1->getDis2(point) <= max3Ddis) {
-                pointsInView.push_back(point);
-            }
-        }
-        //随机选取一定数量的地图点,提取地图的特征点matches
-        random_shuffle(pointsInView.begin(), pointsInView.end());
-        int i = 0;
-        for (MapPoint::Ptr &point:pointsInView) {
-            if (i >= max3Dnum)
-                break;
-            points3D.push_back(point->getPosPoint3_CV<float>());
-            descriptorsMap.push_back(point->descriptor);
-            ++i;
-        }*/
-
 #ifdef DEBUG
-        cout << points3D.size() << " points found" << endl;
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver3D2D: Found " << points3D.size()
+             << " points in the last frame. " << endl;
 #endif
         if (points3D.size() < min3Dnum) {
 #ifdef DEBUG
-            cout << "Failed! " << points3D.size() << " is less than min3Dnum: " << min3Dnum << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver3D2D: Failed! " << points3D.size()
+                 << " points in the last frame is less than min3Dnum: " << min3Dnum << endl;
 #endif
             return false;
         }
@@ -75,8 +56,8 @@ namespace sky {
         match(descriptorsMap, keyFrame2->descriptors);
         if (matches.size() < minInlierNum) {
 #ifdef DEBUG
-            cout << "Solver3D2D: Failed! matchesNum " << matches.size()
-                 << " is less than minInlierNum " << minInlierNum << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver3D2D: Failed! matchesNum "
+                 << matches.size() << " is less than minInlierNum " << minInlierNum << endl;
 #endif
             return false;
         }
@@ -84,15 +65,15 @@ namespace sky {
 
         if (inlierNum < minInlierNum) {
 #ifdef DEBUG
-            cout << "Solver3D2D: Failed! inlierNum " << inlierNum
-                 << " is less than minInlierNum " << minInlierNum << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver3D2D: Failed! inlierNum "
+                 << inlierNum << " is less than minInlierNum " << minInlierNum << endl;
 #endif
             return false;
         }
         if (inlierRatio < minInlierRatio) {
 #ifdef DEBUG
-            cout << "Solver3D2D: Failed! inlierRatio " << inlierRatio
-                 << " is less than minInlierRatio " << minInlierRatio << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver3D2D: Failed! inlierRatio "
+                 << inlierRatio << " is less than minInlierRatio " << minInlierRatio << endl;
 #endif
             return false;
         }
@@ -101,8 +82,8 @@ namespace sky {
         //TODO:以下建图没有考虑到当前帧可能不是KeyFrame，导致MapPoint的observedFrames存有非KeyFrame
 /*        Map::Ptr mapLastFrame(new Map);//用于最后帧BA的地图
         mapLastFrame->addFrame(keyFrame2);
-        //cout << indexInliers << endl;
-        //cout << indexInliers.type() << endl;
+        //cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << indexInliers << endl;
+        //cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << indexInliers.type() << endl;
         //建立matches从3D地图点到2D特征点的对应
         unordered_map<int, int> i3Dto2D;
         for (auto &match:matches) {
@@ -113,9 +94,9 @@ namespace sky {
             //将当前帧添加到地图点的观测帧中
             auto indexInlier = indexInliers.at<int>(i);
             auto mapPointInlier = pointsInView[indexInlier];
-            //cout << "\tadding mapPoint " << indexInlier << " to BA map" << endl;
+            //cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "\tadding mapPoint " << indexInlier << " to BA map" << endl;
             auto indexKeyPoint = i3Dto2D[indexInlier];
-            //cout << "\tadding observedFrame to mapPoint, corresponding to keyPoint "
+            //cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "\tadding observedFrame to mapPoint, corresponding to keyPoint "
             //        << indexKeyPoint << " of " << keyFrame2->keyPoints.size()
             //     << endl;
             mapPointInlier->addObservedFrame(keyFrame2, keyFrame2->getKeyPointCoor(indexKeyPoint));
@@ -129,9 +110,6 @@ namespace sky {
     }
 
     void Solver3D2D::solvePose() {
-#ifdef DEBUG
-        cout << "Solver3D2D: solvePose... ";
-#endif
         //解PnP得相机位姿
         vector<cv::Point2f> points2DPnP;
         vector<cv::Point3f> points3DPnP;
@@ -155,14 +133,9 @@ namespace sky {
         keyFrame2->inlierPnPnum = inlierNum;
         inlierRatio = (double) inlierNum / getMatchesNum();
 #ifdef DEBUG
-        cout << inlierNum << " valid points of " << points2DPnP.size()
-             << " , " << (float) inlierRatio * 100 << "% "
-             << "are used" << endl;
-/*        cout << "2D-2D frame2 R: " << R.size << endl << R << endl;
-        cout << "2D-2D frame2 t: " << t.size << endl << t << endl;
-        cout << "2D-2D frame2 SE3: " << endl << keyFrame2->frame->Tcw << endl;
-        cout << "2D-2D frame2 Tcw: " << endl << keyFrame2->frame->getTcwMatCV() << endl << endl;
-        cout << "2D-2D frame2 ProjMat: " << endl << keyFrame2->frame->getTcw34MatCV() << endl << endl;*/
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver3D2D: Pose solved. "
+             << inlierNum << " valid points of " << points2DPnP.size()
+             << " , " << (float) inlierRatio * 100 << "% are used. " << endl;
 #endif
     }
 
@@ -172,9 +145,13 @@ namespace sky {
             auto rawCoor = cv::Point2d(keyFrame2->getKeyPointCoor(matches[iInlier].trainIdx));
 /*            cv::Point2d reprojCoor;
             proj2frame(pointsCandi[matches[iInlier].queryIdx], keyFrame2, reprojCoor);
-            cout << disBetween(reprojCoor, rawCoor) << endl;*/
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << disBetween(reprojCoor, rawCoor) << endl;*/
             pointsCandi[matches[iInlier].queryIdx]->addObservedFrame(keyFrame2, rawCoor);
         }
+#ifdef DEBUG
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver3D2D: addFrame2inliers done. "
+             << "Added currFrame as observedFrame to " << indexInliers.rows << " old mapPoints. " << endl;
+#endif
     }
 
 }

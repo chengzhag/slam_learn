@@ -8,15 +8,9 @@
 namespace sky {
 
     void Matcher::match(const Mat &descriptors1, const Mat &descriptors2) {
+        float thres;
         if (testRatio == 0) {
-#ifdef DEBUG
-            cout << "Matcher: matching... ";
-#endif
             matcher->match(descriptors1, descriptors2, matches, cv::noArray());
-
-#ifdef DEBUG
-            cout << matches.size() << " matches found ";
-#endif
 
 /*#ifdef CVVISUAL_DEBUGMODE
             cvv::debugDMatch(keyFrame1->image, keyFrame1->keyPoints, keyFrame2->image, keyFrame2->keyPoints, matches,
@@ -33,27 +27,17 @@ namespace sky {
             auto minDis = minMaxDis.first->distance;
             auto maxDis = minMaxDis.second->distance;
             vector<cv::DMatch> goodMatches;
-            auto thres = max(disThresRatio * minDis, disThresMin);
+            thres = max(disThresRatio * minDis, disThresMin);
             for (auto match:matches) {
                 if (match.distance <= thres)
                     goodMatches.push_back(match);
             }
             matches = goodMatches;
-#ifdef DEBUG
-            cout << "(" << matches.size() << " good matches, thres " << thres << ")" << endl;
-#endif
 
         } else {
 
             vector<vector<cv::DMatch>> knnMatches;
-#ifdef DEBUG
-            cout << "Matcher: matching... ";
-#endif
             matcher->knnMatch(descriptors1, descriptors2, knnMatches, 2);
-
-#ifdef DEBUG
-            cout << knnMatches.size() << " matches found ";
-#endif
 
 /*#ifdef CVVISUAL_DEBUGMODE
             cvv::debugDMatch(keyFrame1->image, keyFrame1->keyPoints, keyFrame2->image, keyFrame2->keyPoints, matches,
@@ -72,7 +56,7 @@ namespace sky {
             }
 
             matches.clear();
-            auto thres = max(disThresRatio * minDis, disThresMin);
+            thres = max(disThresRatio * minDis, disThresMin);
             for (auto &m:knnMatches) {
                 //排除不满足Ratio Test的点和匹配距离过大的点
                 if (m[0].distance > testRatio * m[1].distance
@@ -83,10 +67,13 @@ namespace sky {
                 matches.push_back(m[0]);
             }
 
-#ifdef DEBUG
-            cout << "(" << matches.size() << " good matches, thres " << thres << ")" << endl;
-#endif
         }
+#ifdef DEBUG
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Matcher: "
+             << matches.size() << " matches found. "
+             << matches.size() << " good matches, thres "
+             << thres << ". " << endl;
+#endif
 
     }
 

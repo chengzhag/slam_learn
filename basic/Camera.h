@@ -23,11 +23,11 @@ namespace sky {
         ) :
                 fx(fx), fy(fy), cx(cx), cy(cy) {
 #ifdef DEBUG
-            cout << "Camera: Initializing..." << endl;
-            coutVariable(fx);
-            coutVariable(fy);
-            coutVariable(cx);
-            coutVariable(cy);
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Camera: Initializing..." << endl;
+            printVariable(fx);
+            printVariable(fy);
+            printVariable(cx);
+            printVariable(cy);
 #endif
         }
 
