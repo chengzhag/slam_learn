@@ -66,7 +66,10 @@ namespace sky {
             pos(2) = posMatx13(2);
         }
 
-        void addObservedFrame(const KeyFrame::Ptr &observedFrame, const cv::Point2d &pixelCoor);
+        void
+        addObservedFrame(const KeyFrame::Ptr &observedFrame, const cv::Point2d &pixelCoor, bool doRefreshNorm = true);
+
+        void refreshNorm(const KeyFrame::Ptr &observedFrame);
 
         inline void deleteObservedFrame(const KeyFrame::Ptr &observedFrame) {
             observedFrames.erase(observedFrame);

@@ -21,8 +21,6 @@ namespace sky {
         this->keyFrame2 = keyFrame2;
         auto keyFrame1 = map->getLastFrame();
 
-        Mat descriptorsMap;
-
         for (MapPoint::Ptr &point:map->mapPoints) {
 
             if (isInFrame(point->pos, keyFrame1)
@@ -79,6 +77,28 @@ namespace sky {
         }
 
         //建立BA用局部地图
+        Map::Ptr mapLastFrame(new Map);//用于最后帧BA的地图
+        mapLastFrame->addFrame(keyFrame2);
+
+        //添加观测帧
+        for (int i = 0; i < indexInliers.rows; ++i) {
+            auto iInlier = indexInliers.at<int>(i);
+            auto rawCoor = keyFrame2->getKeyPointCoor(matches[iInlier].trainIdx);
+            auto mapPoint = pointsCandi[matches[iInlier].queryIdx];
+            mapPoint->addObservedFrame(keyFrame2, rawCoor, false);
+            mapLastFrame->addMapPoint(mapPoint);
+        }
+        BA ba({BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});
+        ba.loadMap(mapLastFrame);
+        ba.ba();
+        ba.writeMap();
+
+        //消除观测帧
+        for (int i = 0; i < indexInliers.rows; ++i) {
+            auto iInlier = indexInliers.at<int>(i);
+            pointsCandi[matches[iInlier].queryIdx]->deleteObservedFrame(keyFrame2);
+        }
+
         //TODO:以下建图没有考虑到当前帧可能不是KeyFrame，导致MapPoint的observedFrames存有非KeyFrame
 /*        Map::Ptr mapLastFrame(new Map);//用于最后帧BA的地图
         mapLastFrame->addFrame(keyFrame2);

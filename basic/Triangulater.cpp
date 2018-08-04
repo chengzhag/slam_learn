@@ -85,19 +85,17 @@ namespace sky {
                 mapPoint->addObservedFrame(
                         keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));*/
 
-                auto normOld = mapPoint->norm;
 
                 mapPoint->addObservedFrame(
-                        keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
-
+                        keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2), false);
 
                 if (!isGoodPoint(mapPoint)) {
                     mapPoint->deleteObservedFrame(keyFrame2);
-                    mapPoint->norm = normOld;
                     continue;
                 }
 
-                //更新描述子
+                //更新描述子和norm
+                mapPoint->refreshNorm(keyFrame2);
                 mapPoint->descriptor = descriptor;
 
                 //记录当前帧加入地图的mapPoint和特征点下标
