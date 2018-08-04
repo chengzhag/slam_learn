@@ -26,8 +26,17 @@ namespace sky {
         Mat descriptorsMap;
 
         for (MapPoint::Ptr &point:map->mapPoints) {
+
             if (isInFrame(point->pos, keyFrame1)
                 && disBetween(keyFrame1, point) <= max3Ddis) {
+
+                Vector3d n = keyFrame1->getCamCenterEigen() - point->pos;
+                n.normalize();
+                auto angle = acos(n.transpose() * (point->norm / point->norm.norm()));
+                //coutVariable(angle);
+                if (angle > M_PI / 6)
+                    continue;
+
                 points3D.push_back(point->getPosPoint3_CV<float>());
                 descriptorsMap.push_back(point->descriptor);
             }
