@@ -7,6 +7,7 @@
 #include "Matcher.h"
 #include "Triangulater.h"
 #include <opencv2/cvv.hpp>
+#include "basic.h"
 
 namespace sky {
     void LocalMap::init(const Map::Ptr &map) {
@@ -26,7 +27,7 @@ namespace sky {
         lock.unlock();
 
 #ifdef DEBUG
-        cout << "LocalMap: Adding keyFrame... " << frame->getDis2(refFrame)
+        cout << "LocalMap: Adding keyFrame... " << disBetween(frame, refFrame)
              << " from last keyFrame" << endl;
 #endif
 
@@ -141,21 +142,21 @@ namespace sky {
         cout << "\t" << !setHas(newMapPoints, mapPoint) << "\t"
              << mapPoint->observedFrames.size() << " observedFrames" << endl;
 #endif*/
-        if (map->keyFrames.size() >= 4)
+/*        if (map->keyFrames.size() >= 4)
             if (!setHas(newMapPoints, mapPoint)
                 && mapPoint->observedFrames.size() < 3)
-                return false;
+                return false;*/
 
         for (auto &observedFrame:mapPoint->observedFrames) {
             //根据到每个观测帧的最大距离来判断
-            if (observedFrame.first->getDis2(mapPoint) > maxInlierPointDis)
+            if (disBetween(observedFrame.first, mapPoint) > maxInlierPointDis)
                 return false;
 
             //根据重投影误差删除外点
             cv::Point2d reprojCoor;
-            if(!observedFrame.first->proj2frame(mapPoint, reprojCoor))
+            if (!proj2frame(mapPoint, observedFrame.first, reprojCoor))
                 return false;
-            auto reprojErr = point2dis(observedFrame.second, reprojCoor);
+            auto reprojErr = disBetween(observedFrame.second, reprojCoor);
             if (reprojErr > triangulater.maxReprojErr)
                 return false;
         }

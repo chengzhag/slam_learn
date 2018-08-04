@@ -5,6 +5,7 @@
 #include "Solver3D2D.h"
 #include <opencv2/cvv.hpp>
 #include "BA.h"
+#include "basic.h"
 
 namespace sky {
 
@@ -25,8 +26,8 @@ namespace sky {
         Mat descriptorsMap;
 
         for (MapPoint::Ptr &point:map->mapPoints) {
-            if (keyFrame1->isInFrame(point->pos)
-                && keyFrame1->getDis2(point) <= max3Ddis) {
+            if (isInFrame(point->pos, keyFrame1)
+                && disBetween(keyFrame1, point) <= max3Ddis) {
                 points3D.push_back(point->getPosPoint3_CV<float>());
                 descriptorsMap.push_back(point->descriptor);
             }

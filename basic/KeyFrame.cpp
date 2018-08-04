@@ -44,27 +44,7 @@ namespace sky {
         return TwcCVR;
     }
 
-    bool KeyFrame::proj2frame(const Vector3d &pt_world, Vector2d &pixelColRow) const {
-        Vector3d p_cam = camera->world2camera(pt_world, Tcw);
-        pixelColRow = camera->world2pixel(pt_world, Tcw);
-        // cout<<"pt_world = "<<endl<<pt_world<<endl;
-        // cout<<"P_pixel = "<<pixelColRow.transpose()<<endl<<endl;
-        if (p_cam(2, 0) < 0) return false;
-        return pixelColRow(0, 0) > 0
-               && pixelColRow(1, 0) > 0
-               && pixelColRow(0, 0) < image.cols
-               && pixelColRow(1, 0) < image.rows;
-    }
-
-    float KeyFrame::getDis2(const Sophus::Vector3d &coor) const {
-        Sophus::Vector3d coorFrom = Tcw.translation();
-        float dis = 0;
-        for (int i = 0; i < 3; ++i)
-            dis += pow(coorFrom[i] - coor[i], 2);
-        return sqrt(dis);
-    }
-
-    MapPoint::Ptr KeyFrame::getMapPoint(int i) const {
+    MapPointPtr KeyFrame::getMapPoint(int i) const {
         auto it = mapPoints.find(i);
         if (it != mapPoints.end()) {
             return it->second;
@@ -78,7 +58,7 @@ namespace sky {
         }
     }
 
-    bool KeyFrame::setMapPoint(int i, MapPoint::Ptr &mapPoint) {
+    bool KeyFrame::setMapPoint(int i, MapPointPtr &mapPoint) {
         if (hasMapPoint(i)) {
             mapPoints[i] = mapPoint;
             return true;

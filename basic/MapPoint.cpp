@@ -6,12 +6,13 @@
 
 namespace sky {
 
-    void MapPoint::addObservedFrame(const KeyFramePtr &observedFrame, const cv::Point2d &pixelCoor) {
+    void MapPoint::addObservedFrame(const KeyFrame::Ptr &observedFrame, const cv::Point2d &pixelCoor) {
+        Vector3d n = pos - observedFrame->getCamCenterEigen();
         if (observedFrame)
             observedFrames[observedFrame] = pixelCoor;
     }
 
-    bool MapPoint::getPixelCoor(const KeyFramePtr &observedFrame, cv::Point2d &pixelCoor) const {
+    bool MapPoint::getPixelCoor(const KeyFrame::Ptr &observedFrame, cv::Point2d &pixelCoor) const {
         auto it = observedFrames.find(observedFrame);
         if (it != observedFrames.end()) {
             pixelCoor = it->second;

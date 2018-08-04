@@ -3,6 +3,7 @@
 //
 
 #include "Tracker.h"
+#include "basic.h"
 
 namespace sky {
 
@@ -70,7 +71,7 @@ namespace sky {
     bool Tracker::isKeyFrame() const {
         boost::mutex::scoped_lock lock(localMap->mapMutex);
         auto lasFrame = localMap->getLastFrame();
-        auto dis2LastFrame = frame->getDis2(lasFrame);
+        auto dis2LastFrame = disBetween(frame, lasFrame);
         auto localMapFrameNum = localMap->map->keyFrames.size();
         auto localMapPointNum = localMap->map->mapPoints.size();
         lock.unlock();

@@ -4,6 +4,6 @@
 
 #include "utility.h"
 
-namespace sky{
+namespace sky {
 
 }

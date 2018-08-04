@@ -9,12 +9,6 @@
 
 namespace sky {
 
-    template<typename T>
-    T point2dis(const cv::Point_<T> &p1, const cv::Point_<T> &p2) {
-        auto diff = p1 - p2;
-        return cv::sqrt(diff.x * diff.x + diff.y * diff.y);
-    }
-
     template<class K, class T, class H, class P, class A,
             template<class, class, class, class, class> class M>
     inline bool mapHas(const M<K, T, H, P, A> &map, const K &key) {
@@ -26,6 +20,16 @@ namespace sky {
     inline bool setHas(const S<K, H, P, A> &set, const K &key) {
         return set.find(key) != set.end();
     };
+
+    //计算距离
+    template<typename T>
+    T disBetween(const cv::Point_<T> &p1, const cv::Point_<T> &p2) {
+        auto diff = p1 - p2;
+        return cv::sqrt(diff.x * diff.x + diff.y * diff.y);
+    }
+
+
+
 }
 
 #endif //SLAM_LEARN_UTILITY_H

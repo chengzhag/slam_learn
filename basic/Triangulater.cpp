@@ -7,6 +7,7 @@
 #include "BA.h"
 #include <algorithm>
 #include "utility.h"
+#include "basic.h"
 
 namespace sky {
 
@@ -56,7 +57,7 @@ namespace sky {
     void Triangulater::convAndAddMappoints(const Map::Ptr &map, const Mat &inlierMask,
                                            const Mat &points4D, const vector<cv::DMatch> &matches) {
 #ifdef DEBUG
-        cout << "Triangulater: convAndAddMappoints... "<<points4D.cols<<" raw 3D points, ";
+        cout << "Triangulater: convAndAddMappoints... " << points4D.cols << " raw 3D points, ";
 #endif
         for (int i = 0; i < points4D.cols; ++i) {
             MapPoint::Ptr mapPoint;
@@ -168,7 +169,7 @@ namespace sky {
             cv::Point2d projPos2;
             keyFrame2->proj2frame(mapPoint, projPos2);
             cout << setiosflags(ios::fixed) << setprecision(2)
-                 << "\trawPos2: " << rawPos2 << "\tprojPos2: " << projPos2 << "\tdis: " << point2dis(rawPos2, projPos2)
+                 << "\trawPos2: " << rawPos2 << "\tprojPos2: " << projPos2 << "\tdis: " << disBetween(rawPos2, projPos2)
                  << endl;
         }
 #endif*/
@@ -178,8 +179,8 @@ namespace sky {
 
     bool Triangulater::isGoodPoint(const MapPoint::Ptr &mapPoint) const {
         //检查是否在距离范围内
-        auto dis2keyFrame2 = keyFrame2->getDis2(mapPoint);
-        auto disB12 = keyFrame2->getDis2(keyFrame1);
+        auto dis2keyFrame2 = disBetween(keyFrame2, mapPoint);
+        auto disB12 = disBetween(keyFrame2, keyFrame1);
         if (dis2keyFrame2 > maxDisRatio * disB12
             || dis2keyFrame2 < minDisRatio * disB12)
             return false;
@@ -187,16 +188,16 @@ namespace sky {
         //测试重投影误差
         auto &rawPos1 = mapPoint->observedFrames[keyFrame1];
         cv::Point2d projPos1;
-        if (!keyFrame1->proj2frame(mapPoint, projPos1))
+        if (!proj2frame(mapPoint, keyFrame1, projPos1))
             return false;
-        if (point2dis(rawPos1, projPos1) > maxReprojErr)
+        if (disBetween(rawPos1, projPos1) > maxReprojErr)
             return false;
 
         auto &rawPos2 = mapPoint->observedFrames[keyFrame1];
         cv::Point2d projPos2;
-        if (!keyFrame2->proj2frame(mapPoint, projPos2))
+        if (!proj2frame(mapPoint, keyFrame2, projPos2))
             return false;
-        if (point2dis(rawPos2, projPos2) > maxReprojErr)
+        if (disBetween(rawPos2, projPos2) > maxReprojErr)
             return false;
 
 

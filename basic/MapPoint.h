@@ -9,21 +9,19 @@
 #include "common_include.h"
 #include <unordered_map>
 #include "utility.h"
+#include "KeyFrame.h"
 
 namespace sky {
-
-    class KeyFrame;
-
-    typedef shared_ptr<KeyFrame> KeyFramePtr;
 
     class MapPoint {
     private:
 
     public:
         typedef shared_ptr<MapPoint> Ptr;
-        unordered_map<KeyFramePtr, cv::Point2d> observedFrames;//观测帧和像素坐标
+        unordered_map<KeyFrame::Ptr, cv::Point2d> observedFrames;//观测帧和像素坐标
         Mat descriptor; // Descriptor for matching
         Vector3d pos;       // Position in world
+        Vector3d norm;      // Normal of viewing direction
         cv::Vec3b rgb;
 
 
@@ -68,17 +66,17 @@ namespace sky {
             pos(2) = posMatx13(2);
         }
 
-        void addObservedFrame(const KeyFramePtr &observedFrame, const cv::Point2d &pixelCoor);
+        void addObservedFrame(const KeyFrame::Ptr &observedFrame, const cv::Point2d &pixelCoor);
 
-        inline void deleteObservedFrame(const KeyFramePtr &observedFrame) {
+        inline void deleteObservedFrame(const KeyFrame::Ptr &observedFrame) {
             observedFrames.erase(observedFrame);
         }
 
-        inline bool hasObservedFrame(const KeyFramePtr &observedFrame) const {
+        inline bool hasObservedFrame(const KeyFrame::Ptr &observedFrame) const {
             return mapHas(observedFrames, observedFrame);
         }
 
-        bool getPixelCoor(const KeyFramePtr &observedFrame, cv::Point2d &pixelCoor) const;
+        bool getPixelCoor(const KeyFrame::Ptr &observedFrame, cv::Point2d &pixelCoor) const;
 
         template<typename L>
         void forObservedFrames(L func) {
