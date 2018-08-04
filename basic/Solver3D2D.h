@@ -26,6 +26,7 @@ namespace sky {
 
         Mat descriptorsMap;
         vector<cv::Point3f> points3D;
+        vector<MapPoint::Ptr> pointsCandi;
         Map::Ptr map;
         KeyFrame::Ptr keyFrame2;
 
@@ -53,6 +54,8 @@ namespace sky {
         }
 
         bool solve(const Map::Ptr &map, const KeyFrame::Ptr &keyFrame2);
+
+        void addFrame2inliers();
 
         inline float getInlierRatio() const {
             return inlierRatio;

@@ -54,7 +54,7 @@ Solver3D2D.minInlierRatio: 0.3
 Triangulater.maxDisRatio: 50
 Triangulater.minDisRatio: 1
 # 重投影误差最大值
-Triangulater.maxReprojErr: 50
+Triangulater.maxReprojErr: 10
 
 # local_map
 # 地图点到每个观测帧的最大距离

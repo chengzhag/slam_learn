@@ -4,6 +4,7 @@
 
 #include "Map.h"
 #include <opencv2/cvv.hpp>
+#include "basic.h"
 
 namespace sky {
 
@@ -34,14 +35,14 @@ namespace sky {
         vector<cv::DMatch> projMatches;
         int i = 0;
         for (const MapPoint::Ptr &mapPoint:mapPoints) {
-            if(mapPoint->hasObservedFrame(frame)){
+            if (mapPoint->hasObservedFrame(frame)) {
                 auto &rawPos = mapPoint->observedFrames[frame];
                 cv::Point2d projPos;
-                frame->proj2frame(mapPoint, projPos);
+                proj2frame(mapPoint, frame, projPos);
 
                 rawPoints.push_back(cv::KeyPoint(rawPos, 1));
                 projPoints.push_back(cv::KeyPoint(projPos, 1));
-                projMatches.push_back(cv::DMatch(i, i, point2dis(rawPos, projPos)));
+                projMatches.push_back(cv::DMatch(i, i, disBetween(rawPos, projPos)));
                 ++i;
             }
         }

@@ -142,10 +142,10 @@ namespace sky {
         cout << "\t" << !setHas(newMapPoints, mapPoint) << "\t"
              << mapPoint->observedFrames.size() << " observedFrames" << endl;
 #endif*/
-/*        if (map->keyFrames.size() >= 4)
+        if (map->keyFrames.size() >= 4)
             if (!setHas(newMapPoints, mapPoint)
                 && mapPoint->observedFrames.size() < 3)
-                return false;*/
+                return false;
 
         for (auto &observedFrame:mapPoint->observedFrames) {
             //根据到每个观测帧的最大距离来判断

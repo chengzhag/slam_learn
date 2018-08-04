@@ -6,12 +6,14 @@
 #include <opencv2/cvv.hpp>
 #include "BA.h"
 #include "basic.h"
+#include "utility.h"
 
 namespace sky {
 
     bool Solver3D2D::solve(const Map::Ptr &map, const KeyFrame::Ptr &keyFrame2) {
         //重置中间变量
         points3D.clear();
+        pointsCandi.clear();
         descriptorsMap = Mat();
         indexInliers = Mat();
         this->map = map;
@@ -38,6 +40,7 @@ namespace sky {
                     continue;
 
                 points3D.push_back(point->getPosPoint3_CV<float>());
+                pointsCandi.push_back(point);
                 descriptorsMap.push_back(point->descriptor);
             }
         }
@@ -161,6 +164,17 @@ namespace sky {
         cout << "2D-2D frame2 Tcw: " << endl << keyFrame2->frame->getTcwMatCV() << endl << endl;
         cout << "2D-2D frame2 ProjMat: " << endl << keyFrame2->frame->getTcw34MatCV() << endl << endl;*/
 #endif
+    }
+
+    void Solver3D2D::addFrame2inliers() {
+        for (int i = 0; i < indexInliers.rows; ++i) {
+            auto iInlier = indexInliers.at<int>(i);
+            auto rawCoor = cv::Point2d(keyFrame2->getKeyPointCoor(matches[iInlier].trainIdx));
+/*            cv::Point2d reprojCoor;
+            proj2frame(pointsCandi[matches[iInlier].queryIdx], keyFrame2, reprojCoor);
+            cout << disBetween(reprojCoor, rawCoor) << endl;*/
+            pointsCandi[matches[iInlier].queryIdx]->addObservedFrame(keyFrame2, rawCoor);
+        }
     }
 
 }

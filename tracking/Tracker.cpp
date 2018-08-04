@@ -52,6 +52,9 @@ namespace sky {
                     localMap->viewReprojInCVV();
                     showedCVV = true;
                 }
+                lock.lock();
+                solver3D2D.addFrame2inliers();
+                lock.unlock();
                 localMap->addFrame(frame);
                 frameInterval = 0;
                 showedCVV = false;

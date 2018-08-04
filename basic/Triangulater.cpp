@@ -181,6 +181,7 @@ namespace sky {
         //检查是否在距离范围内
         auto dis2keyFrame2 = disBetween(keyFrame2, mapPoint);
         auto disB12 = disBetween(keyFrame2, keyFrame1);
+        //coutVariable(dis2keyFrame2);
         if (dis2keyFrame2 > maxDisRatio * disB12
             || dis2keyFrame2 < minDisRatio * disB12)
             return false;
@@ -190,6 +191,7 @@ namespace sky {
         cv::Point2d projPos1;
         if (!proj2frame(mapPoint, keyFrame1, projPos1))
             return false;
+        //coutVariable(disBetween(rawPos1, projPos1));
         if (disBetween(rawPos1, projPos1) > maxReprojErr)
             return false;
 
@@ -197,6 +199,7 @@ namespace sky {
         cv::Point2d projPos2;
         if (!proj2frame(mapPoint, keyFrame2, projPos2))
             return false;
+        //coutVariable(disBetween(rawPos2, projPos2));
         if (disBetween(rawPos2, projPos2) > maxReprojErr)
             return false;
 
