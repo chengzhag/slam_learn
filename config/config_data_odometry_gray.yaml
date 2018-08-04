@@ -1,7 +1,6 @@
 %YAML:1.0
 # 路径
 datasetDir: dataset/data_odometry_gray/dataset/sequences/00/image_0
-# datasetDir: /home/pidan1231239/projects_temp/datasets/tum/rgbd_dataset_freiburg1_xyz/rgb
 
 # 相机内参
 Camera.fx: 718.856
@@ -9,10 +8,6 @@ Camera.fy: 718.856
 Camera.cx: 607.1928
 Camera.cy: 185.2157
 
-# Camera.fx: 517.3
-# Camera.fy: 516.5
-# Camera.cx: 325.1
-# Camera.cy: 249.7
 
 # 描述子提取的数量
 VO.nfeatures: 2000
@@ -45,7 +40,7 @@ Solver2D2D.minInlierNum: 100
 # 用于解对极约束的最小内点比例
 Solver2D2D.minInlierRatio: 0.3
 
-# 用于解PnP选取的最多局部地图点
+# 用于解PnP选取的最多局部地图点（暂时取消）
 Solver3D2D.max3Dnum: 500
 # 用于解PnP选取的最少局部地图点
 Solver3D2D.min3Dnum: 10
