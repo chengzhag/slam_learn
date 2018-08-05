@@ -9,9 +9,10 @@ namespace sky {
 
     void Matcher::match(const Mat &descriptors1, const Mat &descriptors2) {
         float thres;
+        int numMatchesRaw;
         if (testRatio == 0) {
             matcher->match(descriptors1, descriptors2, matches, cv::noArray());
-
+            numMatchesRaw = matches.size();
 /*#ifdef CVVISUAL_DEBUGMODE
             cvv::debugDMatch(keyFrame1->image, keyFrame1->keyPoints, keyFrame2->image, keyFrame2->keyPoints, matches,
                              CVVISUAL_LOCATION,
@@ -38,7 +39,7 @@ namespace sky {
 
             vector<vector<cv::DMatch>> knnMatches;
             matcher->knnMatch(descriptors1, descriptors2, knnMatches, 2);
-
+            numMatchesRaw = knnMatches.size();
 /*#ifdef CVVISUAL_DEBUGMODE
             cvv::debugDMatch(keyFrame1->image, keyFrame1->keyPoints, keyFrame2->image, keyFrame2->keyPoints, matches,
                              CVVISUAL_LOCATION,
@@ -70,7 +71,7 @@ namespace sky {
         }
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Matcher: "
-             << matches.size() << " matches found. "
+             << numMatchesRaw << " matches found. "
              << matches.size() << " good matches, thres "
              << thres << ". " << endl;
 #endif
