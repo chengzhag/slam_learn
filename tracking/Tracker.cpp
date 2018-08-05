@@ -96,41 +96,22 @@ namespace sky {
 #endif
             return false;
         }
-        if (dis2LastFrame > 2 * maxKeyFrameDis) {
+        if (dis2LastFrame > maxKeyFrameDis) {
 #ifdef DEBUG
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
                  << "Tracker: Not a keyFrame. Distance to the last keyFrame " << dis2LastFrame
-                 << " is more than 2*maxKeyFrameDis " << 2 * maxKeyFrameDis << endl;
+                 << " is more than maxKeyFrameDis " << maxKeyFrameDis << endl;
 #endif
             return false;
         }
-        if (dis2LastFrame > maxKeyFrameDis) {
+/*        if (dis2LastFrame > maxKeyFrameDis) {
 #ifdef DEBUG
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
                  << "Tracker: Is a keyFrame. Distance to the last keyFrame " << dis2LastFrame
                  << " is more than maxKeyFrameDis " << maxKeyFrameDis << endl;
 #endif
             return true;
-        }
-
-        //关键帧解PnP所用地图点数相对于上一关键帧的最大比例
-        int lastKeyFrameTrackingNum;
-        if (localMapFrameNum >= 3)
-            lastKeyFrameTrackingNum = lasFrame->inlierPnPnum;
-        else
-            lastKeyFrameTrackingNum = localMapPointNum;
-        auto trackRatio2LastFrame = (float) solver3D2D.getInlierNum() / lastKeyFrameTrackingNum;
-/*        printVariable(lastKeyFrameTrackingNum);
-        printVariable(solver3D2D.getInlierNum());
-        printVariable(trackRatio2LastFrame);*/
-        if (trackRatio2LastFrame < maxKeyFrameTrackRatio) {
-#ifdef DEBUG
-            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Tracker: Is a keyFrame. TrackRatio2LastFrame "
-                 << trackRatio2LastFrame
-                 << " is less than maxKeyFrameTrackRatio " << maxKeyFrameTrackRatio << endl;
-#endif
-            return true;
-        }
+        }*/
 
         //关键帧之间的最小间隔帧数
         if (frameInterval < minKeyFrameInterval) {
@@ -142,7 +123,7 @@ namespace sky {
             return false;
         }
 
-        //关键帧之间的最小间隔帧数
+        //关键帧的最少地图点
         if (solver3D2D.getInlierNum() < minKeyFrameInlierNum) {
 #ifdef DEBUG
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Tracker: Not a keyFrame. InlierNum "
@@ -151,6 +132,27 @@ namespace sky {
 #endif
             return false;
         }
+
+        //关键帧解PnP所用地图点数相对于上一关键帧的最大比例
+        int lastKeyFrameTrackingNum;
+        if (localMapFrameNum >= 3)
+            lastKeyFrameTrackingNum = lasFrame->getMapPointsNum();
+        else
+            lastKeyFrameTrackingNum = localMapPointNum;
+        auto trackRatio2LastFrame = (float) solver3D2D.getInlierNum() / lastKeyFrameTrackingNum;
+/*        printVariable(lastKeyFrameTrackingNum);
+        printVariable(solver3D2D.getInlierNum());
+        printVariable(trackRatio2LastFrame);*/
+        if (trackRatio2LastFrame > maxKeyFrameTrackRatio) {
+#ifdef DEBUG
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Tracker: Not a keyFrame. TrackRatio2LastFrame "
+                 << trackRatio2LastFrame
+                 << " is more than maxKeyFrameTrackRatio " << maxKeyFrameTrackRatio << endl;
+#endif
+            return false;
+        }
+
+
 
         return true;
     }

@@ -9,7 +9,7 @@ Camera.cx: 320.1
 Camera.cy: 247.6
 
 # 描述子提取的数量
-VO.nfeatures: 1000
+VO.nfeatures: 2000
 # 特征点算法
 VO.featureType: SIFT
 # VO.featureType: ORB
@@ -51,33 +51,33 @@ Solver3D2D.minInlierNum: 8
 Solver3D2D.minInlierRatio: 0.3
 
 # 三角化点到两帧的最大距离相对于帧间距的最大比例
-Triangulater.maxDisRatio: 50
+Triangulater.maxDisRatio: 75
 Triangulater.minDisRatio: 1
 # 重投影误差最大值
-Triangulater.maxReprojErr: 10
+Triangulater.maxReprojErr: 30
 
 # local_map
 # 地图点到每个观测帧的最大距离
-LocalMap.maxInlierPointDis: 50
+LocalMap.maxInlierPointDis: 100
 # 关键帧最大数量，超过此数量删除旧关键帧
-LocalMap.maxKeyFrames: 7
+LocalMap.maxKeyFrames: 10
 
 # tracking
 
 # 初始化两帧的最大间隔帧数
 Initializer.maxFrameInterval: 40
 # 初始化两帧的最小间隔帧数
-Initializer.minFrameInterval: 10
+Initializer.minFrameInterval: 15
 # 初始化地图的最小点数
 Initializer.minMapPointNum: 100
 
 # 关键帧的最小间距
-Tracker.minKeyFrameDis: 1
+Tracker.minKeyFrameDis: 0.8
 # 关键帧的最大间距
-Tracker.maxKeyFrameDis: 3
+Tracker.maxKeyFrameDis: 10
 # 关键帧的最少地图点
 Tracker.minKeyFrameInlierNum: 30
 # 关键帧之间的最小间隔帧数
-Tracker.minKeyFrameInterval: 10
+Tracker.minKeyFrameInterval: 2
 # 关键帧解PnP所用地图点数相对于上一关键帧的最大比例
 Tracker.maxKeyFrameTrackRatio: 1
