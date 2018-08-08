@@ -15,15 +15,13 @@ namespace sky {
 
     class MapPoint {
     private:
-
+        unordered_map<KeyFrame::Ptr, int> frame2indexs;//观测帧和像素坐标
     public:
         typedef shared_ptr<MapPoint> Ptr;
         Mat descriptor; // Descriptor for matching
         Vector3d pos;       // Position in world
         Vector3d norm;      // Normal of viewing direction
         cv::Vec3b rgb;
-
-        unordered_map<KeyFrame::Ptr, int> frame2indexs;//观测帧和像素坐标
 
 
         MapPoint();
@@ -77,9 +75,15 @@ namespace sky {
             frame2indexs.erase(observedFrame);
         }
 
+        inline void deleteAllFrame() {
+            frame2indexs.clear();
+        }
+
         inline bool hasFrame(const KeyFrame::Ptr &observedFrame) const {
             return mapHas(frame2indexs, observedFrame);
         }
+
+        int getIndex(const KeyFrame::Ptr &observedFrame) const;
 
         bool getPixelCoor(const KeyFrame::Ptr &frame, cv::Point2f &pixelCoor) const;
 
@@ -87,10 +91,19 @@ namespace sky {
             return frame2indexs.size();
         }
 
+        //循环遍历frame2indexs，不能用于删除
+        template<typename L>
+        void forEachFrame2index(L func) {
+            for (auto &frame2index:frame2indexs) {
+                func(frame2index);
+            }
+        }
+
+        //循环遍历frame2indexs，不能用于删除
         template<typename L>
         void forEachFrames(L func) {
-            for (auto &observedFrame:frame2indexs) {
-                func(observedFrame);
+            for (auto &frame2index:frame2indexs) {
+                func(frame2index.first);
             }
         }
     };

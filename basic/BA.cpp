@@ -87,7 +87,7 @@ namespace sky {
             if (hasMode(Mode_Fix_Points))
                 problem.SetParameterBlockConstant(mapPoint2pos.second.val);
 
-            mapPoint2pos.first->forEachFrames(
+            mapPoint2pos.first->forEachFrame2index(
                     [&](auto const &observedFrame) {
                         if (mapHas(frame2extrinsics, observedFrame.first)) {
                             cv::Point2d pixelCoor(observedFrame.first->getKeyPointCoor(observedFrame.second));

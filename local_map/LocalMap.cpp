@@ -127,6 +127,13 @@ namespace sky {
                 ++it;
                 ++iFrames;
             } else {
+                //删除被筛选掉的关键帧在LocalMap中的观测点,保留观测关系
+                for (auto it = map->mapPoints.begin(); it != map->mapPoints.end();) {
+                    if (currFrame->hasMapPoint(*it))
+                        it = map->mapPoints.erase(it);
+                    else
+                        ++it;
+                }
                 it = list<KeyFrame::Ptr>::reverse_iterator(map->keyFrames.erase((++it).base()));
             }
         }
@@ -146,8 +153,10 @@ namespace sky {
         for (auto it = map->mapPoints.begin(); it != map->mapPoints.end();) {
             if (isGoodPoint(*it))
                 ++it;
-            else
+            else {
+                map->deleteObservation(*it);
                 it = map->mapPoints.erase(it);
+            }
         }
         lock.unlock();
     }
@@ -162,27 +171,27 @@ namespace sky {
                 && mapPoint->getFrameNum() < 3)
                 return false;
 
-        for (auto &observedFrame:mapPoint->frame2indexs) {
+        mapPoint->forEachFrame2index([&](auto &frame2index) {
             //根据到每个观测帧的最大距离来判断
-            if (disBetween(observedFrame.first, mapPoint) > maxInlierPointDis)
+            if (disBetween(frame2index.first, mapPoint) > maxInlierPointDis)
                 return false;
 
             //根据重投影误差删除外点
             cv::Point2d reprojCoor;
-            if (!proj2frame(mapPoint, observedFrame.first, reprojCoor))
+            if (!proj2frame(mapPoint, frame2index.first, reprojCoor))
                 return false;
-            auto reprojErr = disBetween<float>(observedFrame.first->getKeyPointCoor(observedFrame.second), reprojCoor);
+            auto reprojErr = disBetween<float>(frame2index.first->getKeyPointCoor(frame2index.second), reprojCoor);
             if (reprojErr > triangulater.maxReprojErr)
                 return false;
-        }
+        });
 
-        //如果不被当前LocalMap中的关键帧观测，则过滤
+/*        //如果不被当前LocalMap中的关键帧观测，则过滤
         for (auto &keyFrame:map->keyFrames) {
             if (mapPoint->hasFrame(keyFrame))
                 break;
             if (keyFrame == map->keyFrames.back())
                 return false;
-        }
+        }*/
 
         return true;
     }

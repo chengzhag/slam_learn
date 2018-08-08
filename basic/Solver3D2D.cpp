@@ -83,7 +83,7 @@ namespace sky {
         //添加观测帧
         for (int i = 0; i < indexInliers.rows; ++i) {
             auto iInlier = indexInliers.at<int>(i);
-            auto mapPoint = pointsCandi[matches[iInlier].queryIdx];
+            MapPoint::Ptr mapPoint(new MapPoint(*pointsCandi[matches[iInlier].queryIdx]));
             mapPoint->addFrame(keyFrame2, matches[iInlier].trainIdx, false);
             mapLastFrame->addMapPoint(mapPoint);
         }
@@ -91,12 +91,6 @@ namespace sky {
         ba.loadMap(mapLastFrame);
         ba.ba();
         ba.writeMap();
-
-        //消除观测帧
-        for (int i = 0; i < indexInliers.rows; ++i) {
-            auto iInlier = indexInliers.at<int>(i);
-            pointsCandi[matches[iInlier].queryIdx]->deleteFrame(keyFrame2);
-        }
 
         return true;
     }

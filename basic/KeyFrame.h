@@ -10,6 +10,7 @@
 #include <opencv2/opencv.hpp>
 #include <unordered_map>
 #include "utility.h"
+#include "boost/bimap.hpp"
 
 namespace sky {
 
@@ -23,7 +24,8 @@ namespace sky {
 
     class KeyFrame {
     private:
-        unordered_map<int, MapPointPtr> index2mapPoints;//在descriptors或keyPoints中的序号和对应的地图点
+        boost::bimap<int, MapPointPtr> index2mapPoints;//在descriptors或keyPoints中的序号和对应的地图点
+        typedef boost::bimap<int, MapPointPtr>::value_type Index2mapPoint;
 
     public:
         typedef shared_ptr<KeyFrame> Ptr;
@@ -66,15 +68,31 @@ namespace sky {
         //观测到的地图点
         //在descriptors或keyPoints中的序号
         inline void addMapPoint(int i, const MapPointPtr &mapPoint) {
-            index2mapPoints[i] = mapPoint;
+            index2mapPoints.insert(Index2mapPoint(i, mapPoint));
         }
 
-        inline auto getMapPointsNum(){
+        inline void deleteMapPoint(int i) {
+            index2mapPoints.left.erase(i);
+        }
+
+        inline void deleteMapPoint(const MapPointPtr &mapPoint) {
+            index2mapPoints.right.erase(mapPoint);
+        }
+
+        inline void deleteAllMapPoint(){
+            index2mapPoints.clear();
+        }
+
+        inline auto getMapPointsNum() {
             return index2mapPoints.size();
         }
 
         inline bool hasMapPoint(int i) const {
-            return mapHas(index2mapPoints, i);
+            return index2mapPoints.left.find(i) != index2mapPoints.left.end();
+        }
+
+        inline bool hasMapPoint(const MapPointPtr &mapPoint) {
+            return index2mapPoints.right.find(mapPoint) != index2mapPoints.right.end();
         }
 
         MapPointPtr getMapPoint(int i) const;
@@ -87,6 +105,14 @@ namespace sky {
 
         inline Mat getKeyPointDesciptor(int i) const {
             return descriptors.row(i);
+        }
+
+        //循环遍历frame2indexs，不能用于删除
+        template<typename L>
+        void forEachMapPoint(L func) {
+            for (auto &index2mapPoint:index2mapPoints.left) {
+                func(index2mapPoint.second);
+            }
         }
 
 

@@ -28,6 +28,29 @@ namespace sky {
             frame->addMapPoint(index, mapPoint);
         }
 
+        //删除KeyFrame和MapPoint的观测关系
+        //不能用于循环删除某KeyFrame或MapPoint的所有观测关系！
+/*        inline void deleteObservation(const KeyFrame::Ptr &frame, const MapPoint::Ptr &mapPoint) {
+            frame->deleteMapPoint(mapPoint);
+            mapPoint->deleteFrame(frame);
+        }*/
+
+        //删除某地图点的所有观测关系
+        inline void deleteObservation(const MapPoint::Ptr &mapPoint) {
+            mapPoint->forEachFrames([&](auto &frame) {
+                frame->deleteMapPoint(mapPoint);
+            });
+            mapPoint->deleteAllFrame();
+        }
+
+        //删除某关键帧的所有观测关系
+        inline void deleteObservation(const KeyFrame::Ptr &frame) {
+            frame->forEachMapPoint([&](auto &mapPoint) {
+                mapPoint->deleteFrame(frame);
+            });
+            frame->deleteAllMapPoint();
+        }
+
         KeyFrame::Ptr getLastFrame() const;
 
         bool viewFrameProjInCVV(const KeyFrame::Ptr &frame, string message = "Reprojection") const;
