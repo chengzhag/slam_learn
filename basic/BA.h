@@ -36,9 +36,9 @@ namespace sky {
         Map::Ptr map;
         ceres::Solver::Options ceres_config_options;
 
-        unordered_map<Camera::Ptr, cv::Matx14d> cameraIntrinsics;
-        unordered_map<KeyFrame::Ptr, cv::Matx23d> frameExtrinsics;
-        unordered_map<MapPoint::Ptr, cv::Matx13d> mapPointsPos;
+        unordered_map<Camera::Ptr, cv::Matx14d> camera2intrinsics;
+        unordered_map<KeyFrame::Ptr, cv::Matx23d> frame2extrinsics;
+        unordered_map<MapPoint::Ptr, cv::Matx13d> mapPoint2poses;
 
     public:
         BA(ModeSet modeSet = {Mode_Fix_First_Frame, Mode_Fix_Intrinsic});

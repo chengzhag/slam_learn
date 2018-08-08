@@ -13,7 +13,7 @@ namespace sky {
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
              << "MapViewer: Visualizing " << map->keyFrames.size() << " keyFrames and "
-             << map->mapPoints.size() << " mapPoints" << endl;
+             << map->mapPoints.size() << " index2mapPoints" << endl;
 #endif
         //更新点云
         cloud->clear();

@@ -74,28 +74,16 @@ namespace sky {
                 mapPoint = keyFrame1->getMapPoint(iMapPoint1);
 
                 //创建临时mapPoint拷贝并加入关键帧，再作isGoodPoint判断
-                /*MapPoint::Ptr testMapPoint(new MapPoint(mapPoint));
-                testMapPoint->addObervedFrame(
-                        keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
+                MapPoint::Ptr testMapPoint(new MapPoint(*mapPoint));
+                testMapPoint->addFrame(keyFrame2, iMapPoint2);
 
                 if (!isGoodPoint(testMapPoint))
                     continue;
 
-                //更新mapPoint观测帧
-                mapPoint->addObservedFrame(
-                        keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));*/
+                //保存添加的观测帧和更新的norm
+                *mapPoint = *testMapPoint;
 
-
-                mapPoint->addObservedFrame(
-                        keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2), false);
-
-                if (!isGoodPoint(mapPoint)) {
-                    mapPoint->deleteObservedFrame(keyFrame2);
-                    continue;
-                }
-
-                //更新描述子和norm
-                mapPoint->refreshNorm(keyFrame2);
+                //更新描述子
                 mapPoint->descriptor = descriptor;
 
                 //记录当前帧加入地图的mapPoint和特征点下标
@@ -135,12 +123,8 @@ namespace sky {
                     ));
                 }
 
-/*#ifdef DEBUG
-            if (i < 5)
-                cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << mapPoint->pos << endl << endl;
-#endif*/
-                mapPoint->addObservedFrame(keyFrame1, keyFrame1->getKeyPointCoor(iMapPoint1));
-                mapPoint->addObservedFrame(keyFrame2, keyFrame2->getKeyPointCoor(iMapPoint2));
+                mapPoint->addFrame(keyFrame1, iMapPoint1);
+                mapPoint->addFrame(keyFrame2, iMapPoint2);
 
                 if (!isGoodPoint(mapPoint))
                     continue;
@@ -160,17 +144,17 @@ namespace sky {
 #endif
 
 /*#ifdef DEBUG
-        cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "Triangulater: Showing rawPos and projPos of mapPoints... " << endl;
-        for (auto &mapPoint:map->mapPoints) {
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "Triangulater: Showing rawPos and projPos of index2mapPoints... " << endl;
+        for (auto &mapPoint:map->index2mapPoints) {
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "  .width(6);
 
-            auto &rawPos1 = mapPoint->observedFrames[keyFrame1];
+            auto &rawPos1 = mapPoint->frame2indexs[keyFrame1];
             cv::Point2d projPos1;
             keyFrame1->proj2frame(mapPoint, projPos1);
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << setiosflags(ios::fixed) << setprecision(2)
                  << "rawPos1: " << rawPos1 << "\tprojPos1: " << projPos1 << "\tdis: " << point2dis(rawPos1, projPos1);
 
-            auto &rawPos2 = mapPoint->observedFrames[keyFrame1];
+            auto &rawPos2 = mapPoint->frame2indexs[keyFrame1];
             cv::Point2d projPos2;
             keyFrame2->proj2frame(mapPoint, projPos2);
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << setiosflags(ios::fixed) << setprecision(2)
@@ -190,20 +174,22 @@ namespace sky {
             return false;
 
         //测试重投影误差
-        auto &rawPos1 = mapPoint->observedFrames[keyFrame1];
+        cv::Point2f rawPos1;
+        mapPoint->getPixelCoor(keyFrame1, rawPos1);
         cv::Point2d projPos1;
         if (!proj2frame(mapPoint, keyFrame1, projPos1))
             return false;
         //printVariable(disBetween(rawPos1, projPos1));
-        if (disBetween(rawPos1, projPos1) > maxReprojErr)
+        if (disBetween<float>(rawPos1, projPos1) > maxReprojErr)
             return false;
 
-        auto &rawPos2 = mapPoint->observedFrames[keyFrame1];
+        cv::Point2f rawPos2;
+        mapPoint->getPixelCoor(keyFrame2, rawPos2);
         cv::Point2d projPos2;
         if (!proj2frame(mapPoint, keyFrame2, projPos2))
             return false;
         //printVariable(disBetween(rawPos2, projPos2));
-        if (disBetween(rawPos2, projPos2) > maxReprojErr)
+        if (disBetween<float>(rawPos2, projPos2) > maxReprojErr)
             return false;
 
 

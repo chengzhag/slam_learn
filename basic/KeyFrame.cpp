@@ -39,12 +39,12 @@ namespace sky {
     }
 
     MapPointPtr KeyFrame::getMapPoint(int i) const {
-        auto it = mapPoints.find(i);
-        if (it != mapPoints.end()) {
+        auto it = index2mapPoints.find(i);
+        if (it != index2mapPoints.end()) {
             return it->second;
         }
 /*        if (hasMapPoint(i))
-            return mapPoints[i];*/
+            return index2mapPoints[i];*/
         else {
             cerr << "[" << boost::this_thread::get_id() << "]ERROR: " << "KeyFrame: getMapPoint failed! KeyPoint "
                  << i << " has no corresponding mapPoint" << endl;
@@ -54,7 +54,7 @@ namespace sky {
 
     bool KeyFrame::setMapPoint(int i, MapPointPtr &mapPoint) {
         if (hasMapPoint(i)) {
-            mapPoints[i] = mapPoint;
+            index2mapPoints[i] = mapPoint;
             return true;
         }
         return false;

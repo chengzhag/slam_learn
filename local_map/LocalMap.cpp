@@ -155,14 +155,14 @@ namespace sky {
     bool LocalMap::isGoodPoint(const MapPoint::Ptr &mapPoint) const {
 /*#ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "\t" << !setHas(newMapPoints, mapPoint) << "\t"
-             << mapPoint->observedFrames.size() << " observedFrames" << endl;
+             << mapPoint->frame2indexs.size() << " frame2indexs" << endl;
 #endif*/
         if (map->keyFrames.size() >= 4)
             if (!setHas(newMapPoints, mapPoint)
-                && mapPoint->observedFrames.size() < 3)
+                && mapPoint->getFrameNum() < 3)
                 return false;
 
-        for (auto &observedFrame:mapPoint->observedFrames) {
+        for (auto &observedFrame:mapPoint->frame2indexs) {
             //根据到每个观测帧的最大距离来判断
             if (disBetween(observedFrame.first, mapPoint) > maxInlierPointDis)
                 return false;
@@ -171,14 +171,14 @@ namespace sky {
             cv::Point2d reprojCoor;
             if (!proj2frame(mapPoint, observedFrame.first, reprojCoor))
                 return false;
-            auto reprojErr = disBetween(observedFrame.second, reprojCoor);
+            auto reprojErr = disBetween<float>(observedFrame.first->getKeyPointCoor(observedFrame.second), reprojCoor);
             if (reprojErr > triangulater.maxReprojErr)
                 return false;
         }
 
         //如果不被当前LocalMap中的关键帧观测，则过滤
         for (auto &keyFrame:map->keyFrames) {
-            if (mapPoint->hasObservedFrame(keyFrame))
+            if (mapPoint->hasFrame(keyFrame))
                 break;
             if (keyFrame == map->keyFrames.back())
                 return false;

@@ -23,7 +23,7 @@ namespace sky {
 
     class KeyFrame {
     private:
-        unordered_map<int, MapPointPtr> mapPoints;//在descriptors或keyPoints中的序号和对应的地图点
+        unordered_map<int, MapPointPtr> index2mapPoints;//在descriptors或keyPoints中的序号和对应的地图点
 
     public:
         typedef shared_ptr<KeyFrame> Ptr;
@@ -63,9 +63,18 @@ namespace sky {
                                          angleAxisAndTranslation(1, 2));
         }
 
+        //观测到的地图点
         //在descriptors或keyPoints中的序号
+        inline void addMapPoint(int i, const MapPointPtr &mapPoint) {
+            index2mapPoints[i] = mapPoint;
+        }
+
+        inline auto getMapPointsNum(){
+            return index2mapPoints.size();
+        }
+
         inline bool hasMapPoint(int i) const {
-            return mapHas(mapPoints, i);
+            return mapHas(index2mapPoints, i);
         }
 
         MapPointPtr getMapPoint(int i) const;
@@ -80,13 +89,7 @@ namespace sky {
             return descriptors.row(i);
         }
 
-        inline void addMapPoint(int i, MapPointPtr &mapPoint) {
-            mapPoints[i] = mapPoint;
-        }
 
-        inline auto getMapPointsNum(){
-            return mapPoints.size();
-        }
     };
 
 }

@@ -34,9 +34,9 @@ namespace sky {
         vector<cv::KeyPoint> rawPoints, projPoints;
         vector<cv::DMatch> projMatches;
         int i = 0;
-        for (const MapPoint::Ptr &mapPoint:mapPoints) {
+        for (const MapPoint::Ptr &mapPoint:index2mapPoints) {
             if (mapPoint->hasObservedFrame(frame)) {
-                auto &rawPos = mapPoint->observedFrames[frame];
+                auto &rawPos = mapPoint->frame2indexs[frame];
                 cv::Point2d projPos;
                 proj2frame(mapPoint, frame, projPos);
 

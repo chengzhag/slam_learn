@@ -23,6 +23,11 @@ namespace sky {
 
         void addMapPoint(const MapPoint::Ptr &mapPoint);
 
+        inline void addObservation(const KeyFrame::Ptr &frame, const MapPoint::Ptr &mapPoint, const int index) {
+            mapPoint->addFrame(frame, index);
+            frame->addMapPoint(index, mapPoint);
+        }
+
         KeyFrame::Ptr getLastFrame() const;
 
         bool viewFrameProjInCVV(const KeyFrame::Ptr &frame, string message = "Reprojection") const;

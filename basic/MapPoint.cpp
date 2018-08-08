@@ -6,13 +6,13 @@
 
 namespace sky {
 
-    void MapPoint::addObservedFrame(const KeyFrame::Ptr &observedFrame, const cv::Point2d &pixelCoor,
-                                    bool doRefreshNorm) {
-        if (!mapHas(observedFrames, observedFrame)) {
-            observedFrames[observedFrame] = pixelCoor;
+    void MapPoint::addFrame(const KeyFrame::Ptr &frame, const int index,
+                            bool doRefreshNorm) {
+        if (!mapHas(frame2indexs, frame)) {
+            frame2indexs[frame] = index;
 
             if (doRefreshNorm) {
-                refreshNorm(observedFrame);
+                refreshNorm(frame);
             }
         }
     }
@@ -20,17 +20,17 @@ namespace sky {
     void MapPoint::refreshNorm(const KeyFrame::Ptr &observedFrame) {
         Vector3d n = observedFrame->getCamCenterEigen() - pos;
         n.normalize();
-        if (observedFrames.size() == 1) {
+        if (frame2indexs.size() == 1) {
             norm = n;
         } else {
             norm += n;
         }
     }
 
-    bool MapPoint::getPixelCoor(const KeyFrame::Ptr &observedFrame, cv::Point2d &pixelCoor) const {
-        auto it = observedFrames.find(observedFrame);
-        if (it != observedFrames.end()) {
-            pixelCoor = it->second;
+    bool MapPoint::getPixelCoor(const KeyFrame::Ptr &frame, cv::Point2f &pixelCoor) const {
+        auto it = frame2indexs.find(frame);
+        if (it != frame2indexs.end()) {
+            pixelCoor = frame->getKeyPointCoor(it->second);
             return true;
         } else {
             cerr << "[" << boost::this_thread::get_id() << "]ERROR: "

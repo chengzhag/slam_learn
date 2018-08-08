@@ -18,11 +18,12 @@ namespace sky {
 
     public:
         typedef shared_ptr<MapPoint> Ptr;
-        unordered_map<KeyFrame::Ptr, cv::Point2d> observedFrames;//观测帧和像素坐标
         Mat descriptor; // Descriptor for matching
         Vector3d pos;       // Position in world
         Vector3d norm;      // Normal of viewing direction
         cv::Vec3b rgb;
+
+        unordered_map<KeyFrame::Ptr, int> frame2indexs;//观测帧和像素坐标
 
 
         MapPoint();
@@ -32,21 +33,21 @@ namespace sky {
                 descriptor(descriptor),
                 rgb(rgb) {}
 
-/*        MapPoint(const MapPoint &mapPoint) :
-                observedFrames(mapPoint.observedFrames),
+        MapPoint(const MapPoint &mapPoint) :
+                frame2indexs(mapPoint.frame2indexs),
                 pos(mapPoint.pos),
+                norm(mapPoint.norm),
                 rgb(mapPoint.rgb) {
             mapPoint.descriptor.copyTo(descriptor);
         }
 
         MapPoint &operator=(const MapPoint &mapPoint) {
-            observedFrames = mapPoint.observedFrames;
+            frame2indexs = mapPoint.frame2indexs;
             pos = mapPoint.pos;
+            norm = mapPoint.norm;
             rgb = mapPoint.rgb;
             mapPoint.descriptor.copyTo(descriptor);
         }
-
-        MapPoint(const MapPoint::Ptr mapPoint) : MapPoint(*mapPoint) {}*/
 
 
         template<typename T>
@@ -66,24 +67,29 @@ namespace sky {
             pos(2) = posMatx13(2);
         }
 
+        //观测帧
         void
-        addObservedFrame(const KeyFrame::Ptr &observedFrame, const cv::Point2d &pixelCoor, bool doRefreshNorm = true);
+        addFrame(const KeyFrame::Ptr &frame, const int index, bool doRefreshNorm = true);
 
         void refreshNorm(const KeyFrame::Ptr &observedFrame);
 
-        inline void deleteObservedFrame(const KeyFrame::Ptr &observedFrame) {
-            observedFrames.erase(observedFrame);
+        inline void deleteFrame(const KeyFrame::Ptr &observedFrame) {
+            frame2indexs.erase(observedFrame);
         }
 
-        inline bool hasObservedFrame(const KeyFrame::Ptr &observedFrame) const {
-            return mapHas(observedFrames, observedFrame);
+        inline bool hasFrame(const KeyFrame::Ptr &observedFrame) const {
+            return mapHas(frame2indexs, observedFrame);
         }
 
-        bool getPixelCoor(const KeyFrame::Ptr &observedFrame, cv::Point2d &pixelCoor) const;
+        bool getPixelCoor(const KeyFrame::Ptr &frame, cv::Point2f &pixelCoor) const;
+
+        inline auto getFrameNum() {
+            return frame2indexs.size();
+        }
 
         template<typename L>
-        void forObservedFrames(L func) {
-            for (auto &observedFrame:observedFrames) {
+        void forEachFrames(L func) {
+            for (auto &observedFrame:frame2indexs) {
                 func(observedFrame);
             }
         }

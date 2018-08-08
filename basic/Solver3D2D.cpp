@@ -83,9 +83,8 @@ namespace sky {
         //添加观测帧
         for (int i = 0; i < indexInliers.rows; ++i) {
             auto iInlier = indexInliers.at<int>(i);
-            auto rawCoor = keyFrame2->getKeyPointCoor(matches[iInlier].trainIdx);
             auto mapPoint = pointsCandi[matches[iInlier].queryIdx];
-            mapPoint->addObservedFrame(keyFrame2, rawCoor, false);
+            mapPoint->addFrame(keyFrame2, matches[iInlier].trainIdx, false);
             mapLastFrame->addMapPoint(mapPoint);
         }
         BA ba({BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});
@@ -96,7 +95,7 @@ namespace sky {
         //消除观测帧
         for (int i = 0; i < indexInliers.rows; ++i) {
             auto iInlier = indexInliers.at<int>(i);
-            pointsCandi[matches[iInlier].queryIdx]->deleteObservedFrame(keyFrame2);
+            pointsCandi[matches[iInlier].queryIdx]->deleteFrame(keyFrame2);
         }
 
         return true;
@@ -134,17 +133,15 @@ namespace sky {
     void Solver3D2D::addFrame2inliers() {
         for (int i = 0; i < indexInliers.rows; ++i) {
             auto iInlier = indexInliers.at<int>(i);
-            auto rawCoor = cv::Point2d(keyFrame2->getKeyPointCoor(matches[iInlier].trainIdx));
 /*            cv::Point2d reprojCoor;
             proj2frame(pointsCandi[matches[iInlier].queryIdx], keyFrame2, reprojCoor);
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << disBetween(reprojCoor, rawCoor) << endl;*/
             auto mapPoint = pointsCandi[matches[iInlier].queryIdx];
-            mapPoint->addObservedFrame(keyFrame2, rawCoor);
-            keyFrame2->addMapPoint(matches[iInlier].trainIdx, mapPoint);
+            map->addObservation(keyFrame2, mapPoint, matches[iInlier].trainIdx);
         }
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver3D2D: addFrame2inliers done. "
-             << "Added currFrame as observedFrame to " << indexInliers.rows << " old mapPoints. " << endl;
+             << "Added currFrame as observedFrame to " << indexInliers.rows << " old index2mapPoints. " << endl;
 #endif
     }
 
