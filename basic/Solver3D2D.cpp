@@ -130,14 +130,18 @@ namespace sky {
 #endif
     }
 
-    void Solver3D2D::addFrame2inliers() {
+    void Solver3D2D::addFrame2inliers(bool add2mapPoints) {
         for (int i = 0; i < indexInliers.rows; ++i) {
             auto iInlier = indexInliers.at<int>(i);
 /*            cv::Point2d reprojCoor;
             proj2frame(pointsCandi[matches[iInlier].queryIdx], keyFrame2, reprojCoor);
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << disBetween(reprojCoor, rawCoor) << endl;*/
             auto mapPoint = pointsCandi[matches[iInlier].queryIdx];
-            map->addObservation(keyFrame2, mapPoint, matches[iInlier].trainIdx);
+            if (add2mapPoints)
+                map->addObservation(keyFrame2, mapPoint, matches[iInlier].trainIdx);
+            else {
+                keyFrame2->addMapPoint(matches[iInlier].trainIdx, mapPoint);
+            }
         }
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver3D2D: addFrame2inliers done. "

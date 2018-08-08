@@ -23,7 +23,7 @@ namespace sky {
             case 1: {
                 if (!tracker->step(keyFrame)) {
                     state = 2;
-                    cerr << "[" << boost::this_thread::get_id() << "]ERROR: "   << "VO: Failed Tracking! " << endl;
+                    cerr << "[" << boost::this_thread::get_id() << "]ERROR: " << "VO: Failed Tracking! " << endl;
                     return false;
                 }
                 break;
@@ -33,6 +33,23 @@ namespace sky {
                 break;
             }
         }
+
+        //绘制当前帧
+        Mat imPoints;
+        keyFrame->image.copyTo(imPoints);
+        int i = 0;
+        for (auto &keyPoint:keyFrame->keyPoints) {
+            cv::Scalar color(255, 0, 0);
+            int radius = 2;
+            if (keyFrame->hasMapPoint(i++)) {
+                color = cv::Scalar(0, 0, 255);
+                radius = 5;
+            }
+            cv::circle(imPoints, keyPoint.pt, radius, color, 2);
+        }
+        cv::imshow("currKeyFrame and keyPoints",imPoints);
+        cv::waitKey(1);
+
         return true;
     }
 

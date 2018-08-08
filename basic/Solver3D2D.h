@@ -55,7 +55,7 @@ namespace sky {
 
         bool solve(const Map::Ptr &map, const KeyFrame::Ptr &keyFrame2);
 
-        void addFrame2inliers();
+        void addFrame2inliers(bool add2mapPoints = true);
 
         inline float getInlierRatio() const {
             return inlierRatio;

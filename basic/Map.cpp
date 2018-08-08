@@ -22,7 +22,8 @@ namespace sky {
         if (!keyFrames.empty())
             return keyFrames.back();
         else {
-            cerr << "[" << boost::this_thread::get_id() << "]ERROR: "   << "Map: Cannot get lastFrame! No Frame in the map" << endl;
+            cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
+                 << "Map: Cannot get lastFrame! No Frame in the map" << endl;
             return nullptr;
         }
 
@@ -34,15 +35,16 @@ namespace sky {
         vector<cv::KeyPoint> rawPoints, projPoints;
         vector<cv::DMatch> projMatches;
         int i = 0;
-        for (const MapPoint::Ptr &mapPoint:index2mapPoints) {
-            if (mapPoint->hasObservedFrame(frame)) {
-                auto &rawPos = mapPoint->frame2indexs[frame];
+        for (const MapPoint::Ptr &mapPoint:mapPoints) {
+            if (mapPoint->hasFrame(frame)) {
+                cv::Point2f rawPos;
+                mapPoint->getPixelCoor(frame, rawPos);
                 cv::Point2d projPos;
                 proj2frame(mapPoint, frame, projPos);
 
-                rawPoints.push_back(cv::KeyPoint(rawPos, 1));
+                rawPoints.push_back(cv::KeyPoint(cv::Point2d(rawPos), 1));
                 projPoints.push_back(cv::KeyPoint(projPos, 1));
-                projMatches.push_back(cv::DMatch(i, i, disBetween(rawPos, projPos)));
+                projMatches.push_back(cv::DMatch(i, i, disBetween<float>(rawPos, projPos)));
                 ++i;
             }
         }

@@ -65,6 +65,8 @@ namespace sky {
                 localMap->addFrame(frame);
                 frameInterval = 0;
                 showedCVV = false;
+            } else {
+                solver3D2D.addFrame2inliers(false);
             }
         }
 
@@ -145,13 +147,13 @@ namespace sky {
         printVariable(trackRatio2LastFrame);*/
         if (trackRatio2LastFrame > maxKeyFrameTrackRatio) {
 #ifdef DEBUG
-            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Tracker: Not a keyFrame. TrackRatio2LastFrame "
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "Tracker: Not a keyFrame. TrackRatio2LastFrame "
                  << trackRatio2LastFrame
                  << " is more than maxKeyFrameTrackRatio " << maxKeyFrameTrackRatio << endl;
 #endif
             return false;
         }
-
 
 
         return true;

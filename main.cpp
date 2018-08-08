@@ -83,8 +83,11 @@ int main(int argc, char **argv) {
         boost::this_thread::sleep_for(boost::chrono::milliseconds(30));
     }
 
-    while (1)
+    while (1){
+        cv::waitKey(1);
         boost::this_thread::sleep_for(boost::chrono::milliseconds(30));
+    }
+
 
     return 0;
 }
