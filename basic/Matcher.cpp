@@ -20,13 +20,15 @@ namespace sky {
 #endif*/
 
             //过滤匹配点
-            auto minMaxDis = minmax_element(
-                    matches.begin(), matches.end(),
-                    [](const cv::DMatch &m1, const cv::DMatch &m2) {
-                        return m1.distance < m2.distance;
-                    });
-            auto minDis = minMaxDis.first->distance;
-            auto maxDis = minMaxDis.second->distance;
+            sort(matches.begin(), matches.end(),
+                 [](const cv::DMatch &m1, const cv::DMatch &m2) {
+                     return m1.distance < m2.distance;
+                 });
+            int numDelete = (1 - rankRatio) * getMatchesNum();
+            for (int i = 0; i < numDelete; ++i)
+                matches.pop_back();
+            auto minDis = matches[0].distance;
+
             vector<cv::DMatch> goodMatches;
             thres = max(disThresRatio * minDis, disThresMin);
             for (auto match:matches) {
@@ -45,6 +47,14 @@ namespace sky {
                              CVVISUAL_LOCATION,
                              "matching");
 #endif*/
+            sort(knnMatches.begin(), knnMatches.end(),
+                 [](const vector<cv::DMatch> &m1, const vector<cv::DMatch> &m2) {
+                     return m1[0].distance < m2[0].distance;
+                 });
+            int numDelete = (1 - rankRatio) * knnMatches.size();
+            for (int i = 0; i < numDelete; ++i)
+                knnMatches.pop_back();
+
             //计算满足Ratio Test的最小距离
             float minDis = numeric_limits<float>::max();
             for (auto &m:knnMatches) {

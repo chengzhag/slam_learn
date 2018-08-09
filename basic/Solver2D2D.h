@@ -39,6 +39,7 @@ namespace sky {
                 minInlierNum(minInlierNum),
                 minInlierRatio(minInlierRatio),
                 matcher(
+                        Config::get<float>("Solver2D2D.Matcher.rankRatio"),
                         Config::get<float>("Solver2D2D.Matcher.disThresRatio"),
                         Config::get<float>("Solver2D2D.Matcher.disThresMin"),
                         Config::get<float>("Solver2D2D.Matcher.testRatio")
@@ -47,6 +48,7 @@ namespace sky {
             printVariable(minInlierNum);
             printVariable(minInlierRatio);
 
+            printVariable(matcher.rankRatio);
             printVariable(matcher.disThresRatio);
             printVariable(matcher.disThresMin);
             printVariable(matcher.testRatio);

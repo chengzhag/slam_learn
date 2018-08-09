@@ -17,20 +17,23 @@ namespace sky {
     private:
         cv::Ptr<cv::DescriptorMatcher> matcher;
     public:
-        float disThresRatio, disThresMin, testRatio;
+        float rankRatio, disThresRatio, disThresMin, testRatio;
         vector<cv::DMatch> matches;
 
-        Matcher(float disThresRatio = Config::get<float>("Matcher.disThresRatio"),
+        Matcher(float rankRatio = Config::get<float>("Matcher.rankRatio"),
+                float disThresRatio = Config::get<float>("Matcher.disThresRatio"),
                 float disThresMin = Config::get<float>("Matcher.disThresMin"),
                 float testRatio = Config::get<float>("Matcher.testRatio"),
                 string matcherType = Config::get<string>("Matcher.matcherType")
         ) :
+                rankRatio(rankRatio),
                 disThresRatio(disThresRatio),
                 disThresMin(disThresMin),
                 testRatio(testRatio),
                 matcher(cv::DescriptorMatcher::create(matcherType)) {
 #ifdef DEBUG
-            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "Matcher: Initializing..." << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Matcher: Initializing..." << endl;
+            printVariable(rankRatio);
             printVariable(disThresRatio);
             printVariable(disThresMin);
             printVariable(testRatio);

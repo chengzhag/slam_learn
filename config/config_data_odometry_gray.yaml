@@ -9,7 +9,7 @@ Camera.cx: 607.1928
 Camera.cy: 185.2157
 
 # 描述子提取的数量
-VO.nfeatures: 500
+VO.nfeatures: 1000
 
 # 特征点算法
 VO.featureType: SIFT
@@ -53,11 +53,13 @@ Matcher.matcherType: BruteForce
 Solver2D2D.minInlierNum: 50
 # 用于解对极约束的最小内点比例
 Solver2D2D.minInlierRatio: 0.3
+# 首先筛选前rankRatio比例的匹配
+Solver2D2D.Matcher.rankRatio: 0.5
 # 特征距离阈值相对最小特征距离的比例
-Solver2D2D.Matcher.disThresRatio: 5
+Solver2D2D.Matcher.disThresRatio: 10000
 # 特征阈值的最小值，防止阈值过小选出的点不够
 # Matcher.disThresMin: 30
-Solver2D2D.Matcher.disThresMin: 300
+Solver2D2D.Matcher.disThresMin: 10000
 # 如果testRatio不为0，通过knnMatch获得距离最近的两个match
 # 测试第一个match的距离是否小于第二个match的距离的testRatio倍
 # 0 <= testRati < 1
@@ -73,18 +75,20 @@ Solver3D2D.max3Ddis: 50
 Solver3D2D.minInlierNum: 8
 # 用于解PnP的最小内点比例
 Solver3D2D.minInlierRatio: 0.3
+# 首先筛选前rankRatio比例的匹配
+Solver3D2D.Matcher.rankRatio: 0.8
 # 特征距离阈值相对最小特征距离的比例
-Solver3D2D.Matcher.disThresRatio: 5
+Solver3D2D.Matcher.disThresRatio: 10000
 # 特征阈值的最小值，防止阈值过小选出的点不够
 # Matcher.disThresMin: 30
-Solver3D2D.Matcher.disThresMin: 300
+Solver3D2D.Matcher.disThresMin: 10000
 # 如果testRatio不为0，通过knnMatch获得距离最近的两个match
 # 测试第一个match的距离是否小于第二个match的距离的testRatio倍
 # 0 <= testRati < 1
-Solver3D2D.Matcher.testRatio: 0.9
+Solver3D2D.Matcher.testRatio: 0.95
 
 # 三角化点到两帧的最大距离相对于帧间距的最大比例
-Triangulater.maxDisRatio: 50
+Triangulater.maxDisRatio: 30
 Triangulater.minDisRatio: 1
 # 重投影误差最大值
 Triangulater.maxReprojErr: 30
@@ -94,15 +98,26 @@ Triangulater.maxReprojErr: 30
 LocalMap.maxInlierPointDis: 50
 # 关键帧最大数量，超过此数量删除旧关键帧
 LocalMap.maxKeyFrames: 10
+# 首先筛选前rankRatio比例的匹配
+LocalMap.Matcher.rankRatio: 1
+# 特征距离阈值相对最小特征距离的比例
+LocalMap.Matcher.disThresRatio: 10000
+# 特征阈值的最小值，防止阈值过小选出的点不够
+# Matcher.disThresMin: 30
+LocalMap.Matcher.disThresMin: 10000
+# 如果testRatio不为0，通过knnMatch获得距离最近的两个match
+# 测试第一个match的距离是否小于第二个match的距离的testRatio倍
+# 0 <= testRati < 1
+LocalMap.Matcher.testRatio: 0
 
 # tracking
 
 # 初始化两帧的最大间隔帧数
-Initializer.maxFrameInterval: 10
+Initializer.maxFrameInterval: 5
 # 初始化两帧的最小间隔帧数
 Initializer.minFrameInterval: 2
 # 初始化地图的最小点数
-Initializer.minMapPointNum: 75
+Initializer.minMapPointNum: 50
 
 # 关键帧的最小间距
 Tracker.minKeyFrameDis: 0.5
@@ -113,5 +128,5 @@ Tracker.minKeyFrameInlierNum: 20
 # 关键帧之间的最小间隔帧数
 Tracker.minKeyFrameInterval: 2
 # 关键帧解PnP所用地图点数相对于上一关键帧的最大比例
-Tracker.maxKeyFrameTrackRatio: 1
+Tracker.maxKeyFrameTrackRatio: 0.9
 

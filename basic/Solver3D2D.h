@@ -48,6 +48,7 @@ namespace sky {
                 minInlierRatio(minInlierRatio),
                 max3Dnum(max3Dnum), min3Dnum(min3Dnum), max3Ddis(max3Ddis),
                 matcher(
+                        Config::get<float>("Solver3D2D.Matcher.rankRatio"),
                         Config::get<float>("Solver3D2D.Matcher.disThresRatio"),
                         Config::get<float>("Solver3D2D.Matcher.disThresMin"),
                         Config::get<float>("Solver3D2D.Matcher.testRatio")
@@ -59,6 +60,7 @@ namespace sky {
             printVariable(min3Dnum);
             printVariable(max3Ddis);
 
+            printVariable(matcher.rankRatio);
             printVariable(matcher.disThresRatio);
             printVariable(matcher.disThresMin);
             printVariable(matcher.testRatio);

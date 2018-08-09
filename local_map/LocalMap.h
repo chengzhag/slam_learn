@@ -38,14 +38,16 @@ namespace sky {
                 maxInlierPointDis(maxInlierPointDis),
                 maxKeyFrames(maxKeyFrames),
                 matcher(
-                        Config::get<float>("Solver2D2D.Matcher.disThresRatio"),
-                        Config::get<float>("Solver2D2D.Matcher.disThresMin"),
-                        Config::get<float>("Solver2D2D.Matcher.testRatio")
+                        Config::get<float>("LocalMap.Matcher.rankRatio"),
+                        Config::get<float>("LocalMap.Matcher.disThresRatio"),
+                        Config::get<float>("LocalMap.Matcher.disThresMin"),
+                        Config::get<float>("LocalMap.Matcher.testRatio")
                 ) {
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: Initializing..." << endl;
             printVariable(maxInlierPointDis);
             printVariable(maxKeyFrames);
 
+            printVariable(matcher.rankRatio);
             printVariable(matcher.disThresRatio);
             printVariable(matcher.disThresMin);
             printVariable(matcher.testRatio);

@@ -15,9 +15,10 @@ namespace sky {
 
     class MapPoint {
     private:
-        unordered_map<KeyFrame::Ptr, int> frame2indexs;//观测帧和像素坐标
+
     public:
         typedef shared_ptr<MapPoint> Ptr;
+        unordered_map<KeyFrame::Ptr, int> frame2indexs;//观测帧和像素坐标
         Mat descriptor; // Descriptor for matching
         Vector3d pos;       // Position in world
         Vector3d norm;      // Normal of viewing direction

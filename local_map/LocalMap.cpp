@@ -171,7 +171,7 @@ namespace sky {
                 && mapPoint->getFrameNum() < 3)
                 return false;
 
-        mapPoint->forEachFrame2index([&](auto &frame2index) {
+        for(auto &frame2index:mapPoint->frame2indexs){
             //根据到每个观测帧的最大距离来判断
             if (disBetween(frame2index.first, mapPoint) > maxInlierPointDis)
                 return false;
@@ -183,7 +183,7 @@ namespace sky {
             auto reprojErr = disBetween<float>(frame2index.first->getKeyPointCoor(frame2index.second), reprojCoor);
             if (reprojErr > triangulater.maxReprojErr)
                 return false;
-        });
+        }
 
 /*        //如果不被当前LocalMap中的关键帧观测，则过滤
         for (auto &keyFrame:map->keyFrames) {
