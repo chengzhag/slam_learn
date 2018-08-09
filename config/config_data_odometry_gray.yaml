@@ -25,7 +25,7 @@ VO.SIFT.contrastThreshold: 0.04
 VO.SIFT.edgeThreshold: 3
 #  @param sigma The sigma of the Gaussian applied to the input image at the octave \#0. If your image
 #  is captured with a weak camera with soft lenses, you might want to reduce the number.
-VO.SIFT.sigma: 3
+VO.SIFT.sigma: 2
 
 # VO.featureType: ORB
 
@@ -74,7 +74,7 @@ Solver3D2D.max3Ddis: 50
 # 用于解PnP的最少点数
 Solver3D2D.minInlierNum: 8
 # 用于解PnP的最小内点比例
-Solver3D2D.minInlierRatio: 0.3
+Solver3D2D.minInlierRatio: 0.25
 # 首先筛选前rankRatio比例的匹配
 Solver3D2D.Matcher.rankRatio: 0.8
 # 特征距离阈值相对最小特征距离的比例
@@ -85,7 +85,7 @@ Solver3D2D.Matcher.disThresMin: 10000
 # 如果testRatio不为0，通过knnMatch获得距离最近的两个match
 # 测试第一个match的距离是否小于第二个match的距离的testRatio倍
 # 0 <= testRati < 1
-Solver3D2D.Matcher.testRatio: 0.95
+Solver3D2D.Matcher.testRatio: 0.9
 
 # 三角化点到两帧的最大距离相对于帧间距的最大比例
 Triangulater.maxDisRatio: 30
@@ -97,7 +97,7 @@ Triangulater.maxReprojErr: 30
 # 地图点到每个观测帧的最大距离
 LocalMap.maxInlierPointDis: 50
 # 关键帧最大数量，超过此数量删除旧关键帧
-LocalMap.maxKeyFrames: 10
+LocalMap.maxKeyFrames: 7
 # 首先筛选前rankRatio比例的匹配
 LocalMap.Matcher.rankRatio: 1
 # 特征距离阈值相对最小特征距离的比例

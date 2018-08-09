@@ -25,7 +25,7 @@ namespace sky {
         if (!solverPass && isAdding) {
 #ifdef DEBUG
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
-                 << "Tracker: Solver3D2D failed! Waiting for adding more index2mapPoints... " << endl;
+                 << "Tracker: Solver3D2D failed! Waiting for adding more mapPoints... " << endl;
 #endif
             lock.unlock();
             localMap->waitForThread();
@@ -46,7 +46,6 @@ namespace sky {
             return false;
         } else {
             lock.unlock();
-            //if(solver3D2D.getInlierNum()<
             //判断是否插入关键帧
             if (isKeyFrame()) {
 #ifdef DEBUG

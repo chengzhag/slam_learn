@@ -68,7 +68,6 @@ namespace sky {
             Mat descriptor = keyFrame2->getKeyPointDesciptor(iMapPoint2);
 
             //如果是上一帧加到地图中的点，更新描述子、加入观测帧后跳过
-
             if (keyFrame1->hasMapPoint(iMapPoint1)) {
                 ++numOldMapPoint;
                 mapPoint = keyFrame1->getMapPoint(iMapPoint1);

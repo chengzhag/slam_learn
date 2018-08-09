@@ -128,13 +128,22 @@ namespace sky {
                 ++iFrames;
             } else {
                 //删除被筛选掉的关键帧在LocalMap中的观测点,保留观测关系
-                for (auto it = map->mapPoints.begin(); it != map->mapPoints.end();) {
-                    if (currFrame->hasMapPoint(*it))
-                        it = map->mapPoints.erase(it);
-                    else
-                        ++it;
-                }
                 it = list<KeyFrame::Ptr>::reverse_iterator(map->keyFrames.erase((++it).base()));
+                //删除除了该帧没有其他观测帧的点
+                for (auto it = map->mapPoints.begin(); it != map->mapPoints.end();) {
+                    for (auto &keyFrame:map->keyFrames) {
+                        //除了该帧有其他观测帧
+                        if ((*it)->hasFrame(keyFrame)){
+                            ++it;
+                            break;
+                        }
+                        //除了该帧没有其他观测帧
+                        if (keyFrame == map->keyFrames.back()){
+                            it = map->mapPoints.erase(it);
+                        }
+                    }
+
+                }
             }
         }
         lock.unlock();
@@ -171,7 +180,7 @@ namespace sky {
                 && mapPoint->getFrameNum() < 3)
                 return false;
 
-        for(auto &frame2index:mapPoint->frame2indexs){
+        for (auto &frame2index:mapPoint->frame2indexs) {
             //根据到每个观测帧的最大距离来判断
             if (disBetween(frame2index.first, mapPoint) > maxInlierPointDis)
                 return false;
