@@ -15,9 +15,9 @@ namespace sky {
     class Matcher {
 
     private:
-        float disThresRatio, disThresMin, testRatio;
         cv::Ptr<cv::DescriptorMatcher> matcher;
     public:
+        float disThresRatio, disThresMin, testRatio;
         vector<cv::DMatch> matches;
 
         Matcher(float disThresRatio = Config::get<float>("Matcher.disThresRatio"),

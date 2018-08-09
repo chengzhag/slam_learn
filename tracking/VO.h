@@ -44,8 +44,20 @@ namespace sky {
 
             if (featureType == "ORB")
                 feature2D = cv::ORB::create(nfeatures);
-            else if (featureType == "SIFT")
-                feature2D = cv::xfeatures2d::SIFT::create(nfeatures, 3, 0.04, 10);
+            else if (featureType == "SIFT"){
+                auto nOctaveLayers = Config::get<int>("VO.SIFT.nOctaveLayers");
+                auto contrastThreshold = Config::get<double>("VO.SIFT.contrastThreshold");
+                auto edgeThreshold = Config::get<double>("VO.SIFT.edgeThreshold");
+                auto sigma = Config::get<double>("VO.SIFT.sigma");
+                printVariable(nOctaveLayers);
+                printVariable(contrastThreshold);
+                printVariable(edgeThreshold);
+                printVariable(sigma);
+
+                feature2D = cv::xfeatures2d::SIFT::create(
+                        nfeatures, nOctaveLayers, contrastThreshold, edgeThreshold,sigma);
+            }
+
         }
 
         bool step(const Mat &image);

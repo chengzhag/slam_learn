@@ -9,9 +9,24 @@ Camera.cx: 607.1928
 Camera.cy: 185.2157
 
 # 描述子提取的数量
-VO.nfeatures: 2000
+VO.nfeatures: 500
+
 # 特征点算法
 VO.featureType: SIFT
+#  @param nOctaveLayers The number of layers in each octave. 3 is the value used in D. Lowe paper. The
+#  number of octaves is computed automatically from the image resolution.
+VO.SIFT.nOctaveLayers: 1
+#  @param contrastThreshold The contrast threshold used to filter out weak features in semi-uniform
+#  (low-contrast) regions. The larger the threshold, the less features are produced by the detector.
+VO.SIFT.contrastThreshold: 0.04
+#  @param edgeThreshold The threshold used to filter out edge-like features. Note that the its meaning
+#  is different from the contrastThreshold, i.e. the larger the edgeThreshold, the less features are
+#  filtered out (more features are retained).
+VO.SIFT.edgeThreshold: 3
+#  @param sigma The sigma of the Gaussian applied to the input image at the octave \#0. If your image
+#  is captured with a weak camera with soft lenses, you might want to reduce the number.
+VO.SIFT.sigma: 3
+
 # VO.featureType: ORB
 
 # MapViewer的背景颜色
@@ -21,44 +36,62 @@ MapViewer.backgroundColor.b: 0.8
 # MapViewer进行update后是否等待按键
 MapViewer.updateWait: 0
 
-# 特征距离阈值相对最小特征距离的比例
-Matcher.disThresRatio: 3
-# 特征阈值的最小值，防止阈值过小选出的点不够
-# Matcher.disThresMin: 30
-Matcher.disThresMin: 100
-# 如果testRatio不为0，通过knnMatch获得距离最近的两个match
-# 测试第一个match的距离是否小于第二个match的距离的testRatio倍
-# 0 <= testRati < 1
-Matcher.testRatio: 0.8
+## 特征距离阈值相对最小特征距离的比例
+#Matcher.disThresRatio: 5
+## 特征阈值的最小值，防止阈值过小选出的点不够
+## Matcher.disThresMin: 30
+#Matcher.disThresMin: 300
+## 如果testRatio不为0，通过knnMatch获得距离最近的两个match
+## 测试第一个match的距离是否小于第二个match的距离的testRatio倍
+## 0 <= testRati < 1
+#Matcher.testRatio: 0.9
 # 特征匹配方式
 Matcher.matcherType: BruteForce
 # Matcher.matcherType: BruteForce-Hamming
 
 # 用于解对极约束的最少点数
-Solver2D2D.minInlierNum: 100
+Solver2D2D.minInlierNum: 50
 # 用于解对极约束的最小内点比例
 Solver2D2D.minInlierRatio: 0.3
+# 特征距离阈值相对最小特征距离的比例
+Solver2D2D.Matcher.disThresRatio: 5
+# 特征阈值的最小值，防止阈值过小选出的点不够
+# Matcher.disThresMin: 30
+Solver2D2D.Matcher.disThresMin: 300
+# 如果testRatio不为0，通过knnMatch获得距离最近的两个match
+# 测试第一个match的距离是否小于第二个match的距离的testRatio倍
+# 0 <= testRati < 1
+Solver2D2D.Matcher.testRatio: 0.9
 
 # 用于解PnP选取的最多局部地图点（暂时取消）
 Solver3D2D.max3Dnum: 500
 # 用于解PnP选取的最少局部地图点
-Solver3D2D.min3Dnum: 10
+Solver3D2D.min3Dnum: 20
 # 用于解PnP选取的局部地图点距离范围
 Solver3D2D.max3Ddis: 50
 # 用于解PnP的最少点数
 Solver3D2D.minInlierNum: 8
 # 用于解PnP的最小内点比例
 Solver3D2D.minInlierRatio: 0.3
+# 特征距离阈值相对最小特征距离的比例
+Solver3D2D.Matcher.disThresRatio: 5
+# 特征阈值的最小值，防止阈值过小选出的点不够
+# Matcher.disThresMin: 30
+Solver3D2D.Matcher.disThresMin: 300
+# 如果testRatio不为0，通过knnMatch获得距离最近的两个match
+# 测试第一个match的距离是否小于第二个match的距离的testRatio倍
+# 0 <= testRati < 1
+Solver3D2D.Matcher.testRatio: 0.9
 
 # 三角化点到两帧的最大距离相对于帧间距的最大比例
-Triangulater.maxDisRatio: 75
+Triangulater.maxDisRatio: 50
 Triangulater.minDisRatio: 1
 # 重投影误差最大值
 Triangulater.maxReprojErr: 30
 
 # local_map
 # 地图点到每个观测帧的最大距离
-LocalMap.maxInlierPointDis: 75
+LocalMap.maxInlierPointDis: 50
 # 关键帧最大数量，超过此数量删除旧关键帧
 LocalMap.maxKeyFrames: 10
 

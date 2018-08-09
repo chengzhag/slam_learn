@@ -16,11 +16,11 @@ namespace sky {
         this->keyFrame1 = keyFrame1;
         this->keyFrame2 = keyFrame2;
 
-        match(keyFrame1->descriptors, keyFrame2->descriptors);
-        if (getMatchesNum() < minInlierNum) {
+        matcher.match(keyFrame1->descriptors, keyFrame2->descriptors);
+        if (matcher.getMatchesNum() < minInlierNum) {
 #ifdef DEBUG
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver2D2D: Failed! matchesNum "
-                 << getMatchesNum() << " is less than minInlierNum " << minInlierNum << endl;
+                 << matcher.getMatchesNum() << " is less than minInlierNum " << minInlierNum << endl;
 #endif
             return false;
         }
@@ -48,14 +48,14 @@ namespace sky {
 #ifdef CVVISUAL_DEBUGMODE
         vector<cv::DMatch> inlierMatches;
         vector<cv::KeyPoint> inlierKeyPoints1, inlierKeyPoints2;
-        for (int i = 0; i < matches.size(); ++i) {
+        for (int i = 0; i < matcher.getMatchesNum(); ++i) {
             if (!inlierMask.at<uint8_t>(i, 0))
                 continue;
-            inlierMatches.push_back(matches[i]);
+            inlierMatches.push_back(matcher.matches[i]);
             inlierMatches.back().trainIdx = inlierKeyPoints1.size();
             inlierMatches.back().queryIdx = inlierKeyPoints2.size();
-            inlierKeyPoints1.push_back(keyFrame1->keyPoints[matches[i].queryIdx]);
-            inlierKeyPoints2.push_back(keyFrame2->keyPoints[matches[i].trainIdx]);
+            inlierKeyPoints1.push_back(keyFrame1->keyPoints[matcher.matches[i].queryIdx]);
+            inlierKeyPoints2.push_back(keyFrame2->keyPoints[matcher.matches[i].trainIdx]);
         }
         cvv::debugDMatch(keyFrame1->image, inlierKeyPoints1, keyFrame2->image, inlierKeyPoints2, inlierMatches,
                          CVVISUAL_LOCATION,
@@ -65,12 +65,12 @@ namespace sky {
     }
 
     Map::Ptr Solver2D2D::triangulate() {
-        return triangulater.triangulate(keyFrame1, keyFrame2, matches, inlierMask);
+        return triangulater.triangulate(keyFrame1, keyFrame2, matcher.matches, inlierMask);
     }
 
     void Solver2D2D::solvePose(bool saveResult) {
         vector<cv::Point2f> matchPoints1, matchPoints2;
-        for (auto match:matches) {
+        for (auto match:matcher.matches) {
             matchPoints1.push_back(keyFrame1->getKeyPointCoor(match.queryIdx));
             matchPoints2.push_back(keyFrame2->getKeyPointCoor(match.trainIdx));
         }
@@ -95,7 +95,7 @@ namespace sky {
         }
 
         inlierNum = countNonZero(inlierMask);
-        inlierRatio = (double) inlierNum / getMatchesNum();
+        inlierRatio = (double) inlierNum / matcher.getMatchesNum();
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver2D2D: Pose solved. " << inlierNum
              << " valid points of "

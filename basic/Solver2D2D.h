@@ -14,7 +14,7 @@
 
 namespace sky {
 
-    class Solver2D2D : protected Matcher {
+    class Solver2D2D {
 
     private:
         int inlierNum;
@@ -22,6 +22,8 @@ namespace sky {
 
         int minInlierNum;
         float minInlierRatio;
+
+        Matcher matcher;
 
         KeyFrame::Ptr keyFrame1, keyFrame2;
         Triangulater triangulater;
@@ -35,10 +37,19 @@ namespace sky {
                    float minInlierRatio = Config::get<float>("Solver2D2D.minInlierRatio")
         ) :
                 minInlierNum(minInlierNum),
-                minInlierRatio(minInlierRatio) {
-            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "Solver2D2D: Initializing..." << endl;
+                minInlierRatio(minInlierRatio),
+                matcher(
+                        Config::get<float>("Solver2D2D.Matcher.disThresRatio"),
+                        Config::get<float>("Solver2D2D.Matcher.disThresMin"),
+                        Config::get<float>("Solver2D2D.Matcher.testRatio")
+                ) {
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver2D2D: Initializing..." << endl;
             printVariable(minInlierNum);
             printVariable(minInlierRatio);
+
+            printVariable(matcher.disThresRatio);
+            printVariable(matcher.disThresMin);
+            printVariable(matcher.testRatio);
         }
 
         bool solve(const KeyFrame::Ptr &keyFrame1, const KeyFrame::Ptr &keyFrame2, bool saveResult = true);

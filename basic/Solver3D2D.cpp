@@ -51,11 +51,11 @@ namespace sky {
             return false;
         }
 
-        match(descriptorsMap, keyFrame2->descriptors);
-        if (matches.size() < minInlierNum) {
+        matcher.match(descriptorsMap, keyFrame2->descriptors);
+        if (matcher.matches.size() < minInlierNum) {
 #ifdef DEBUG
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver3D2D: Failed! matchesNum "
-                 << matches.size() << " is less than minInlierNum " << minInlierNum << endl;
+                 << matcher.getMatchesNum() << " is less than minInlierNum " << minInlierNum << endl;
 #endif
             return false;
         }
@@ -83,8 +83,8 @@ namespace sky {
         //添加观测帧
         for (int i = 0; i < indexInliers.rows; ++i) {
             auto iInlier = indexInliers.at<int>(i);
-            MapPoint::Ptr mapPoint(new MapPoint(*pointsCandi[matches[iInlier].queryIdx]));
-            mapPoint->addFrame(keyFrame2, matches[iInlier].trainIdx, false);
+            MapPoint::Ptr mapPoint(new MapPoint(*pointsCandi[matcher.matches[iInlier].queryIdx]));
+            mapPoint->addFrame(keyFrame2, matcher.matches[iInlier].trainIdx, false);
             mapLastFrame->addMapPoint(mapPoint);
         }
         BA ba({BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});
@@ -99,7 +99,7 @@ namespace sky {
         //解PnP得相机位姿
         vector<cv::Point2f> points2DPnP;
         vector<cv::Point3f> points3DPnP;
-        for (auto match:matches) {
+        for (auto match:matcher.matches) {
             points2DPnP.push_back(keyFrame2->getKeyPointCoor(match.trainIdx));
             points3DPnP.push_back(points3D[match.queryIdx]);
         }
@@ -116,7 +116,7 @@ namespace sky {
         );
 
         inlierNum = indexInliers.rows;
-        inlierRatio = (double) inlierNum / getMatchesNum();
+        inlierRatio = (double) inlierNum / matcher.getMatchesNum();
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver3D2D: Pose solved. "
              << inlierNum << " valid points of " << points2DPnP.size()
@@ -130,11 +130,11 @@ namespace sky {
 /*            cv::Point2d reprojCoor;
             proj2frame(pointsCandi[matches[iInlier].queryIdx], keyFrame2, reprojCoor);
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << disBetween(reprojCoor, rawCoor) << endl;*/
-            auto mapPoint = pointsCandi[matches[iInlier].queryIdx];
+            auto mapPoint = pointsCandi[matcher.matches[iInlier].queryIdx];
             if (add2mapPoints)
-                map->addObservation(keyFrame2, mapPoint, matches[iInlier].trainIdx);
+                map->addObservation(keyFrame2, mapPoint, matcher.matches[iInlier].trainIdx);
             else {
-                keyFrame2->addMapPoint(matches[iInlier].trainIdx, mapPoint);
+                keyFrame2->addMapPoint(matcher.matches[iInlier].trainIdx, mapPoint);
             }
         }
 #ifdef DEBUG

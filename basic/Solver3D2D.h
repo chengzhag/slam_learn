@@ -13,7 +13,7 @@
 
 namespace sky {
 
-    class Solver3D2D : protected Matcher {
+    class Solver3D2D {
 
     private:
         int inlierNum;
@@ -23,6 +23,8 @@ namespace sky {
         float max3Ddis;
         int minInlierNum;
         float minInlierRatio;
+
+        Matcher matcher;
 
         Mat descriptorsMap;
         vector<cv::Point3f> points3D;
@@ -44,13 +46,22 @@ namespace sky {
         ) :
                 minInlierNum(minInlierNum),
                 minInlierRatio(minInlierRatio),
-                max3Dnum(max3Dnum), min3Dnum(min3Dnum), max3Ddis(max3Ddis) {
+                max3Dnum(max3Dnum), min3Dnum(min3Dnum), max3Ddis(max3Ddis),
+                matcher(
+                        Config::get<float>("Solver3D2D.Matcher.disThresRatio"),
+                        Config::get<float>("Solver3D2D.Matcher.disThresMin"),
+                        Config::get<float>("Solver3D2D.Matcher.testRatio")
+                        ){
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "Solver3D2D: Initializing..." << endl;
             printVariable(minInlierNum);
             printVariable(minInlierRatio);
             printVariable(max3Dnum);
             printVariable(min3Dnum);
             printVariable(max3Ddis);
+
+            printVariable(matcher.disThresRatio);
+            printVariable(matcher.disThresMin);
+            printVariable(matcher.testRatio);
         }
 
         bool solve(const Map::Ptr &map, const KeyFrame::Ptr &keyFrame2);
