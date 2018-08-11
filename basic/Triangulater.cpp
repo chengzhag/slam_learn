@@ -84,6 +84,8 @@ namespace sky {
 
                 //更新描述子
                 //mapPoint->descriptor = descriptor;
+                mapPoint->descriptor =
+                        (mapPoint->descriptor * (mapPoint->getFrameNum() - 1) + descriptor) / mapPoint->getFrameNum();
 
                 //记录当前帧加入地图的mapPoint和特征点下标
                 keyFrame2->addMapPoint(iMapPoint2, mapPoint);

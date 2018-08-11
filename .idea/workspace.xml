@@ -7,19 +7,15 @@
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
     <configurations>
-      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" GENERATION_OPTIONS="-DCLOUDVIEWER_DEBUG_MODE=OFF -DCVV_DEBUG_MODE=OFF" BUILD_OPTIONS="-j 4" />
-      <configuration PROFILE_NAME="DebugWithCvv" CONFIG_NAME="Debug" GENERATION_OPTIONS="-DCVV_DEBUG_MODE=ON -DCLOUDVIEWER_DEBUG_MODE=OFF" BUILD_OPTIONS="-j 4" />
-      <configuration PROFILE_NAME="DebugWithCloudViewer" CONFIG_NAME="Debug" GENERATION_OPTIONS="-DCLOUDVIEWER_DEBUG_MODE=ON -DCVV_DEBUG_MODE=OFF" BUILD_OPTIONS="-j 4" />
-      <configuration PROFILE_NAME="Release" CONFIG_NAME="Release" BUILD_OPTIONS="-j 4" />
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" GENERATION_OPTIONS="-DCLOUDVIEWER_DEBUG_MODE=OFF -DCVV_DEBUG_MODE=OFF" BUILD_OPTIONS="-j 8" />
+      <configuration PROFILE_NAME="DebugWithCvv" CONFIG_NAME="Debug" GENERATION_OPTIONS="-DCVV_DEBUG_MODE=ON -DCLOUDVIEWER_DEBUG_MODE=OFF" BUILD_OPTIONS="-j 8" />
+      <configuration PROFILE_NAME="DebugWithCloudViewer" CONFIG_NAME="Debug" GENERATION_OPTIONS="-DCLOUDVIEWER_DEBUG_MODE=ON -DCVV_DEBUG_MODE=OFF" BUILD_OPTIONS="-j 8" />
+      <configuration PROFILE_NAME="Release" CONFIG_NAME="Release" BUILD_OPTIONS="-j 8" />
     </configurations>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d03b25aa-01f9-4cb3-b1c6-c95429c4b77e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/BA.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/basic/BA.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/BA.h" beforeDir="false" afterPath="$PROJECT_DIR$/basic/BA.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/Map.h" beforeDir="false" afterPath="$PROJECT_DIR$/basic/Map.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/MapPoint.h" beforeDir="false" afterPath="$PROJECT_DIR$/basic/MapPoint.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic/Triangulater.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/basic/Triangulater.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/config_data_odometry_gray.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/config_data_odometry_gray.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/local_map/LocalMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/local_map/LocalMap.cpp" afterDir="false" />
@@ -69,7 +65,7 @@
               <file leaf-file-name="BA.cpp" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/basic/BA.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="581">
+                    <state relative-caret-position="491">
                       <caret line="146" column="97" selection-start-line="146" selection-start-column="97" selection-end-line="146" selection-end-column="97" />
                     </state>
                   </provider>
@@ -78,8 +74,8 @@
               <file leaf-file-name="Map.cpp" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/basic/Map.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="300">
-                      <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+                    <state relative-caret-position="125">
+                      <caret line="31" column="14" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
                       <folding>
                         <element signature="e#46#62#0" expanded="true" />
                       </folding>
@@ -90,8 +86,8 @@
               <file leaf-file-name="Tracker.cpp" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/tracking/Tracker.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="424">
-                      <caret line="145" column="44" selection-start-line="145" selection-start-column="44" selection-end-line="145" selection-end-column="44" />
+                    <state relative-caret-position="-4">
+                      <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
                       <folding>
                         <element signature="e#46#66#0" expanded="true" />
                       </folding>
@@ -114,8 +110,8 @@
               <file leaf-file-name="Triangulater.cpp" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/basic/Triangulater.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="471">
-                      <caret line="95" column="24" lean-forward="true" selection-start-line="95" selection-start-column="24" selection-end-line="95" selection-end-column="24" />
+                    <state relative-caret-position="266">
+                      <caret line="69" column="42" lean-forward="true" selection-start-line="69" selection-start-column="42" selection-end-line="69" selection-end-column="42" />
                       <folding>
                         <element signature="e#46#71#0" expanded="true" />
                       </folding>
@@ -142,8 +138,8 @@
               <file leaf-file-name="config_data_odometry_gray.yaml" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/config/config_data_odometry_gray.yaml">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="470">
-                      <caret line="91" column="33" selection-start-line="91" selection-start-column="32" selection-end-line="91" selection-end-column="33" />
+                    <state relative-caret-position="302">
+                      <caret line="87" column="35" selection-start-line="87" selection-start-column="35" selection-end-line="87" selection-end-column="35" />
                     </state>
                   </provider>
                 </entry>
@@ -211,8 +207,8 @@
               <file leaf-file-name="LocalMap.cpp" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/local_map/LocalMap.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="276">
-                      <caret line="122" column="89" selection-start-line="122" selection-start-column="89" selection-end-line="122" selection-end-column="89" />
+                    <state relative-caret-position="190">
+                      <caret line="239" column="51" selection-start-line="239" selection-start-column="51" selection-end-line="239" selection-end-column="51" />
                       <folding>
                         <element signature="e#46#67#0" expanded="true" />
                       </folding>
@@ -241,7 +237,7 @@
               <file leaf-file-name="VO.cpp" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/tracking/VO.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="120">
+                    <state relative-caret-position="-60">
                       <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
                     </state>
                   </provider>
@@ -260,11 +256,11 @@
           </split-first>
           <split-second>
             <leaf>
-              <file leaf-file-name="LocalMap.h" pinned="false" current-in-tab="false">
+              <file leaf-file-name="LocalMap.h" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/local_map/LocalMap.h">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="327">
-                      <caret line="53" column="21" selection-start-line="53" selection-start-column="21" selection-end-line="53" selection-end-column="21" />
+                    <state relative-caret-position="315">
+                      <caret line="86" column="29" selection-start-line="86" selection-start-column="29" selection-end-line="86" selection-end-column="29" />
                     </state>
                   </provider>
                 </entry>
@@ -305,11 +301,11 @@
                   </provider>
                 </entry>
               </file>
-              <file leaf-file-name="MapPoint.h" pinned="false" current-in-tab="true">
+              <file leaf-file-name="MapPoint.h" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/basic/MapPoint.h">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="351">
-                      <caret line="100" column="9" selection-start-line="100" selection-start-column="9" selection-end-line="100" selection-end-column="9" />
+                    <state relative-caret-position="275">
+                      <caret line="101" selection-start-line="101" selection-end-line="101" />
                       <folding>
                         <element signature="e#108#135#0" expanded="true" />
                       </folding>
@@ -527,12 +523,12 @@
       <workItem from="1533775875589" duration="16136000" />
       <workItem from="1533814392409" duration="2542000" />
       <workItem from="1533816956685" duration="5000" />
-      <workItem from="1533863431975" duration="24294000" />
+      <workItem from="1533863431975" duration="29643000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="353685000" />
+    <option name="totallyTimeSpent" value="359034000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -544,14 +540,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1849" height="2002" extended-state="6" />
+    <frame x="65" y="-4" width="1849" height="1995" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.11627907" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32980973" />
-      <window_info anchor="bottom" id="Messages" order="7" visible="true" weight="0.23572938" />
+      <window_info anchor="bottom" id="Messages" order="7" visible="true" weight="0.23660478" />
       <window_info anchor="bottom" id="CMake" order="11" weight="0.317734" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32928118" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32891247" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.3295688" />
       <window_info active="true" anchor="bottom" x="987" y="103" width="927" height="1870" id="Run" order="2" type="WINDOWED" visible="true" weight="0.15750529" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -663,13 +659,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="33" column="12" selection-start-line="33" selection-start-column="12" selection-end-line="33" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/Initializer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="574">
-          <caret line="63" column="16" selection-start-line="63" selection-start-column="16" selection-end-line="63" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -785,13 +774,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/basic/Solver2D2D.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="8" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tracking/Tracker.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -848,13 +830,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/local_map/LocalMap.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="53" column="21" selection-start-line="53" selection-start-column="21" selection-end-line="53" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/basic/Solver3D2D.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
@@ -868,26 +843,6 @@
           <caret line="90" column="33" selection-start-line="90" selection-start-column="33" selection-end-line="90" selection-end-column="33" />
           <folding>
             <element signature="e#46#69#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/Tracker.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="424">
-          <caret line="145" column="44" selection-start-line="145" selection-start-column="44" selection-end-line="145" selection-end-column="44" />
-          <folding>
-            <element signature="e#46#66#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="56" selection-start-line="56" selection-end-line="56" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -906,13 +861,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/VO.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/include/pcl-1.8/pcl/visualization/keyboard_event.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
@@ -924,13 +872,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="312">
           <caret line="1769" column="8" selection-start-line="1769" selection-start-column="8" selection-end-line="1769" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/MapViewer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="100" column="45" selection-start-line="100" selection-start-column="45" selection-end-line="100" selection-end-column="45" />
         </state>
       </provider>
     </entry>
@@ -965,16 +906,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/basic/MapPoint.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="100" column="9" selection-start-line="100" selection-start-column="9" selection-end-line="100" selection-end-column="9" />
-          <folding>
-            <element signature="e#108#135#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/basic/KeyFrame.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="470">
@@ -996,27 +927,92 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/basic/BA.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="491">
+          <caret line="146" column="97" selection-start-line="146" selection-start-column="97" selection-end-line="146" selection-end-column="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="244">
+          <caret line="56" selection-start-line="56" selection-end-line="56" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/MapViewer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="423">
+          <caret line="100" column="45" selection-start-line="100" selection-start-column="45" selection-end-line="100" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/VO.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-60">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/MapPoint.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="101" selection-start-line="101" selection-end-line="101" />
+          <folding>
+            <element signature="e#108#135#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/Initializer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="58" column="23" selection-start-line="58" selection-start-column="23" selection-end-line="58" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/Solver2D2D.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="60" column="32" selection-start-line="60" selection-start-column="32" selection-end-line="60" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/local_map/LocalMap.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="86" column="29" selection-start-line="86" selection-start-column="29" selection-end-line="86" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/basic/Map.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+        <state relative-caret-position="125">
+          <caret line="31" column="14" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
           <folding>
             <element signature="e#46#62#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/basic/BA.cpp">
+    <entry file="file://$PROJECT_DIR$/tracking/Tracker.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="581">
-          <caret line="146" column="97" selection-start-line="146" selection-start-column="97" selection-end-line="146" selection-end-column="97" />
+        <state relative-caret-position="-4">
+          <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+          <folding>
+            <element signature="e#46#66#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/local_map/LocalMap.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="122" column="89" selection-start-line="122" selection-start-column="89" selection-end-line="122" selection-end-column="89" />
+        <state relative-caret-position="190">
+          <caret line="239" column="51" selection-start-line="239" selection-start-column="51" selection-end-line="239" selection-end-column="51" />
           <folding>
             <element signature="e#46#67#0" expanded="true" />
           </folding>
@@ -1025,8 +1021,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/basic/Triangulater.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="471">
-          <caret line="95" column="24" lean-forward="true" selection-start-line="95" selection-start-column="24" selection-end-line="95" selection-end-column="24" />
+        <state relative-caret-position="266">
+          <caret line="69" column="42" lean-forward="true" selection-start-line="69" selection-start-column="42" selection-end-line="69" selection-end-column="42" />
           <folding>
             <element signature="e#46#71#0" expanded="true" />
           </folding>
@@ -1035,8 +1031,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config/config_data_odometry_gray.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="470">
-          <caret line="91" column="33" selection-start-line="91" selection-start-column="32" selection-end-line="91" selection-end-column="33" />
+        <state relative-caret-position="302">
+          <caret line="87" column="35" selection-start-line="87" selection-start-column="35" selection-end-line="87" selection-end-column="35" />
         </state>
       </provider>
     </entry>

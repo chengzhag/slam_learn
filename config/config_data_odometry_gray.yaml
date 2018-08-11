@@ -9,7 +9,7 @@ Camera.cx: 607.1928
 Camera.cy: 185.2157
 
 # 描述子提取的数量
-VO.nfeatures: 1000
+VO.nfeatures: 2000
 
 # 特征点算法
 VO.featureType: SIFT
@@ -36,7 +36,7 @@ MapViewer.backgroundColor.b: 0.8
 # MapViewer进行update后是否等待按键
 MapViewer.updateWait: 0
 # 镜头与当前帧的距离
-MapViewer.disCamera: 50
+MapViewer.disCamera: 30
 # 是否自动跟踪当前帧
 MapViewer.trackCurrFrame: 1
 
@@ -80,7 +80,7 @@ Solver3D2D.minInlierNum: 20
 # 用于解PnP的最小内点比例
 Solver3D2D.minInlierRatio: 0.3
 # 首先筛选前rankRatio比例的匹配
-Solver3D2D.Matcher.rankRatio: 1
+Solver3D2D.Matcher.rankRatio: 0.8
 # 特征距离阈值相对最小特征距离的比例
 Solver3D2D.Matcher.disThresRatio: 10
 # 特征阈值的最小值，防止阈值过小选出的点不够
@@ -89,7 +89,7 @@ Solver3D2D.Matcher.disThresMin: 300
 # 如果testRatio不为0，通过knnMatch获得距离最近的两个match
 # 测试第一个match的距离是否小于第二个match的距离的testRatio倍
 # 0 <= testRati < 1
-Solver3D2D.Matcher.testRatio: 0.9
+Solver3D2D.Matcher.testRatio: 0.8
 
 # 三角化点到两帧的最大距离相对于帧间距的最大比例
 Triangulater.maxDisRatio: 100
@@ -101,15 +101,15 @@ Triangulater.minDisRatio: 1
 # 最少关键点数
 # 如果当前局部地图关键帧数等于最大关键帧数，且关键点数小于最少关键点数，则增加最大关键帧数
 # 否则减小最大关键帧数
-LocalMap.minMapPoints: 600
+LocalMap.minMapPoints: 500
 # 地图点到每个观测帧的最大距离
 LocalMap.maxInlierPointDis: 50
 # 关键帧最大数量，超过此数量删除旧关键帧
 LocalMap.maxKeyFrames: 10
 # 重投影误差最大值
-LocalMap.maxReprojErr: 30
+LocalMap.maxReprojErr: 40
 # 首先筛选前rankRatio比例的匹配
-LocalMap.Matcher.rankRatio: 1
+LocalMap.Matcher.rankRatio: 0.8
 # 特征距离阈值相对最小特征距离的比例
 LocalMap.Matcher.disThresRatio: 5
 # 特征阈值的最小值，防止阈值过小选出的点不够
@@ -130,7 +130,7 @@ Initializer.minFrameInterval: 2
 Initializer.minMapPointNum: 50
 
 # 关键帧的最小间距
-Tracker.minKeyFrameDis: 0.8
+Tracker.minKeyFrameDis: 0.5
 # 关键帧的最大间距
 Tracker.maxKeyFrameDis: 5
 # 关键帧的最少地图点

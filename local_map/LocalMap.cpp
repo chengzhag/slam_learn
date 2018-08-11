@@ -149,7 +149,8 @@ namespace sky {
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: filtKeyFrames... " << endl;
         printVariable(maxKeyFrames);
-        printVariable(map->mapPoints.size());
+        auto oldKeyFramesNum = map->keyFrames.size();
+        printVariable(oldKeyFramesNum);
 #endif
         //筛选关键帧
         int iFrames = 0;
@@ -178,9 +179,16 @@ namespace sky {
                 }
             }
         }
-        lock.unlock();
         if (map->mapPoints.size() > minMapPoints)
             --maxKeyFrames;
+#ifdef DEBUG
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+             << "LocalMap: filtKeyFrames done. "
+             << oldKeyFramesNum - map->keyFrames.size() << " filtered."
+             << map->keyFrames.size() << " keyFrames remained."
+             << endl;
+#endif
+        lock.unlock();
     }
 
     bool LocalMap::isGoodFrame(const KeyFrame::Ptr &keyFrame) const {
@@ -191,6 +199,8 @@ namespace sky {
     void LocalMap::filtMapPoints() {
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: filtMapPoints... " << endl;
+        auto oldMapPointsNum = map->mapPoints.size();
+        printVariable(oldMapPointsNum);
 #endif
         boost::mutex::scoped_lock lock(mapMutex);
         for (auto it = map->mapPoints.begin(); it != map->mapPoints.end();) {
@@ -201,6 +211,13 @@ namespace sky {
                 it = map->mapPoints.erase(it);
             }
         }
+#ifdef DEBUG
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+             << "LocalMap: filtMapPoints done. "
+             << oldMapPointsNum - map->mapPoints.size() << " filtered."
+             << map->mapPoints.size() << " mapPoints remained."
+             << endl;
+#endif
         lock.unlock();
     }
 
@@ -210,10 +227,10 @@ namespace sky {
              << mapPoint->frame2indexs.size() << " frame2indexs" << endl;
 #endif*/
 
-        if (map->keyFrames.size() >= 4)
+/*        if (map->keyFrames.size() >= 4)
             if (!setHas(newMapPoints, mapPoint)
                 && mapPoint->getFrameNum() < 3)
-                return false;
+                return false;*/
 
 
         bool inRangeNum = false;
