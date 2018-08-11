@@ -105,10 +105,12 @@ namespace sky {
         auto triangulateMap = triangulater.triangulate(
                 refFrame, currFrame, matcher.matches);
 
+/*
         BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
         ba.loadMap(triangulateMap);
         ba.ba();
         ba.writeMap();
+*/
 
         //添加关键帧和地图点
         newMapPoints.clear();
@@ -179,12 +181,12 @@ namespace sky {
                 }
             }
         }
-        if (map->mapPoints.size() > minMapPoints)
+        if (map->mapPoints.size() > minMapPoints && maxKeyFrames > minKeyFrames)
             --maxKeyFrames;
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
              << "LocalMap: filtKeyFrames done. "
-             << oldKeyFramesNum - map->keyFrames.size() << " filtered."
+             << oldKeyFramesNum - map->keyFrames.size() << " filtered. "
              << map->keyFrames.size() << " keyFrames remained."
              << endl;
 #endif
@@ -214,7 +216,7 @@ namespace sky {
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
              << "LocalMap: filtMapPoints done. "
-             << oldMapPointsNum - map->mapPoints.size() << " filtered."
+             << oldMapPointsNum - map->mapPoints.size() << " filtered. "
              << map->mapPoints.size() << " mapPoints remained."
              << endl;
 #endif
@@ -227,10 +229,10 @@ namespace sky {
              << mapPoint->frame2indexs.size() << " frame2indexs" << endl;
 #endif*/
 
-/*        if (map->keyFrames.size() >= 4)
+        if (map->keyFrames.size() >= 4)
             if (!setHas(newMapPoints, mapPoint)
                 && mapPoint->getFrameNum() < 3)
-                return false;*/
+                return false;
 
 
         bool inRangeNum = false;
