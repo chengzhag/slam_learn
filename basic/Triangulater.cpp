@@ -83,7 +83,7 @@ namespace sky {
                 *mapPoint = *testMapPoint;
 
                 //更新描述子
-                mapPoint->descriptor = descriptor;
+                //mapPoint->descriptor = descriptor;
 
                 //记录当前帧加入地图的mapPoint和特征点下标
                 keyFrame2->addMapPoint(iMapPoint2, mapPoint);
@@ -180,8 +180,8 @@ namespace sky {
             return false;
 
 
-/*        //测试重投影误差
-        cv::Point2f rawPos1;
+        //测试重投影误差
+/*        cv::Point2f rawPos1;
         mapPoint->getPixelCoor(keyFrame1, rawPos1);
         cv::Point2d projPos1;
         if (!proj2frame(mapPoint, keyFrame1, projPos1))

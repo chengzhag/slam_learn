@@ -72,20 +72,20 @@ Solver2D2D.Matcher.testRatio: 0.8
 # 用于解PnP选取的最多局部地图点 TODO:（暂时取消）
 Solver3D2D.max3Dnum: 500
 # 用于解PnP选取的最少局部地图点
-Solver3D2D.min3Dnum: 50
+Solver3D2D.min3Dnum: 30
 # 用于解PnP选取的局部地图点距离范围
 Solver3D2D.max3Ddis: 50
 # 用于解PnP的最少点数
 Solver3D2D.minInlierNum: 20
 # 用于解PnP的最小内点比例
-Solver3D2D.minInlierRatio: 0.25
+Solver3D2D.minInlierRatio: 0.3
 # 首先筛选前rankRatio比例的匹配
-Solver3D2D.Matcher.rankRatio: 0.8
+Solver3D2D.Matcher.rankRatio: 1
 # 特征距离阈值相对最小特征距离的比例
 Solver3D2D.Matcher.disThresRatio: 10
 # 特征阈值的最小值，防止阈值过小选出的点不够
 # Matcher.disThresMin: 30
-Solver3D2D.Matcher.disThresMin: 200
+Solver3D2D.Matcher.disThresMin: 300
 # 如果testRatio不为0，通过knnMatch获得距离最近的两个match
 # 测试第一个match的距离是否小于第二个match的距离的testRatio倍
 # 0 <= testRati < 1
@@ -130,7 +130,7 @@ Initializer.minFrameInterval: 2
 Initializer.minMapPointNum: 50
 
 # 关键帧的最小间距
-Tracker.minKeyFrameDis: 0.3
+Tracker.minKeyFrameDis: 0.8
 # 关键帧的最大间距
 Tracker.maxKeyFrameDis: 5
 # 关键帧的最少地图点

@@ -38,10 +38,26 @@ namespace sky {
             auto angleAxis = frame->getAngleAxisWcMatxCV<double>();
             auto t = frame->Tcw.translation();
             frame2extrinsics[frame] = cv::Matx23d(angleAxis(0), angleAxis(1), angleAxis(2),
-                                                 t[0], t[1], t[2]);
+                                                  t[0], t[1], t[2]);
             if (!mapHas(camera2intrinsics, frame->camera))
                 camera2intrinsics[frame->camera] = cv::Matx14d(
                         frame->camera->fx, frame->camera->fy, frame->camera->cx, frame->camera->cy);
+        }
+        //加载map->keyFrames之外的关键帧
+        for (auto &mapPoint:map->mapPoints) {
+            mapPoint->forEachFrame(
+                    [&](const KeyFrame::Ptr &frame) {
+                        if (!mapHas(frame2extrinsics, frame)) {
+                            auto angleAxis = frame->getAngleAxisWcMatxCV<double>();
+                            auto t = frame->Tcw.translation();
+                            otherFrame2extrinsics[frame] = cv::Matx23d(angleAxis(0), angleAxis(1), angleAxis(2),
+                                                                       t[0], t[1], t[2]);
+                            if (!mapHas(camera2intrinsics, frame->camera))
+                                camera2intrinsics[frame->camera] = cv::Matx14d(
+                                        frame->camera->fx, frame->camera->fy, frame->camera->cx, frame->camera->cy);
+                        }
+                    }
+            );
         }
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "BA: Map loaded. "
@@ -88,12 +104,12 @@ namespace sky {
                 problem.SetParameterBlockConstant(mapPoint2pos.second.val);
 
             mapPoint2pos.first->forEachFrame2index(
-                    [&](auto const &observedFrame) {
+                    [&](const auto &observedFrame) {
+                        cv::Point2d pixelCoor(observedFrame.first->getKeyPointCoor(observedFrame.second));
+                        ceres::CostFunction *costFunction =
+                                new ceres::AutoDiffCostFunction<ReprojectCost, 2, 4, 6, 3>(
+                                        new ReprojectCost(pixelCoor));
                         if (mapHas(frame2extrinsics, observedFrame.first)) {
-                            cv::Point2d pixelCoor(observedFrame.first->getKeyPointCoor(observedFrame.second));
-                            ceres::CostFunction *costFunction =
-                                    new ceres::AutoDiffCostFunction<ReprojectCost, 2, 4, 6, 3>(
-                                            new ReprojectCost(pixelCoor));
                             problem.AddResidualBlock(
                                     costFunction,
                                     lossFunction,
@@ -101,6 +117,15 @@ namespace sky {
                                     frame2extrinsics[observedFrame.first].val,  // View Rotation and Translation
                                     mapPoint2pos.second.val          // Point in 3D space
                             );
+                        } else {
+                            problem.AddResidualBlock(
+                                    costFunction,
+                                    lossFunction,
+                                    camera2intrinsics[observedFrame.first->camera].val,            // Intrinsic
+                                    otherFrame2extrinsics[observedFrame.first].val,  // View Rotation and Translation
+                                    mapPoint2pos.second.val          // Point in 3D space
+                            );
+                            problem.SetParameterBlockConstant(otherFrame2extrinsics[observedFrame.first].val);
                         }
                     }
             );
@@ -119,7 +144,7 @@ namespace sky {
             std::cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
                       << "BA: Bundle Adjustment statistics (approximated RMSE):\n"
                       << "[" << boost::this_thread::get_id() << "]DEBUG: "
-                      << "    #views: " << frame2extrinsics.size() << "\n"
+                      << "    #views: " << frame2extrinsics.size() + otherFrame2extrinsics.size() << "\n"
                       << "[" << boost::this_thread::get_id() << "]DEBUG: "
                       << "    #residuals: " << summary.num_residuals << "\n"
                       << "[" << boost::this_thread::get_id() << "]DEBUG: "

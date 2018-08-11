@@ -37,7 +37,7 @@ namespace sky {
 
         //删除某地图点的所有观测关系
         inline void deleteObservation(const MapPoint::Ptr &mapPoint) {
-            mapPoint->forEachFrames([&](auto &frame) {
+            mapPoint->forEachFrame([&](auto &frame) {
                 frame->deleteMapPoint(mapPoint);
             });
             mapPoint->deleteAllFrame();

@@ -38,6 +38,7 @@ namespace sky {
 
         unordered_map<Camera::Ptr, cv::Matx14d> camera2intrinsics;
         unordered_map<KeyFrame::Ptr, cv::Matx23d> frame2extrinsics;
+        unordered_map<KeyFrame::Ptr, cv::Matx23d> otherFrame2extrinsics;
         unordered_map<MapPoint::Ptr, cv::Matx13d> mapPoint2poses;
 
     public:

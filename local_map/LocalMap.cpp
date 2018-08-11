@@ -105,10 +105,10 @@ namespace sky {
         auto triangulateMap = triangulater.triangulate(
                 refFrame, currFrame, matcher.matches);
 
-/*        BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
+        BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
         ba.loadMap(triangulateMap);
         ba.ba();
-        ba.writeMap();*/
+        ba.writeMap();
 
         //添加关键帧和地图点
         newMapPoints.clear();

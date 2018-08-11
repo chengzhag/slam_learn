@@ -102,7 +102,7 @@ namespace sky {
 
         //循环遍历frame2indexs，不能用于删除
         template<typename L>
-        void forEachFrames(L func) {
+        void forEachFrame(L func) {
             for (auto &frame2index:frame2indexs) {
                 func(frame2index.first);
             }
