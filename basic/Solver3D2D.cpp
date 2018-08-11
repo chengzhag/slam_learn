@@ -87,10 +87,10 @@ namespace sky {
             mapPoint->addFrame(keyFrame2, matcher.matches[iInlier].trainIdx, false);
             mapLastFrame->addMapPoint(mapPoint);
         }
-        BA ba({BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});
+/*        BA ba({BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});
         ba.loadMap(mapLastFrame);
         ba.ba();
-        ba.writeMap();
+        ba.writeMap();*/
 
         return true;
     }
@@ -139,7 +139,8 @@ namespace sky {
         }
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Solver3D2D: addFrame2inliers done. "
-             << "Added currFrame as observedFrame to " << indexInliers.rows << " old index2mapPoints. " << endl;
+             << "Added currFrame as observedFrame to " << indexInliers.rows << " of " << pointsCandi.size()
+             << " old index2mapPoints. " << endl;
 #endif
     }
 

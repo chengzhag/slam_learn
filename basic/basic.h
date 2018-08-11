@@ -32,11 +32,11 @@ namespace sky {
     float disBetween(const Sophus::Vector3d &coor1, const Sophus::Vector3d &coor2);
 
     inline float disBetween(const Sophus::Vector3d &coor, const KeyFrame::Ptr &keyFrame) {
-        return disBetween(coor, keyFrame->Tcw.translation());
+        return disBetween(coor, keyFrame->Tcw.inverse().translation());
     }
 
     inline float disBetween(const KeyFrame::Ptr &keyFrame, const Sophus::Vector3d &coor) {
-        return disBetween(coor, keyFrame->Tcw.translation());
+        return disBetween(coor, keyFrame->Tcw.inverse().translation());
     }
 
     inline float disBetween(const KeyFrame::Ptr &keyFrame1, const KeyFrame::Ptr &keyFrame2) {

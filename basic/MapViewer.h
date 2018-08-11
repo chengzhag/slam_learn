@@ -42,7 +42,7 @@ namespace sky {
                 viewer("3D Viewer"),
                 cloud(new pcl::PointCloud<pcl::PointXYZRGB>) {
 #ifdef DEBUG
-            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "MapViewer: Initializing..." << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "MapViewer: Initializing..." << endl;
             printVariable(updateWait);
 #endif
 

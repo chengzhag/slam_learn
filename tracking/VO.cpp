@@ -34,7 +34,7 @@ namespace sky {
             }
         }
 
-        //绘制当前帧
+        //绘制当前帧和跟踪的关键点
         Mat imPoints;
         keyFrame->image.copyTo(imPoints);
         int i = 0;

@@ -141,9 +141,9 @@ namespace sky {
         else
             lastKeyFrameTrackingNum = localMapPointNum;
         auto trackRatio2LastFrame = (float) solver3D2D.getInlierNum() / lastKeyFrameTrackingNum;
-/*        printVariable(lastKeyFrameTrackingNum);
+        printVariable(lastKeyFrameTrackingNum);
         printVariable(solver3D2D.getInlierNum());
-        printVariable(trackRatio2LastFrame);*/
+        printVariable(trackRatio2LastFrame);
         if (trackRatio2LastFrame > maxKeyFrameTrackRatio) {
 #ifdef DEBUG
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "

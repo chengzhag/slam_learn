@@ -69,7 +69,6 @@ namespace sky {
 
             //如果是上一帧加到地图中的点，更新描述子、加入观测帧后跳过
             if (keyFrame1->hasMapPoint(iMapPoint1)) {
-                ++numOldMapPoint;
                 mapPoint = keyFrame1->getMapPoint(iMapPoint1);
 
                 //创建临时mapPoint拷贝并加入关键帧，再作isGoodPoint判断
@@ -78,6 +77,7 @@ namespace sky {
 
                 if (!isGoodPoint(testMapPoint))
                     continue;
+                ++numOldMapPoint;
 
                 //保存添加的观测帧和更新的norm
                 *mapPoint = *testMapPoint;
@@ -172,13 +172,21 @@ namespace sky {
             || dis2keyFrame2 < minDisRatio * disB12)
             return false;
 
-        //测试重投影误差
+
+        //检查是否在帧的视野内
+        if (!isInFrame(mapPoint, keyFrame1))
+            return false;
+        if (!isInFrame(mapPoint, keyFrame2))
+            return false;
+
+
+/*        //测试重投影误差
         cv::Point2f rawPos1;
         mapPoint->getPixelCoor(keyFrame1, rawPos1);
         cv::Point2d projPos1;
         if (!proj2frame(mapPoint, keyFrame1, projPos1))
             return false;
-        //printVariable(disBetween(rawPos1, projPos1));
+        //printVariable(disBetween<float>(rawPos1, projPos1));
         if (disBetween<float>(rawPos1, projPos1) > maxReprojErr)
             return false;
 
@@ -187,9 +195,9 @@ namespace sky {
         cv::Point2d projPos2;
         if (!proj2frame(mapPoint, keyFrame2, projPos2))
             return false;
-        //printVariable(disBetween(rawPos2, projPos2));
+        //printVariable(disBetween<float>(rawPos2, projPos2));
         if (disBetween<float>(rawPos2, projPos2) > maxReprojErr)
-            return false;
+            return false;*/
 
 
         return true;
