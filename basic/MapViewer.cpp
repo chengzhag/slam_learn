@@ -53,6 +53,14 @@ namespace sky {
         for (auto &frame:map->keyFrames) {
             addFrame(frame, "frame" + to_string(++i));
         }
+
+        //更新相机位姿
+        if (trackCurrFrame) {
+            auto target = map->getLastFrame()->getCamCenterEigen();
+            viewer.setCameraPosition(target[0], target[1]-disCamera, target[2],
+                                     target[0], target[1], target[2],
+                                     0, 0, 1);
+        }
         lockUpdate.unlock();
 
         //暂停
@@ -82,6 +90,15 @@ namespace sky {
         if (event.getKeySym() == "space" && event.keyDown()) {
             wait4keyDown = true;
             updateWait = !updateWait;
+        }
+        if (event.getKeySym() == "Up" && event.keyDown()) {
+            disCamera *= 2.0/3.0;
+        }
+        if (event.getKeySym() == "Down" && event.keyDown()) {
+            disCamera *= 3.0/2.0;
+        }
+        if (event.getKeySym() == "t" && event.keyDown()) {
+            trackCurrFrame = !trackCurrFrame;
         }
     }
 

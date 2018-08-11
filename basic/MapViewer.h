@@ -31,19 +31,40 @@ namespace sky {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
         boost::thread thread;
         boost::mutex updateMutex;
-        bool updateWait, wait4keyDown = false;
+        bool updateWait, wait4keyDown = false, trackCurrFrame;
+        float disCamera;
 #endif
 
     public:
 #ifdef CLOUDVIEWER_DEBUG
 
-        MapViewer(bool updateWait = Config::get<int>("MapViewer.updateWait")) :
+        MapViewer(bool updateWait = Config::get<int>("MapViewer.updateWait"),
+                  bool trackCurrFrame = Config::get<int>("MapViewer.trackCurrFrame"),
+                  float disCamera = Config::get<float>("MapViewer.disCamera")
+        ) :
                 updateWait(updateWait),
+                trackCurrFrame(trackCurrFrame),
+                disCamera(disCamera),
                 viewer("3D Viewer"),
                 cloud(new pcl::PointCloud<pcl::PointXYZRGB>) {
 #ifdef DEBUG
-            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "MapViewer: Initializing..." << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "MapViewer: Initializing..." << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "MapViewer: usage: " << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "\tpress 'Return' to jump to next frame" << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "\tpress 'space' to skip waiting for all frames" << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "\tpress 'up' to room in while tracking currFrame" << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "\tpress 'down' to room out while tracking currFrame" << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+                 << "\tpress 't' to switch tracking status" << endl;
             printVariable(updateWait);
+            printVariable(trackCurrFrame);
+            printVariable(disCamera);
 #endif
 
             viewer.setBackgroundColor(
@@ -57,11 +78,11 @@ namespace sky {
                                                     "Triangulated Point Cloud");
             viewer.initCameraParameters();
             viewer.addCoordinateSystem(1.0);
+            viewer.setCameraPosition(0, -disCamera, 0, 0, 0, 1);
 
             thread = boost::thread(boost::bind(&MapViewer::threadFunc, this));
-            if (updateWait) {
-                viewer.registerKeyboardCallback(boost::bind(&MapViewer::keyboardEventOccurred, this, _1));
-            }
+            viewer.registerKeyboardCallback(boost::bind(&MapViewer::keyboardEventOccurred, this, _1));
+
         }
 
 #endif

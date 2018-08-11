@@ -35,6 +35,10 @@ MapViewer.backgroundColor.g: 0.8
 MapViewer.backgroundColor.b: 0.8
 # MapViewer进行update后是否等待按键
 MapViewer.updateWait: 0
+# 镜头与当前帧的距离
+MapViewer.disCamera: 50
+# 是否自动跟踪当前帧
+MapViewer.trackCurrFrame: 1
 
 ## 特征距离阈值相对最小特征距离的比例
 #Matcher.disThresRatio: 5
