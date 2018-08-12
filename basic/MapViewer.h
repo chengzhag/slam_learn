@@ -31,7 +31,7 @@ namespace sky {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
         boost::thread thread;
         boost::mutex updateMutex;
-        bool updateWait, wait4keyDown = false, trackCurrFrame;
+        bool updateWait, wait4keyDown = false, trackCurrFrame, drawNorms;
         float disCamera;
 #endif
 
@@ -40,11 +40,13 @@ namespace sky {
 
         MapViewer(bool updateWait = Config::get<int>("MapViewer.updateWait"),
                   bool trackCurrFrame = Config::get<int>("MapViewer.trackCurrFrame"),
-                  float disCamera = Config::get<float>("MapViewer.disCamera")
+                  float disCamera = Config::get<float>("MapViewer.disCamera"),
+                  bool drawNorms = Config::get<int>("MapViewer.drawNorms")
         ) :
                 updateWait(updateWait),
                 trackCurrFrame(trackCurrFrame),
                 disCamera(disCamera),
+                drawNorms(drawNorms),
                 viewer("3D Viewer"),
                 cloud(new pcl::PointCloud<pcl::PointXYZRGB>) {
 #ifdef DEBUG
@@ -65,6 +67,7 @@ namespace sky {
             printVariable(updateWait);
             printVariable(trackCurrFrame);
             printVariable(disCamera);
+            printVariable(drawNorms);
 #endif
 
             viewer.setBackgroundColor(
@@ -87,7 +90,7 @@ namespace sky {
 
 #endif
 
-        void update(const Map::Ptr &map, bool drawNorms = false);
+        void update(const Map::Ptr &map);
 
         ~MapViewer() {}
 

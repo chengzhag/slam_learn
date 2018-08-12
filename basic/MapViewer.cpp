@@ -6,7 +6,7 @@
 
 namespace sky {
 
-    void MapViewer::update(const Map::Ptr &map, bool drawNorms) {
+    void MapViewer::update(const Map::Ptr &map) {
 #ifdef CLOUDVIEWER_DEBUG
         if (!map)
             return;
