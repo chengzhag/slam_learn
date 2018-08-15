@@ -49,28 +49,20 @@ namespace sky {
     void LocalMap::threadFunc() {
         prepareKeyFrame();
         triangulate();
-        boost::mutex::scoped_lock lock(mapMutex);
         mapViewer.update(map);
-        lock.unlock();
 //        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 
         ba();
-        lock.lock();
         mapViewer.update(map);
-        lock.unlock();
 //        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 
         //BA可能导致一些外点，不如把筛选过程放到BA后
         filtKeyFrames();
-        lock.lock();
         mapViewer.update(map);
-        lock.unlock();
 //        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 
         filtMapPoints(map);
-        lock.lock();
         mapViewer.update(map);
-        lock.unlock();
 //        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 
 /*        prepareKeyFrame();
@@ -80,9 +72,7 @@ namespace sky {
         filtKeyFrames();
         filtMapPoints(map);
 
-        boost::mutex::scoped_lock lock(mapMutex);
-        mapViewer.update(map);
-        lock.unlock();*/
+        mapViewer.update(map);*/
 
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: End adding! " << endl;
@@ -145,10 +135,10 @@ namespace sky {
     }
 
     void LocalMap::ba() {
+        boost::mutex::scoped_lock lock(mapMutex);
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: ba... " << endl;
 #endif
-        boost::mutex::scoped_lock lock(mapMutex);
         BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_2Frames});
         ba.loadMap(map);
         ba.ba();
@@ -157,6 +147,8 @@ namespace sky {
     }
 
     void LocalMap::filtKeyFrames() {
+        boost::mutex::scoped_lock lock(mapMutex);
+
         //根据当前LocalMap地图点数自适应增减maxKeyFrames
         if (map->mapPoints.size() < minMapPoints && map->keyFrames.size() > maxKeyFrames)
             ++maxKeyFrames;
@@ -168,7 +160,6 @@ namespace sky {
 #endif
         //筛选关键帧
         int iFrames = 0;
-        boost::mutex::scoped_lock lock(mapMutex);
         for (auto it = map->keyFrames.rbegin(); it != map->keyFrames.rend();) {
             if (isGoodFrame(*it) && iFrames < maxKeyFrames) {
                 ++it;
@@ -211,6 +202,8 @@ namespace sky {
     }
 
     void LocalMap::filtMapPoints(Map::Ptr &map) {
+        boost::mutex::scoped_lock lock(mapMutex);
+
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: filtMapPoints... " << endl;
         auto oldMapPointsNum = map->mapPoints.size();
@@ -218,7 +211,6 @@ namespace sky {
         int numNoEnoughObservation = 0, numNotInView = 0, numNotInErrThres = 0, numNotInDisRange = 0;
         int errCode;
 #endif
-        boost::mutex::scoped_lock lock(mapMutex);
         for (auto it = map->mapPoints.begin(); it != map->mapPoints.end();) {
             errCode = isGoodPoint(*it);
             if (errCode > 0)

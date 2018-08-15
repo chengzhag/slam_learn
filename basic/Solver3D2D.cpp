@@ -10,18 +10,18 @@
 
 namespace sky {
 
-    bool Solver3D2D::solve(const Map::Ptr &map, const KeyFrame::Ptr &keyFrame2) {
+    bool Solver3D2D::solve(const KeyFrame::Ptr &keyFrame2) {
         //重置中间变量
         points3D.clear();
         pointsCandi.clear();
         descriptorsMap = Mat();
         indexInliers = Mat();
-        this->map = map;
 
+        boost::mutex::scoped_lock lock(localMap->mapMutex);
         this->keyFrame2 = keyFrame2;
-        auto keyFrame1 = map->getLastFrame();
+        auto keyFrame1 = localMap->getLastFrame();
 
-        for (MapPoint::Ptr &point:map->mapPoints) {
+        for (MapPoint::Ptr &point:localMap->map->mapPoints) {
 
             if (isInFrame(point->pos, keyFrame1)
                 && disBetween(keyFrame1, point) <= max3Ddis) {
@@ -92,6 +92,7 @@ namespace sky {
         ba.ba();
         ba.writeMap();
 
+        lock.unlock();
         return true;
     }
 
@@ -125,6 +126,7 @@ namespace sky {
     }
 
     void Solver3D2D::addFrame2inliers(bool add2mapPoints) {
+        boost::mutex::scoped_lock lock(localMap->mapMutex);
         for (int i = 0; i < indexInliers.rows; ++i) {
             auto iInlier = indexInliers.at<int>(i);
 /*            cv::Point2d reprojCoor;
@@ -132,7 +134,8 @@ namespace sky {
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << disBetween(reprojCoor, rawCoor) << endl;*/
             auto mapPoint = pointsCandi[matcher.matches[iInlier].queryIdx];
             if (add2mapPoints)
-                map->addObservation(keyFrame2, mapPoint, matcher.matches[iInlier].trainIdx);
+                //包括了addFrame和addMapPoint
+                localMap->map->addObservation(keyFrame2, mapPoint, matcher.matches[iInlier].trainIdx);
             else {
                 keyFrame2->addMapPoint(matcher.matches[iInlier].trainIdx, mapPoint);
             }
@@ -142,6 +145,7 @@ namespace sky {
              << "Added currFrame as observedFrame to " << indexInliers.rows << " of " << pointsCandi.size()
              << " old index2mapPoints. " << endl;
 #endif
+        lock.unlock();
     }
 
 }

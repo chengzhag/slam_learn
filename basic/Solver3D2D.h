@@ -6,7 +6,7 @@
 #define SLAM_LEARN_SOLVER3D2D_H
 
 #include "common_include.h"
-#include "Map.h"
+#include "LocalMap.h"
 #include <opencv2/opencv.hpp>
 #include "Matcher.h"
 #include "Config.h"
@@ -29,7 +29,7 @@ namespace sky {
         Mat descriptorsMap;
         vector<cv::Point3f> points3D;
         vector<MapPoint::Ptr> pointsCandi;
-        Map::Ptr map;
+        LocalMap::Ptr localMap;
         KeyFrame::Ptr keyFrame2;
 
         Mat indexInliers;
@@ -38,12 +38,14 @@ namespace sky {
         typedef shared_ptr<Solver3D2D> Ptr;
 
         Solver3D2D(
+                LocalMap::Ptr localMap,
                 int minInlierNum = Config::get<int>("Solver3D2D.minInlierNum"),
                 float minInlierRatio = Config::get<float>("Solver3D2D.minInlierRatio"),
                 int max3Dnum = Config::get<int>("Solver3D2D.max3Dnum"),
                 int min3Dnum = Config::get<int>("Solver3D2D.min3Dnum"),
                 float max3Ddis = Config::get<float>("Solver3D2D.max3Ddis")
         ) :
+                localMap(localMap),
                 minInlierNum(minInlierNum),
                 minInlierRatio(minInlierRatio),
                 max3Dnum(max3Dnum), min3Dnum(min3Dnum), max3Ddis(max3Ddis),
@@ -66,7 +68,7 @@ namespace sky {
             printVariable(matcher.testRatio);
         }
 
-        bool solve(const Map::Ptr &map, const KeyFrame::Ptr &keyFrame2);
+        bool solve(const KeyFrame::Ptr &keyFrame2);
 
         void addFrame2inliers(bool add2mapPoints = true);
 

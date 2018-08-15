@@ -7,6 +7,7 @@
 namespace sky {
 
     void MapViewer::update(const Map::Ptr &map) {
+        boost::mutex::scoped_lock lockUpdate(updateMutex);
 #ifdef CLOUDVIEWER_DEBUG
         if (!map)
             return;
@@ -30,7 +31,6 @@ namespace sky {
         viewer.updatePointCloud(cloud, "Triangulated Point Cloud");
 
         //更新其他
-        boost::mutex::scoped_lock lockUpdate(updateMutex);
         int i = 0;
         //更新法线
         if (drawNorms) {

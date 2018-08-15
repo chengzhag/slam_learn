@@ -19,18 +19,17 @@ namespace sky {
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
                  << "Tracker: Still adding keyFrame... " << endl;
 #endif
-        boost::mutex::scoped_lock lock(localMap->mapMutex);
-        bool solverPass = solver3D2D.solve(localMap->map, frame);
+
+        bool solverPass = solver3D2D.solve(frame);
         //如果tracking丢失，且关键帧添加未完成，等待上一个关键帧的处理,以获得更多地图点
         if (!solverPass && isAdding) {
 #ifdef DEBUG
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
                  << "Tracker: Solver3D2D failed! Waiting for adding more mapPoints... " << endl;
 #endif
-            lock.unlock();
             localMap->waitForThread();
-            lock.lock();
-            solverPass = solver3D2D.solve(localMap->map, frame);
+
+            solverPass = solver3D2D.solve(frame);
         }
         //如果仍丢失，判定跟踪失败
         if (!solverPass) {
@@ -42,10 +41,8 @@ namespace sky {
             localMap->map->viewFrameProjInCVV(localMap->getLastFrame(),
                                               "Tracker: Solver3D2D failed! LocalMap proj to crrFrame");
 #endif
-            lock.unlock();
             return false;
         } else {
-            lock.unlock();
             //判断是否插入关键帧
             if (isKeyFrame()) {
 #ifdef DEBUG
@@ -58,9 +55,7 @@ namespace sky {
                     localMap->viewReprojInCVV();
                     showedCVV = true;
                 }
-                lock.lock();
                 solver3D2D.addFrame2inliers();
-                lock.unlock();
                 localMap->addFrame(frame);
                 frameInterval = 0;
                 showedCVV = false;

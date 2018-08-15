@@ -33,6 +33,7 @@ namespace sky {
                 int minKeyFrameInterval = Config::get<int>("Tracker.minKeyFrameInterval")
         ) :
                 localMap(localMap),
+                solver3D2D(localMap),
                 minKeyFrameDis(minKeyFrameDis),
                 maxKeyFrameDis(maxKeyFrameDis),
                 maxKeyFrameTrackRatio(maxKeyFrameTrackRatio),
