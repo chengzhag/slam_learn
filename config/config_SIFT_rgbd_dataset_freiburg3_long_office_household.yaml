@@ -1,6 +1,7 @@
 %YAML:1.0
 # 路径
 datasetDir: dataset/rgbd_dataset_freiburg3_long_office_household/rgb
+startIndex: 0
 
 # 相机内参
 Camera.fx: 535.4
@@ -8,22 +9,63 @@ Camera.fy: 539.2
 Camera.cx: 320.1
 Camera.cy: 247.6
 
+# BA
+#// Scaling
+#// -------
+#// Given one robustifier
+#//   s -> rho(s)
+#// one can change the length scale at which robustification takes
+#// place, by adding a scale factor 'a' as follows:
+#//
+#//   s -> a^2 rho(s / a^2).
+#//
+#// The first and second derivatives are:
+#//
+#//   s -> rho'(s / a^2),
+#//   s -> (1 / a^2) rho''(s / a^2),
+#//
+#// but the behaviour near s = 0 is the same as the original function,
+#// i.e.
+#//
+#//   rho(s) = s + higher order terms,
+#//   a^2 rho(s / a^2) = s + higher order terms.
+#//
+#// The scalar 'a' should be positive.
+#//
+#// The reason for the appearance of squaring is that 'a' is in the
+#// units of the residual vector norm whereas 's' is a squared
+#// norm. For applications it is more convenient to specify 'a' than
+#// its square. The commonly used robustifiers below are described in
+#// un-scaled format (a = 1) but their implementations work for any
+#// non-zero value of 'a'.
+#
+#// Huber.
+#//
+#//   rho(s) = s               for s <= 1,
+#//   rho(s) = 2 sqrt(s) - 1   for s >= 1.
+#//
+#// At s = 0: rho = [0, 1, 0].
+#//
+#// The scaling parameter 'a' corresponds to 'delta' on this page:
+#//   http://en.wikipedia.org/wiki/Huber_Loss_Function
+BA.lossFunction.scaling: 2
+
 # 描述子提取的数量
-VO.nfeatures: 1000
+VO.nfeatures: 500
 
 # 特征点算法
 
 VO.featureType: SIFT
 #  @param nOctaveLayers The number of layers in each octave. 3 is the value used in D. Lowe paper. The
 #  number of octaves is computed automatically from the image resolution.
-VO.SIFT.nOctaveLayers: 3
+VO.SIFT.nOctaveLayers: 1
 #  @param contrastThreshold The contrast threshold used to filter out weak features in semi-uniform
 #  (low-contrast) regions. The larger the threshold, the less features are produced by the detector.
 VO.SIFT.contrastThreshold: 0.04
 #  @param edgeThreshold The threshold used to filter out edge-like features. Note that the its meaning
 #  is different from the contrastThreshold, i.e. the larger the edgeThreshold, the less features are
 #  filtered out (more features are retained).
-VO.SIFT.edgeThreshold: 5
+VO.SIFT.edgeThreshold: 10
 #  @param sigma The sigma of the Gaussian applied to the input image at the octave \#0. If your image
 #  is captured with a weak camera with soft lenses, you might want to reduce the number.
 VO.SIFT.sigma: 1.6
@@ -40,7 +82,7 @@ MapViewer.disCamera: 100
 # 是否自动跟踪当前帧
 MapViewer.trackCurrFrame: 1
 # 是否画norm
-MapViewer.drawNorms: 1
+MapViewer.drawNorms: 0
 
 
 # 特征匹配方式
@@ -71,7 +113,7 @@ Solver3D2D.max3Ddis: 50
 # 用于解PnP的最少点数
 Solver3D2D.minInlierNum: 20
 # 用于解PnP的最小内点比例
-Solver3D2D.minInlierRatio: 0.3
+Solver3D2D.minInlierRatio: 0.25
 # 首先筛选前rankRatio比例的匹配
 Solver3D2D.Matcher.rankRatio: 0.8
 # 特征距离阈值相对最小特征距离的比例
@@ -82,7 +124,7 @@ Solver3D2D.Matcher.disThresMin: 300
 # 如果testRatio不为0，通过knnMatch获得距离最近的两个match
 # 测试第一个match的距离是否小于第二个match的距离的testRatio倍
 # 0 <= testRati < 1
-Solver3D2D.Matcher.testRatio: 0.8
+Solver3D2D.Matcher.testRatio: 0.9
 
 # 三角化点到两帧的最大距离相对于帧间距的最大比例
 Triangulater.maxDisRatio: 100
@@ -118,19 +160,19 @@ LocalMap.Matcher.testRatio: 0.8
 # 初始化两帧的最大间隔帧数
 Initializer.maxFrameInterval: 40
 # 初始化两帧的最小间隔帧数
-Initializer.minFrameInterval: 10
+Initializer.minFrameInterval: 15
 # 初始化地图的最小点数
 Initializer.minMapPointNum: 50
 
 # 关键帧的最小间距
 Tracker.minKeyFrameDis: 0.5
 # 关键帧的最大间距
-Tracker.maxKeyFrameDis: 10
+Tracker.maxKeyFrameDis: 8
 # 关键帧的最少地图点
 Tracker.minKeyFrameInlierNum: 30
 # 关键帧之间的最小间隔帧数
-Tracker.minKeyFrameInterval: 2
+Tracker.minKeyFrameInterval: 1
 # 关键帧解PnP所用地图点数相对于上一关键帧的最大比例
-Tracker.maxKeyFrameTrackRatio: 0.7
+Tracker.maxKeyFrameTrackRatio: 0.9
 
 

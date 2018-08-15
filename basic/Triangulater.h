@@ -29,7 +29,7 @@ namespace sky {
                 maxDisRatio(maxDisRatio),
                 minDisRatio(minDisRatio),
                 maxReprojErr(maxReprojErr) {
-            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "Triangulater: Initializing..." << endl;
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Triangulater: Initializing..." << endl;
             printVariable(maxDisRatio);
             printVariable(minDisRatio);
             printVariable(maxReprojErr);

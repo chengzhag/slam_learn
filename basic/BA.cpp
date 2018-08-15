@@ -6,16 +6,6 @@
 
 namespace sky {
 
-    BA::BA(ModeSet modeSet) :
-            modeSet(modeSet) {
-        ceres_config_options.minimizer_progress_to_stdout = false;
-        ceres_config_options.logging_type = ceres::SILENT;
-        ceres_config_options.num_threads = 4;
-        ceres_config_options.preconditioner_type = ceres::JACOBI;
-        ceres_config_options.linear_solver_type = ceres::SPARSE_SCHUR;
-        ceres_config_options.sparse_linear_algebra_library_type = ceres::EIGEN_SPARSE;
-    }
-
     void BA::loadMap(Map::Ptr map) {
         clear();
         this->map = map;
@@ -96,7 +86,7 @@ namespace sky {
                 problem.SetParameterBlockConstant(camera2intrinsic.second.val);
         }
 
-        ceres::LossFunction *lossFunction = new ceres::HuberLoss(4);
+        ceres::LossFunction *lossFunction = new ceres::HuberLoss(lossFunctionScaling);
         for (auto &mapPoint2pos:mapPoint2poses) {
 
             problem.AddParameterBlock(mapPoint2pos.second.val, 3);

@@ -47,42 +47,42 @@ namespace sky {
     }
 
     void LocalMap::threadFunc() {
-/*        prepareKeyFrame();
-        triangulate();
-        boost::mutex::scoped_lock lock(mapMutex);
-        mapViewer.update(map);
-        lock.unlock();
-        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
-
-        ba();
-        lock.lock();
-        mapViewer.update(map);
-        lock.unlock();
-        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
-
-        //BA可能导致一些外点，不如把筛选过程放到BA后
-        filtKeyFrames();
-        lock.lock();
-        mapViewer.update(map);
-        lock.unlock();
-        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
-
-        filtMapPoints();
-        lock.lock();
-        mapViewer.update(map);
-        lock.unlock();
-        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));*/
-
         prepareKeyFrame();
         triangulate();
-        ba();
-        //BA可能导致一些外点，不如把筛选过程放到BA后
-        filtKeyFrames();
-        filtMapPoints();
-
         boost::mutex::scoped_lock lock(mapMutex);
         mapViewer.update(map);
         lock.unlock();
+//        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
+
+        ba();
+        lock.lock();
+        mapViewer.update(map);
+        lock.unlock();
+//        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
+
+        //BA可能导致一些外点，不如把筛选过程放到BA后
+        filtKeyFrames();
+        lock.lock();
+        mapViewer.update(map);
+        lock.unlock();
+//        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
+
+        filtMapPoints(map);
+        lock.lock();
+        mapViewer.update(map);
+        lock.unlock();
+//        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
+
+/*        prepareKeyFrame();
+        triangulate();
+        ba();
+        //BA可能导致一些外点，不如把筛选过程放到BA后
+        filtKeyFrames();
+        filtMapPoints(map);
+
+        boost::mutex::scoped_lock lock(mapMutex);
+        mapViewer.update(map);
+        lock.unlock();*/
 
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: End adding! " << endl;
@@ -105,13 +105,6 @@ namespace sky {
         auto triangulateMap = triangulater.triangulate(
                 refFrame, currFrame, matcher.matches);
 
-/*
-        BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
-        ba.loadMap(triangulateMap);
-        ba.ba();
-        ba.writeMap();
-*/
-
         //添加关键帧和地图点
         newMapPoints.clear();
         boost::mutex::scoped_lock lock(mapMutex);
@@ -120,26 +113,45 @@ namespace sky {
             map->addMapPoint(point);
             newMapPoints.insert(point);
         }
+        lock.unlock();
+
+        refFrame->forEachMapPoint(
+                [&](auto &MapPoint) {
+                    triangulateMap->addMapPoint(MapPoint);
+                }
+        );
+        currFrame->forEachMapPoint(
+                [&](auto &MapPoint) {
+                    triangulateMap->addMapPoint(MapPoint);
+                }
+        );
+        lock.lock();
+        BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
+        ba.loadMap(triangulateMap);
+        ba.ba();
+        ba.writeMap();
+        lock.unlock();
+
+        //三角化BA后的地图点筛选
+        filtMapPoints(triangulateMap);
+
 #ifdef DEBUG
+        lock.lock();
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: "
              << triangulateMap->mapPoints.size() << " points added to localMap. " << endl;
-#endif
         lock.unlock();
+#endif
+
     }
 
     void LocalMap::ba() {
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: ba... " << endl;
 #endif
-        BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_2Frames});
-
         boost::mutex::scoped_lock lock(mapMutex);
+        BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_2Frames});
         ba.loadMap(map);
-        lock.unlock();
-
         ba.ba();
-
-        lock.lock();
         ba.writeMap();
         lock.unlock();
     }
@@ -198,19 +210,38 @@ namespace sky {
         return true;
     }
 
-    void LocalMap::filtMapPoints() {
+    void LocalMap::filtMapPoints(Map::Ptr &map) {
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: filtMapPoints... " << endl;
         auto oldMapPointsNum = map->mapPoints.size();
         printVariable(oldMapPointsNum);
+        int numNoEnoughObservation = 0, numNotInView = 0, numNotInErrThres = 0, numNotInDisRange = 0;
+        int errCode;
 #endif
         boost::mutex::scoped_lock lock(mapMutex);
         for (auto it = map->mapPoints.begin(); it != map->mapPoints.end();) {
-            if (isGoodPoint(*it))
+            errCode = isGoodPoint(*it);
+            if (errCode > 0)
                 ++it;
             else {
                 map->deleteObservation(*it);
                 it = map->mapPoints.erase(it);
+#ifdef DEBUG
+                switch (errCode) {
+                    case -1:
+                        ++numNoEnoughObservation;
+                        break;
+                    case -2:
+                        ++numNotInView;
+                        break;
+                    case -3:
+                        ++numNotInErrThres;
+                        break;
+                    case -4:
+                        ++numNotInDisRange;
+                        break;
+                }
+#endif
             }
         }
 #ifdef DEBUG
@@ -219,20 +250,24 @@ namespace sky {
              << oldMapPointsNum - map->mapPoints.size() << " filtered. "
              << map->mapPoints.size() << " mapPoints remained."
              << endl;
+        printVariable(numNoEnoughObservation);
+        printVariable(numNotInView);
+        printVariable(numNotInErrThres);
+        printVariable(numNotInDisRange);
 #endif
         lock.unlock();
     }
 
-    bool LocalMap::isGoodPoint(const MapPoint::Ptr &mapPoint) const {
+    int LocalMap::isGoodPoint(const MapPoint::Ptr &mapPoint) const {
 /*#ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: "   << "\t" << !setHas(newMapPoints, mapPoint) << "\t"
              << mapPoint->frame2indexs.size() << " frame2indexs" << endl;
 #endif*/
 
-        if (map->keyFrames.size() >= 4)
+/*        if (map->keyFrames.size() >= 4)
             if (!setHas(newMapPoints, mapPoint)
                 && mapPoint->getFrameNum() < 3)
-                return false;
+                return -1;*/
 
 
         bool inRangeNum = false;
@@ -249,13 +284,13 @@ namespace sky {
             //根据重投影误差删除外点
             cv::Point2d reprojCoor;
             if (!proj2frame(mapPoint, frame2index.first, reprojCoor))
-                return false;
+                return -2;
             auto reprojErr = disBetween<float>(frame2index.first->getKeyPointCoor(frame2index.second), reprojCoor);
             if (reprojErr > maxReprojErr)
-                return false;
+                return -3;
         }
         if (!inRangeNum)
-            return false;
+            return -4;
 
 /*        //如果不被当前LocalMap中的关键帧观测，则过滤
         for (auto &keyFrame:map->keyFrames) {
@@ -265,7 +300,7 @@ namespace sky {
                 return false;
         }*/
 
-        return true;
+        return 1;
     }
 
 }

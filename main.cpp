@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     std::cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Reading images from: " + imagesFolder
               << std::endl;
 #endif
-    vector<string> imagesDir;
+    vector <string> imagesDir;
 
     if (!imagesFolder.empty()) {
         using namespace boost::filesystem;
@@ -62,11 +62,13 @@ int main(int argc, char **argv) {
           localMap
     );
 
+    auto startIndex = Config::get<int>("startIndex");
 
-    for (auto &imageDir:imagesDir) {
-        Mat image = imread(imageDir);
+    for (int i = startIndex; i < imagesDir.size(); ++i) {
+        Mat image = imread(imagesDir[i]);
 #ifdef DEBUG
-        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "==============Adding image: " + imageDir
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
+             << "==============Adding image: " + imagesDir[i]
              << "==============" << endl;
 #endif
 /*#ifdef CVVISUAL_DEBUGMODE
@@ -83,7 +85,7 @@ int main(int argc, char **argv) {
         boost::this_thread::sleep_for(boost::chrono::milliseconds(30));
     }
 
-    while (1){
+    while (1) {
         cv::waitKey(1);
         boost::this_thread::sleep_for(boost::chrono::milliseconds(30));
     }

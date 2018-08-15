@@ -35,19 +35,32 @@ namespace sky {
 
         Map::Ptr map;
         ceres::Solver::Options ceres_config_options;
-
+        double lossFunctionScaling;
         unordered_map<Camera::Ptr, cv::Matx14d> camera2intrinsics;
         unordered_map<KeyFrame::Ptr, cv::Matx23d> frame2extrinsics;
         unordered_map<KeyFrame::Ptr, cv::Matx23d> otherFrame2extrinsics;
         unordered_map<MapPoint::Ptr, cv::Matx13d> mapPoint2poses;
 
     public:
-        BA(ModeSet modeSet = {Mode_Fix_First_Frame, Mode_Fix_Intrinsic});
+        BA(ModeSet modeSet = {Mode_Fix_First_Frame, Mode_Fix_Intrinsic},
+           double lossFunctionScaling = Config::get<double>("BA.lossFunction.scaling")
+        ) :
+                modeSet(modeSet),
+                lossFunctionScaling(lossFunctionScaling) {
+            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "BA: Initializing..." << endl;
+            printVariable(lossFunctionScaling);
+            ceres_config_options.minimizer_progress_to_stdout = false;
+            ceres_config_options.logging_type = ceres::SILENT;
+            ceres_config_options.num_threads = 4;
+            ceres_config_options.preconditioner_type = ceres::JACOBI;
+            ceres_config_options.linear_solver_type = ceres::SPARSE_SCHUR;
+            ceres_config_options.sparse_linear_algebra_library_type = ceres::EIGEN_SPARSE;
+        };
 
 
         void loadMap(Map::Ptr map);
 
-        void ba(){
+        void ba() {
             bundleAdjustment();
         }
 

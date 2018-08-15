@@ -175,32 +175,31 @@ namespace sky {
             return false;
 
 
-        //检查是否在帧的视野内
+/*        //检查是否在帧的视野内
         if (!isInFrame(mapPoint, keyFrame1))
             return false;
         if (!isInFrame(mapPoint, keyFrame2))
-            return false;
+            return false;*/
 
 
         //测试重投影误差
-/*        cv::Point2f rawPos1;
+        cv::Point2f rawPos1;
         mapPoint->getPixelCoor(keyFrame1, rawPos1);
         cv::Point2d projPos1;
-        if (!proj2frame(mapPoint, keyFrame1, projPos1))
-            return false;
-        //printVariable(disBetween<float>(rawPos1, projPos1));
-        if (disBetween<float>(rawPos1, projPos1) > maxReprojErr)
-            return false;
-
         cv::Point2f rawPos2;
         mapPoint->getPixelCoor(keyFrame2, rawPos2);
         cv::Point2d projPos2;
+        if (!proj2frame(mapPoint, keyFrame1, projPos1))
+            return false;
         if (!proj2frame(mapPoint, keyFrame2, projPos2))
             return false;
-        //printVariable(disBetween<float>(rawPos2, projPos2));
-        if (disBetween<float>(rawPos2, projPos2) > maxReprojErr)
-            return false;*/
 
+        auto avgReprojErr=disBetween<float>(rawPos1, projPos1)+disBetween<float>(rawPos2, projPos2);
+        avgReprojErr/=2;
+        //printVariable(avgReprojErr);
+
+        if (avgReprojErr > maxReprojErr)
+            return false;
 
         return true;
     }

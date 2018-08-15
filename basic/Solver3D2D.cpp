@@ -87,10 +87,10 @@ namespace sky {
             mapPoint->addFrame(keyFrame2, matcher.matches[iInlier].trainIdx, false);
             mapLastFrame->addMapPoint(mapPoint);
         }
-/*        BA ba({BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});
+        BA ba({BA::Mode_Fix_Points, BA::Mode_Fix_Intrinsic});
         ba.loadMap(mapLastFrame);
         ba.ba();
-        ba.writeMap();*/
+        ba.writeMap();
 
         return true;
     }

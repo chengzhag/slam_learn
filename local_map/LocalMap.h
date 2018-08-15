@@ -107,9 +107,9 @@ namespace sky {
 
         bool isGoodFrame(const KeyFrame::Ptr &keyFrame) const;
 
-        void filtMapPoints();
+        void filtMapPoints(Map::Ptr &map);
 
-        bool isGoodPoint(const MapPoint::Ptr &mapPoint) const;
+        int isGoodPoint(const MapPoint::Ptr &mapPoint) const;
     };
 
 
