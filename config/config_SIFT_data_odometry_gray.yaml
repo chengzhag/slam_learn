@@ -1,7 +1,7 @@
 %YAML:1.0
 # 路径
 datasetDir: dataset/data_odometry_gray/dataset/sequences/00/image_0
-startIndex: 80
+startIndex: 120
 
 # 相机内参
 Camera.fx: 718.856
@@ -48,7 +48,7 @@ Camera.cy: 185.2157
 #//
 #// The scaling parameter 'a' corresponds to 'delta' on this page:
 #//   http://en.wikipedia.org/wiki/Huber_Loss_Function
-BA.lossFunction.scaling: 3
+BA.lossFunction.scaling: 2
 
 # 描述子提取的数量
 VO.nfeatures: 300
@@ -115,7 +115,7 @@ Solver3D2D.minInlierNum: 10
 # 用于解PnP的最小内点比例
 Solver3D2D.minInlierRatio: 0.3
 # 首先筛选前rankRatio比例的匹配
-Solver3D2D.Matcher.rankRatio: 1
+Solver3D2D.Matcher.rankRatio: 0.8
 # 特征距离阈值相对最小特征距离的比例
 Solver3D2D.Matcher.disThresRatio: 10
 # 特征阈值的最小值，防止阈值过小选出的点不够
@@ -129,22 +129,22 @@ Solver3D2D.Matcher.testRatio: 0.9
 # 三角化点到两帧的最大距离相对于帧间距的最大比例
 Triangulater.maxDisRatio: 200
 Triangulater.minDisRatio: 1
-# 重投影误差最大值 TODO:（暂时取消）
-Triangulater.maxReprojErr: 75
+# 重投影误差最大值
+Triangulater.maxReprojErr: 50
 
 # local_map
 # 最少关键点数
 # 如果当前局部地图关键帧数等于最大关键帧数，且关键点数小于最少关键点数，则增加最大关键帧数
 # 否则减小最大关键帧数
-LocalMap.minMapPoints: 600
+LocalMap.minMapPoints: 300
 # 地图点到每个观测帧的最大距离
 LocalMap.maxInlierPointDis: 150
 # 关键帧最大数量，超过此数量删除旧关键帧
 LocalMap.minKeyFrames: 8
 # 重投影误差最大值
-LocalMap.maxReprojErr: 50
+LocalMap.maxReprojErr: 30
 # 首先筛选前rankRatio比例的匹配
-LocalMap.Matcher.rankRatio: 1
+LocalMap.Matcher.rankRatio: 0.8
 # 特征距离阈值相对最小特征距离的比例
 LocalMap.Matcher.disThresRatio: 10
 # 特征阈值的最小值，防止阈值过小选出的点不够

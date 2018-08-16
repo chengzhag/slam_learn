@@ -51,24 +51,24 @@ Camera.cy: 247.6
 BA.lossFunction.scaling: 2
 
 # 描述子提取的数量
-VO.nfeatures: 500
+VO.nfeatures: 300
 
 # 特征点算法
 
 VO.featureType: SIFT
 #  @param nOctaveLayers The number of layers in each octave. 3 is the value used in D. Lowe paper. The
 #  number of octaves is computed automatically from the image resolution.
-VO.SIFT.nOctaveLayers: 1
+VO.SIFT.nOctaveLayers: 3
 #  @param contrastThreshold The contrast threshold used to filter out weak features in semi-uniform
 #  (low-contrast) regions. The larger the threshold, the less features are produced by the detector.
 VO.SIFT.contrastThreshold: 0.04
 #  @param edgeThreshold The threshold used to filter out edge-like features. Note that the its meaning
 #  is different from the contrastThreshold, i.e. the larger the edgeThreshold, the less features are
 #  filtered out (more features are retained).
-VO.SIFT.edgeThreshold: 10
+VO.SIFT.edgeThreshold: 5
 #  @param sigma The sigma of the Gaussian applied to the input image at the octave \#0. If your image
 #  is captured with a weak camera with soft lenses, you might want to reduce the number.
-VO.SIFT.sigma: 1.6
+VO.SIFT.sigma: 3
 
 
 # MapViewer的背景颜色
@@ -111,9 +111,9 @@ Solver3D2D.min3Dnum: 30
 # 用于解PnP选取的局部地图点距离范围
 Solver3D2D.max3Ddis: 50
 # 用于解PnP的最少点数
-Solver3D2D.minInlierNum: 20
+Solver3D2D.minInlierNum: 10
 # 用于解PnP的最小内点比例
-Solver3D2D.minInlierRatio: 0.25
+Solver3D2D.minInlierRatio: 0.3
 # 首先筛选前rankRatio比例的匹配
 Solver3D2D.Matcher.rankRatio: 0.8
 # 特征距离阈值相对最小特征距离的比例
@@ -127,26 +127,26 @@ Solver3D2D.Matcher.disThresMin: 300
 Solver3D2D.Matcher.testRatio: 0.9
 
 # 三角化点到两帧的最大距离相对于帧间距的最大比例
-Triangulater.maxDisRatio: 100
+Triangulater.maxDisRatio: 200
 Triangulater.minDisRatio: 1
-# 重投影误差最大值 TODO:（暂时取消）
-# Triangulater.maxReprojErr: 30
+# 重投影误差最大值
+Triangulater.maxReprojErr: 50
 
 # local_map
 # 最少关键点数
 # 如果当前局部地图关键帧数等于最大关键帧数，且关键点数小于最少关键点数，则增加最大关键帧数
 # 否则减小最大关键帧数
-LocalMap.minMapPoints: 500
+LocalMap.minMapPoints: 300
 # 地图点到每个观测帧的最大距离
-LocalMap.maxInlierPointDis: 50
+LocalMap.maxInlierPointDis: 150
 # 关键帧最大数量，超过此数量删除旧关键帧
 LocalMap.minKeyFrames: 8
 # 重投影误差最大值
 LocalMap.maxReprojErr: 30
 # 首先筛选前rankRatio比例的匹配
-LocalMap.Matcher.rankRatio: 0.5
+LocalMap.Matcher.rankRatio: 0.8
 # 特征距离阈值相对最小特征距离的比例
-LocalMap.Matcher.disThresRatio: 3
+LocalMap.Matcher.disThresRatio: 10
 # 特征阈值的最小值，防止阈值过小选出的点不够
 # Matcher.disThresMin: 30
 LocalMap.Matcher.disThresMin: 100
@@ -167,7 +167,7 @@ Initializer.minMapPointNum: 50
 # 关键帧的最小间距
 Tracker.minKeyFrameDis: 0.5
 # 关键帧的最大间距
-Tracker.maxKeyFrameDis: 8
+Tracker.maxKeyFrameDis: 5
 # 关键帧的最少地图点
 Tracker.minKeyFrameInlierNum: 30
 # 关键帧之间的最小间隔帧数

@@ -39,7 +39,7 @@ namespace sky {
                  << "Tracker: Solver3D2D failed! Showing reprojection of last keyFrame... " << endl;
 #endif
             localMap->map->viewFrameProjInCVV(localMap->getLastFrame(),
-                                              "Tracker: Solver3D2D failed! LocalMap proj to crrFrame");
+                                              "Tracker: Solver3D2D failed! LocalMap proj to refFrame");
 #endif
             return false;
         } else {

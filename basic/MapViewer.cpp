@@ -7,8 +7,8 @@
 namespace sky {
 
     void MapViewer::update(const Map::Ptr &map) {
-        boost::mutex::scoped_lock lockUpdate(updateMutex);
 #ifdef CLOUDVIEWER_DEBUG
+        boost::mutex::scoped_lock lockUpdate(updateMutex);
         if (!map)
             return;
 #ifdef DEBUG
@@ -18,34 +18,34 @@ namespace sky {
 #endif
         //更新点云
         cloud->clear();
+        if (drawNorms)
+            viewer.removeAllShapes();
+        int i = 0;
         for (auto &point:map->mapPoints) {
+            for (int j = 0; j < 3; ++j) {
+                if (point->pos[j] == NAN)
+                    continue;
+            }
             pcl::PointXYZRGB pointXYZ(point->rgb[0], point->rgb[1], point->rgb[2]);
             pointXYZ.x = point->pos(0);
             pointXYZ.y = point->pos(1);
             pointXYZ.z = point->pos(2);
             cloud->push_back(pointXYZ);
-        }
-        cloud->width = cloud->size();
-        cloud->height = 1;
-        cloud->is_dense = true;
-        viewer.updatePointCloud(cloud, "Triangulated Point Cloud");
 
-        //更新其他
-        int i = 0;
-        //更新法线
-        if (drawNorms) {
-            viewer.removeAllShapes();
-            for (auto &point:map->mapPoints) {
+            //更新法线
+            if (drawNorms) {
                 auto pointStart = point->pos;
                 auto pointTo = point->pos + point->norm;
                 viewer.addLine(pcl::PointXYZ(pointStart[0], pointStart[1], pointStart[2]),
                                pcl::PointXYZ(pointTo[0], pointTo[1], pointTo[2]),
                                1, 1, 1,
                                "normal" + to_string(++i));
-
             }
-
         }
+        cloud->width = cloud->size();
+        cloud->height = 1;
+        cloud->is_dense = true;
+        viewer.updatePointCloud(cloud, "Triangulated Point Cloud");
 
         //更新帧姿态
         viewer.removeAllCoordinateSystems();
@@ -57,7 +57,7 @@ namespace sky {
         //更新相机位姿
         if (trackCurrFrame) {
             auto target = map->getLastFrame()->getCamCenterEigen();
-            viewer.setCameraPosition(target[0], target[1]-disCamera, target[2],
+            viewer.setCameraPosition(target[0], target[1] - disCamera, target[2],
                                      target[0], target[1], target[2],
                                      0, 0, 1);
         }
@@ -92,10 +92,10 @@ namespace sky {
             updateWait = !updateWait;
         }
         if (event.getKeySym() == "Up" && event.keyDown()) {
-            disCamera *= 2.0/3.0;
+            disCamera *= 2.0 / 3.0;
         }
         if (event.getKeySym() == "Down" && event.keyDown()) {
-            disCamera *= 3.0/2.0;
+            disCamera *= 3.0 / 2.0;
         }
         if (event.getKeySym() == "t" && event.keyDown()) {
             trackCurrFrame = !trackCurrFrame;
