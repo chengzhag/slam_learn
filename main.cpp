@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     std::cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "Reading images from: " + imagesFolder
               << std::endl;
 #endif
-    vector <string> imagesDir;
+    vector<string> imagesDir;
 
     if (!imagesFolder.empty()) {
         using namespace boost::filesystem;
@@ -66,6 +66,7 @@ int main(int argc, char **argv) {
 
     for (int i = startIndex; i < imagesDir.size(); ++i) {
         Mat image = imread(imagesDir[i]);
+        //cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << image.type() << "\t" << image.depth() << endl;
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
              << "==============Adding image: " + imagesDir[i]

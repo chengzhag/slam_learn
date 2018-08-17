@@ -102,9 +102,10 @@ namespace sky {
                     rgb = keyFrame2->image.at<cv::Vec3b>(keyFrame2->getKeyPointCoor(iMapPoint2));
                     swap(rgb[0], rgb[2]);
                 } else if (keyFrame2->image.type() == CV_8UC1) {
-                    cvtColor(keyFrame2->image.at<uint8_t>(keyFrame2->getKeyPointCoor(iMapPoint2)),
-                             rgb,
-                             cv::COLOR_GRAY2RGB);
+                    uint8_t gray = keyFrame2->image.at<uint8_t>(keyFrame2->getKeyPointCoor(iMapPoint2));
+                    rgb[0] = gray;
+                    rgb[1] = gray;
+                    rgb[2] = gray;
                 }
 
 
@@ -194,8 +195,8 @@ namespace sky {
         if (!proj2frame(mapPoint, keyFrame2, projPos2))
             return false;
 
-        auto avgReprojErr=disBetween<float>(rawPos1, projPos1)+disBetween<float>(rawPos2, projPos2);
-        avgReprojErr/=2;
+        auto avgReprojErr = disBetween<float>(rawPos1, projPos1) + disBetween<float>(rawPos2, projPos2);
+        avgReprojErr /= 2;
         //printVariable(avgReprojErr);
 
         if (avgReprojErr > maxReprojErr)

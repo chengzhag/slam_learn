@@ -11,6 +11,7 @@
 #include "Tracker.h"
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/xfeatures2d.hpp>
+#include "ORBextractor.h"
 
 namespace sky {
 
@@ -43,7 +44,7 @@ namespace sky {
             printVariable(nfeatures);
 
             if (featureType == "ORB") {
-                float scaleFactor = Config::get<float>("VO.ORB.scaleFactor");
+/*                float scaleFactor = Config::get<float>("VO.ORB.scaleFactor");
                 int nlevels = Config::get<int>("VO.ORB.nlevels");
                 int edgeThreshold = Config::get<int>("VO.ORB.edgeThreshold");
                 int firstLevel = Config::get<int>("VO.ORB.firstLevel");
@@ -59,7 +60,19 @@ namespace sky {
                 printVariable(fastThreshold);
 
                 feature2D = cv::ORB::create(nfeatures, scaleFactor, nlevels, edgeThreshold, firstLevel,
-                                            WTA_K, cv::ORB::HARRIS_SCORE, patchSize, fastThreshold);
+                                            WTA_K, cv::ORB::HARRIS_SCORE, patchSize, fastThreshold);*/
+
+
+                float scaleFactor = Config::get<float>("VO.ORB.scaleFactor");
+                int nlevels = Config::get<int>("VO.ORB.nlevels");
+                int fastThreshold = Config::get<int>("VO.ORB.fastThreshold");
+                printVariable(scaleFactor);
+                printVariable(nlevels);
+                printVariable(fastThreshold);
+
+                feature2D = ORBextractor::create(nfeatures, scaleFactor, nlevels, ORBextractor::FAST_SCORE, fastThreshold);
+
+
             } else if (featureType == "SIFT") {
                 auto nOctaveLayers = Config::get<int>("VO.SIFT.nOctaveLayers");
                 auto contrastThreshold = Config::get<double>("VO.SIFT.contrastThreshold");

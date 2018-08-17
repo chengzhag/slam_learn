@@ -65,27 +65,8 @@ VO.ORB.scaleFactor: 1.2
 #    @param nlevels The number of pyramid levels. The smallest level will have linear size equal to
 #    input_image_linear_size/pow(scaleFactor, nlevels - firstLevel).
 VO.ORB.nlevels: 8
-#    @param edgeThreshold This is size of the border where the features are not detected. It should
-#    roughly match the patchSize parameter.
-VO.ORB.edgeThreshold: 31
-#    @param firstLevel The level of pyramid to put source image to. Previous layers are filled
-#    with upscaled source image.
-VO.ORB.firstLevel: 0
-#    @param WTA_K The number of points that produce each element of the oriented BRIEF descriptor. The
-#    default value 2 means the BRIEF where we take a random point pair and compare their brightnesses,
-#    so we get 0/1 response. Other possible values are 3 and 4. For example, 3 means that we take 3
-#    random points (of course, those point coordinates are random, but they are generated from the
-#    pre-defined seed, so each element of BRIEF descriptor is computed deterministically from the pixel
-#    rectangle), find point of maximum brightness and output index of the winner (0, 1 or 2). Such
-#    output will occupy 2 bits, and therefore it will need a special variant of Hamming distance,
-#    denoted as NORM_HAMMING2 (2 bits per bin). When WTA_K=4, we take 4 random points to compute each
-#    bin (that will also occupy 2 bits with possible values 0, 1, 2 or 3).
-VO.ORB.WTA_K: 2
-#    @param patchSize size of the patch used by the oriented BRIEF descriptor. Of course, on smaller
-#    pyramid layers the perceived image area covered by a feature will be larger.
-VO.ORB.patchSize: 31
 #    @param fastThreshold
-VO.ORB.fastThreshold: 10
+VO.ORB.fastThreshold: 5
 
 
 # MapViewer的背景颜色
@@ -159,7 +140,7 @@ LocalMap.maxInlierPointDis: 150
 # 关键帧最大数量，超过此数量删除旧关键帧
 LocalMap.minKeyFrames: 8
 # 重投影误差最大值
-LocalMap.maxReprojErr: 30
+LocalMap.maxReprojErr: 50
 # 首先筛选前rankRatio比例的匹配
 LocalMap.Matcher.rankRatio: 0.5
 # 特征距离阈值相对最小特征距离的比例
@@ -186,10 +167,10 @@ Tracker.minKeyFrameDis: 0.5
 # 关键帧的最大间距
 Tracker.maxKeyFrameDis: 10
 # 关键帧的最少地图点
-Tracker.minKeyFrameInlierNum: 30
+Tracker.minKeyFrameInlierNum: 20
 # 关键帧之间的最小间隔帧数
 Tracker.minKeyFrameInterval: 2
 # 关键帧解PnP所用地图点数相对于上一关键帧的最大比例
-Tracker.maxKeyFrameTrackRatio: 0.9
+Tracker.maxKeyFrameTrackRatio: 0.8
 
 
