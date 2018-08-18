@@ -22,9 +22,14 @@ namespace sky {
                 //追踪状态
             case 1: {
                 if (!tracker->step(keyFrame)) {
-                    state = 2;
-                    cerr << "[" << boost::this_thread::get_id() << "]ERROR: " << "VO: Failed Tracking! " << endl;
-                    return false;
+                    ++numLost;
+                    if (numLost > 3) {
+                        state = 2;
+                        cerr << "[" << boost::this_thread::get_id() << "]ERROR: " << "VO: Failed Tracking! " << endl;
+                        return false;
+                    }
+                } else {
+                    numLost = 0;
                 }
                 break;
             }
@@ -47,7 +52,7 @@ namespace sky {
             }
             cv::circle(imPoints, keyPoint.pt, radius, color, 2);
         }
-        cv::imshow("currKeyFrame and keyPoints",imPoints);
+        cv::imshow("currKeyFrame and keyPoints", imPoints);
         cv::waitKey(1);
 
         return true;

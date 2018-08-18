@@ -20,7 +20,7 @@ namespace sky {
     protected:
         Initializer::Ptr initializer;
         cv::Ptr<cv::Feature2D> feature2D;
-        int state = 0;
+        int state = 0, numLost = 0;
 
         LocalMap::Ptr localMap;
         Tracker::Ptr tracker;
@@ -70,7 +70,8 @@ namespace sky {
                 printVariable(nlevels);
                 printVariable(fastThreshold);
 
-                feature2D = ORBextractor::create(nfeatures, scaleFactor, nlevels, ORBextractor::FAST_SCORE, fastThreshold);
+                feature2D = ORBextractor::create(nfeatures, scaleFactor, nlevels, ORBextractor::FAST_SCORE,
+                                                 fastThreshold);
 
 
             } else if (featureType == "SIFT") {

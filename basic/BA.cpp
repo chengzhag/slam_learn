@@ -29,10 +29,8 @@ namespace sky {
             auto t = frame->Tcw.translation();
             frame2extrinsics[frame] = cv::Matx23d(angleAxis(0), angleAxis(1), angleAxis(2),
                                                   t[0], t[1], t[2]);
-            if (!mapHas(camera2intrinsics, frame->camera))
-                camera2intrinsics[frame->camera] = cv::Matx14d(
-                        frame->camera->fx, frame->camera->fy, frame->camera->cx, frame->camera->cy);
         }
+
         //加载map->keyFrames之外的关键帧
         for (auto &mapPoint:map->mapPoints) {
             mapPoint->forEachFrame(
@@ -42,9 +40,6 @@ namespace sky {
                             auto t = frame->Tcw.translation();
                             otherFrame2extrinsics[frame] = cv::Matx23d(angleAxis(0), angleAxis(1), angleAxis(2),
                                                                        t[0], t[1], t[2]);
-                            if (!mapHas(camera2intrinsics, frame->camera))
-                                camera2intrinsics[frame->camera] = cv::Matx14d(
-                                        frame->camera->fx, frame->camera->fy, frame->camera->cx, frame->camera->cy);
                         }
                     }
             );
@@ -53,7 +48,8 @@ namespace sky {
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "BA: Map loaded. "
              << mapPoint2poses.size() << " map points, "
              << frame2extrinsics.size() << " keyFrames, "
-             << camera2intrinsics.size() << " cameras. " << endl;
+             << otherFrame2extrinsics.size() << " fixedOtherKeyFrames, "
+             << endl;
 #endif
 
     }
@@ -80,12 +76,6 @@ namespace sky {
         }
 
 
-        for (auto &camera2intrinsic:camera2intrinsics) {
-            problem.AddParameterBlock(camera2intrinsic.second.val, 4);
-            if (hasMode(Mode_Fix_Intrinsic))
-                problem.SetParameterBlockConstant(camera2intrinsic.second.val);
-        }
-
         ceres::LossFunction *lossFunction = new ceres::HuberLoss(lossFunctionScaling);
         for (auto &mapPoint2pos:mapPoint2poses) {
 
@@ -94,28 +84,30 @@ namespace sky {
                 problem.SetParameterBlockConstant(mapPoint2pos.second.val);
 
             mapPoint2pos.first->forEachFrame2index(
-                    [&](const auto &observedFrame) {
-                        cv::Point2d pixelCoor(observedFrame.first->getKeyPointCoor(observedFrame.second));
+                    [&](const auto &frame2index) {
+                        cv::Point2d pixelCoor(frame2index.first->getKeyPointCoor(frame2index.second));
                         ceres::CostFunction *costFunction =
-                                new ceres::AutoDiffCostFunction<ReprojectCost, 2, 4, 6, 3>(
-                                        new ReprojectCost(pixelCoor));
-                        if (mapHas(frame2extrinsics, observedFrame.first)) {
+                                new ceres::AutoDiffCostFunction<ReprojectCost, 2, 6, 3>(
+                                        new ReprojectCost(pixelCoor, frame2index.first->camera));
+                        if (mapHas(frame2extrinsics, frame2index.first)) {
                             problem.AddResidualBlock(
                                     costFunction,
                                     lossFunction,
-                                    camera2intrinsics[observedFrame.first->camera].val,            // Intrinsic
-                                    frame2extrinsics[observedFrame.first].val,  // View Rotation and Translation
+                                    frame2extrinsics[frame2index.first].val,  // View Rotation and Translation
                                     mapPoint2pos.second.val          // Point in 3D space
                             );
-                        } else {
+                        } else if(mapHas(otherFrame2extrinsics, frame2index.first)){
                             problem.AddResidualBlock(
                                     costFunction,
                                     lossFunction,
-                                    camera2intrinsics[observedFrame.first->camera].val,            // Intrinsic
-                                    otherFrame2extrinsics[observedFrame.first].val,  // View Rotation and Translation
+                                    otherFrame2extrinsics[frame2index.first].val,  // View Rotation and Translation
                                     mapPoint2pos.second.val          // Point in 3D space
                             );
-                            problem.SetParameterBlockConstant(otherFrame2extrinsics[observedFrame.first].val);
+                            problem.SetParameterBlockConstant(otherFrame2extrinsics[frame2index.first].val);
+                        }else{
+                            cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
+                                 << "BA: not exist in frame2extrinsics and otherFrame2extrinsics! "
+                                 << endl;
                         }
                     }
             );
@@ -156,19 +148,14 @@ namespace sky {
         for (auto &frame2extrinsic:frame2extrinsics) {
             frame2extrinsic.first->setTcw(frame2extrinsic.second);
         }
-        //写cameraIntrinsics
-        if (!hasMode(Mode_Fix_Intrinsic))
-            for (auto &camera2intrinsic:camera2intrinsics) {
-                camera2intrinsic.first->setIntrinsic(camera2intrinsic.second);
-            }
     }
 
     void BA::clear() {
         map = nullptr;
 
-        camera2intrinsics.clear();
         frame2extrinsics.clear();
         mapPoint2poses.clear();
+        otherFrame2extrinsics.clear();
     }
 
 }

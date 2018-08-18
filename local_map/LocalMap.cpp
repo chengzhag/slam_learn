@@ -144,7 +144,7 @@ namespace sky {
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: ba... " << endl;
 #endif
-        BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_2Frames});
+        BA ba({BA::Mode_Fix_First_2Frames});
         ba.loadMap(map);
         ba.ba();
         ba.writeMap();
@@ -166,7 +166,7 @@ namespace sky {
         //筛选关键帧
         int iFrames = 0;
         for (auto it = map->keyFrames.rbegin(); it != map->keyFrames.rend();) {
-            if (isGoodFrame(*it) && iFrames < maxKeyFrames) {
+            if (isGoodFrame(*it) > 0 && iFrames < maxKeyFrames) {
                 ++it;
                 ++iFrames;
             } else {
@@ -201,9 +201,25 @@ namespace sky {
         lock.unlock();
     }
 
-    bool LocalMap::isGoodFrame(const KeyFrame::Ptr &keyFrame) const {
+    int LocalMap::isGoodFrame(const KeyFrame::Ptr &keyFrame) const {
+/*        float reprojErr = 0;
+        int mapPointsNum = 0;
+        keyFrame->forEachMapPoint([&](auto &mapPoint) {
+            cv::Point2d reprojCoor;
+            if (proj2frame(mapPoint, keyFrame, reprojCoor)) {
+                reprojErr += disBetween<float>(
+                        keyFrame->getKeyPointCoor(mapPoint->getIndex(keyFrame)),
+                        reprojCoor
+                );
+                ++mapPointsNum;
+            }
+        });
+        reprojErr /= mapPointsNum;
+        if (reprojErr > maxReprojErr) {
+            return -1;
+        }*/
 
-        return true;
+        return 1;
     }
 
     void LocalMap::filtMapPoints(Map::Ptr &map) {
@@ -261,13 +277,14 @@ namespace sky {
              << mapPoint->frame2indexs.size() << " frame2indexs" << endl;
 #endif*/
 
-/*        if (map->keyFrames.size() >= 4)
+        if (map->keyFrames.size() >= 4)
             if (!setHas(newMapPoints, mapPoint)
                 && mapPoint->getFrameNum() < 3)
-                return -1;*/
+                return -1;
 
 
         bool inRangeNum = false;
+        float reprojErr = 0;
         for (auto &frame2index:mapPoint->frame2indexs) {
             //根据到每个观测帧的最大距离来判断,只要有一个帧满足最远距离要求，该点满足距离要求
 /*            cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
@@ -282,10 +299,11 @@ namespace sky {
             cv::Point2d reprojCoor;
             if (!proj2frame(mapPoint, frame2index.first, reprojCoor))
                 return -2;
-            auto reprojErr = disBetween<float>(frame2index.first->getKeyPointCoor(frame2index.second), reprojCoor);
-            if (reprojErr > maxReprojErr)
-                return -3;
+            reprojErr += disBetween<float>(frame2index.first->getKeyPointCoor(frame2index.second), reprojCoor);
         }
+        reprojErr /= mapPoint->frame2indexs.size();
+        if (reprojErr > maxReprojErr)
+            return -3;
         if (!inRangeNum)
             return -4;
 

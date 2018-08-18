@@ -51,7 +51,10 @@ namespace sky {
         viewer.removeAllCoordinateSystems();
         i = 0;
         for (auto &frame:map->keyFrames) {
-            addFrame(frame, "frame" + to_string(++i));
+            if (frame != map->keyFrames.back())
+                addFrame(frame, 1.0, "frame" + to_string(++i));
+            else
+                addFrame(frame, 2.0, "frame" + to_string(++i));
         }
 
         //更新相机位姿
@@ -106,7 +109,7 @@ namespace sky {
 
 #ifdef CLOUDVIEWER_DEBUG
 
-    void MapViewer::addFrame(const KeyFrame::Ptr &frame, string camName) {
+    void MapViewer::addFrame(const KeyFrame::Ptr &frame, double size, string camName) {
         //添加一帧的位姿图标
         Eigen::Matrix4f camPose;
         //auto T_c_w = frame->Tcw.inverse();
@@ -114,7 +117,7 @@ namespace sky {
         for (int i = 0; i < camPose.rows(); ++i)
             for (int j = 0; j < camPose.cols(); ++j)
                 camPose(i, j) = T_c_w(i, j);
-        viewer.addCoordinateSystem(1.0, Eigen::Affine3f(camPose), camName);
+        viewer.addCoordinateSystem(size, Eigen::Affine3f(camPose), camName);
         /*Vector3d pointStart(0, 0, 0), pointTo(0, 0, 1);
         pointStart = T_c_w * pointStart;
         pointTo = T_c_w * pointStart;

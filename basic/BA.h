@@ -24,8 +24,7 @@ namespace sky {
         typedef enum mode {
             Mode_Fix_First_Frame,
             Mode_Fix_First_2Frames,
-            Mode_Fix_Points,
-            Mode_Fix_Intrinsic
+            Mode_Fix_Points
         } Mode;
 
         typedef unordered_set<Mode, std::hash<int>> ModeSet;
@@ -36,13 +35,13 @@ namespace sky {
         Map::Ptr map;
         ceres::Solver::Options ceres_config_options;
         double lossFunctionScaling;
-        unordered_map<Camera::Ptr, cv::Matx14d> camera2intrinsics;
+        cv::Matx14d intrinsic;
         unordered_map<KeyFrame::Ptr, cv::Matx23d> frame2extrinsics;
         unordered_map<KeyFrame::Ptr, cv::Matx23d> otherFrame2extrinsics;
         unordered_map<MapPoint::Ptr, cv::Matx13d> mapPoint2poses;
 
     public:
-        BA(ModeSet modeSet = {Mode_Fix_First_Frame, Mode_Fix_Intrinsic},
+        BA(ModeSet modeSet = {Mode_Fix_First_Frame},
            double lossFunctionScaling = Config::get<double>("BA.lossFunction.scaling")
         ) :
                 modeSet(modeSet),
@@ -70,12 +69,15 @@ namespace sky {
 
         class ReprojectCost {
             const cv::Point2d observation;
+            const Camera::Ptr camera;
         public:
-            ReprojectCost(const cv::Point2d &observation) : observation(observation) {}
+            ReprojectCost(const cv::Point2d &observation, Camera::Ptr camera) :
+                    observation(observation),
+                    camera(camera) {}
 
             template<typename T>
             bool
-            operator()(const T *const intrinsic, const T *const extrinsic, const T *const pos3d, T *residuals) const {
+            operator()(const T *const extrinsic, const T *const pos3d, T *residuals) const {
                 const T *r = extrinsic;
                 const T *t = &extrinsic[3];
 
@@ -90,14 +92,9 @@ namespace sky {
                 const T x = pos_proj[0] / pos_proj[2];
                 const T y = pos_proj[1] / pos_proj[2];
 
-                const T fx = intrinsic[0];
-                const T fy = intrinsic[1];
-                const T cx = intrinsic[2];
-                const T cy = intrinsic[3];
-
                 // Apply intrinsic
-                const T u = fx * x + cx;
-                const T v = fy * y + cy;
+                const T u = (double) camera->fx * x + (double) camera->cx;
+                const T v = (double) camera->fy * y + (double) camera->cy;
 
                 residuals[0] = u - T(observation.x);
                 residuals[1] = v - T(observation.y);

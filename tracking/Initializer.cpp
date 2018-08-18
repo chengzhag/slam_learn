@@ -59,7 +59,7 @@ namespace sky {
             solver2D2D.viewReprojInCVV();
 
 
-            BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
+            BA ba({BA::Mode_Fix_First_Frame});
             ba.loadMap(initialMap);
             ba.ba();
             ba.writeMap();

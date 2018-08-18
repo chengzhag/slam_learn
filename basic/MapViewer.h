@@ -101,7 +101,7 @@ namespace sky {
 
         void keyboardEventOccurred(const pcl::visualization::KeyboardEvent &event);
 
-        void addFrame(const KeyFrame::Ptr &frame, string camName = "");
+        void addFrame(const KeyFrame::Ptr &frame, double size = 1.0, string camName = "");
 
 #endif
     };
