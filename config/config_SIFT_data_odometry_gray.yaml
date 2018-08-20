@@ -48,7 +48,7 @@ Camera.cy: 185.2157
 #//
 #// The scaling parameter 'a' corresponds to 'delta' on this page:
 #//   http://en.wikipedia.org/wiki/Huber_Loss_Function
-BA.lossFunction.scaling: 4
+BA.lossFunction.scaling: 1
 
 # 描述子提取的数量
 VO.nfeatures: 300
@@ -76,7 +76,7 @@ MapViewer.backgroundColor.r: 0.8
 MapViewer.backgroundColor.g: 0.8
 MapViewer.backgroundColor.b: 0.8
 # MapViewer进行update后是否等待按键
-MapViewer.updateWait: 1
+MapViewer.updateWait: 0
 # 镜头与当前帧的距离
 MapViewer.disCamera: 50
 # 是否自动跟踪当前帧
@@ -136,7 +136,7 @@ Triangulater.maxReprojErr: 50
 # 最少关键点数
 # 如果当前局部地图关键帧数等于最大关键帧数，且关键点数小于最少关键点数，则增加最大关键帧数
 # 否则减小最大关键帧数
-LocalMap.minMapPoints: 300
+LocalMap.minMapPoints: 500
 # 地图点到每个观测帧的最大距离
 LocalMap.maxInlierPointDis: 150
 # 关键帧最大数量，超过此数量删除旧关键帧
@@ -165,7 +165,7 @@ Initializer.minFrameInterval: 2
 Initializer.minMapPointNum: 50
 
 # 关键帧的最小间距
-Tracker.minKeyFrameDis: 0.5
+Tracker.minKeyFrameDis: 0.25
 # 关键帧的最大间距
 Tracker.maxKeyFrameDis: 5
 # 关键帧的最少地图点
@@ -173,5 +173,5 @@ Tracker.minKeyFrameInlierNum: 15
 # 关键帧之间的最小间隔帧数
 Tracker.minKeyFrameInterval: 1
 # 关键帧解PnP所用地图点数相对于上一关键帧的最大比例
-Tracker.maxKeyFrameTrackRatio: 0.8
+Tracker.maxKeyFrameTrackRatio: 0.7
 

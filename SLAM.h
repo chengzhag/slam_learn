@@ -35,12 +35,13 @@ namespace sky {
                 mapViewer(new MapViewer),
                 map(new Map),
                 camera(new Camera),
-                localMap(new LocalMap(map,mapViewer)),
+                localMap(new LocalMap(map, mapViewer)),
                 vo(camera, localMap) {}
 
         inline bool step(const Mat &image) {
-            return vo.step(image);
-            mapViewer->update(localMap->localMap);
+            auto r = vo.step(image);
+            mapViewer->update(map, localMap->localMap);
+            return r;
         }
 
     };

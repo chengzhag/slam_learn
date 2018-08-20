@@ -48,20 +48,20 @@ namespace sky {
     void LocalMap::threadFunc() {
         prepareKeyFrame();
         triangulate();
-        mapViewer->update(localMap);
+        //mapViewer->update(localMap);
 //        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 
         ba();
-        mapViewer->update(localMap);
+        //mapViewer->update(localMap);
 //        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 
         //BA可能导致一些外点，不如把筛选过程放到BA后
         filtKeyFrames();
-        mapViewer->update(localMap);
+        //mapViewer->update(localMap);
 //        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 
         filtMapPoints(localMap);
-        mapViewer->update(localMap);
+        //mapViewer->update(localMap);
 //        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 
 /*        prepareKeyFrame();
@@ -164,33 +164,32 @@ namespace sky {
 #endif
         //筛选关键帧
         int iFrames = 0;
-        for (auto it = localMap->keyFrames.rbegin(); it != localMap->keyFrames.rend();) {
-            int good = isGoodFrame(*it);
+        for (auto itFrame = localMap->keyFrames.rbegin(); itFrame != localMap->keyFrames.rend();) {
+            int good = isGoodFrame(*itFrame);
             if (good > 0 && iFrames < maxKeyFrames) {
-                ++it;
+                ++itFrame;
                 ++iFrames;
             } else {
                 if (good > 0) {
                     //将该帧保存到map中
-                    map->addFrame(*it);
+                    map->addFrame(*itFrame);
                 } else {
                     //将不好的关键帧与地图点之间的关联断开
-                    localMap->deleteObservation(*it);
+                    localMap->deleteObservation(*itFrame);
                 }
                 //删除被筛选掉的关键帧在LocalMap中的观测点,保留观测关系
-                it = list<KeyFrame::Ptr>::reverse_iterator(localMap->keyFrames.erase((++it).base()));
+                itFrame = list<KeyFrame::Ptr>::reverse_iterator(localMap->keyFrames.erase((++itFrame).base()));
             }
         }
         //删除 在当前LocalMap中没有观测帧 的点
         for (auto itMapPoint = localMap->mapPoints.begin(); itMapPoint != localMap->mapPoints.end();) {
             for (auto &keyFrame:localMap->keyFrames) {
-                //除了该帧有其他观测帧
                 if ((*itMapPoint)->hasFrame(keyFrame)) {
                     ++itMapPoint;
                     break;
                 }
-                //除了该帧没有其他观测帧
                 if (keyFrame == localMap->keyFrames.back()) {
+                    map->addMapPoint(*itMapPoint);
                     itMapPoint = localMap->mapPoints.erase(itMapPoint);
                 }
             }

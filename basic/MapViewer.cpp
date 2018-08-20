@@ -6,17 +6,64 @@
 
 namespace sky {
 
-    void MapViewer::update(const Map::Ptr &map) {
+    void MapViewer::update(const Map::Ptr &map, const Map::Ptr &localMap) {
 #ifdef CLOUDVIEWER_DEBUG
         boost::mutex::scoped_lock lockUpdate(updateMutex);
-        if (!map)
+        if (!localMap)
             return;
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
-             << "MapViewer: Visualizing " << map->keyFrames.size() << " keyFrames and "
-             << map->mapPoints.size() << " index2mapPoints" << endl;
+             << "MapViewer: map has " << map->keyFrames.size() << " keyFrames and "
+             << map->mapPoints.size() << " mapPoints; "
+             << "localMap has " << localMap->keyFrames.size() << " keyFrames and "
+             << localMap->mapPoints.size() << " mapPoints. " << endl;
 #endif
-        //更新点云
+        //更新整体地图点云
+        updateCloud(map, cloudMap);
+        //更新局部地图点云
+        updateCloud(localMap, cloudLocal);
+
+        viewer.removeAllCoordinateSystems();
+        //更新整体地图帧
+        int i = 0;
+        for (auto &frame:map->keyFrames) {
+            addFrame(frame, 1, "frame" + to_string(++i));
+        }
+        //更新局部地图帧
+        for (auto &frame:localMap->keyFrames) {
+            addFrame(frame, 2, "frame" + to_string(++i));
+        }
+
+        //更新相机位姿
+        if (trackCurrFrame) {
+            auto target = localMap->getLastFrame()->getCamCenterEigen();
+            viewer.setCameraPosition(target[0], target[1] - disCamera, target[2],
+                                     target[0], target[1], target[2],
+                                     0, 0, 1);
+        }
+        lockUpdate.unlock();
+
+        //暂停
+        if (updateWait) {
+            while (!wait4keyDown);
+            wait4keyDown = false;
+        }
+
+#endif
+    }
+
+#ifdef CLOUDVIEWER_DEBUG
+
+    void MapViewer::updateCloud(
+            const Map::Ptr &map,
+            pcl::PointCloud<pcl::PointXYZRGB>::Ptr &cloud) {
+        string id;
+        if (cloud == cloudLocal) {
+            id = "cloudLocal";
+        } else if (cloud == cloudMap) {
+            id = "cloudMap";
+        }
+
         cloud->clear();
         if (drawNorms)
             viewer.removeAllShapes();
@@ -39,43 +86,14 @@ namespace sky {
                 viewer.addLine(pcl::PointXYZ(pointStart[0], pointStart[1], pointStart[2]),
                                pcl::PointXYZ(pointTo[0], pointTo[1], pointTo[2]),
                                1, 1, 1,
-                               "normal" + to_string(++i));
+                               id + "Normal" + to_string(++i));
             }
         }
         cloud->width = cloud->size();
         cloud->height = 1;
         cloud->is_dense = true;
-        viewer.updatePointCloud(cloud, "Triangulated Point Cloud");
-
-        //更新帧姿态
-        viewer.removeAllCoordinateSystems();
-        i = 0;
-        for (auto &frame:map->keyFrames) {
-            if (frame != map->keyFrames.back())
-                addFrame(frame, 1.0, "frame" + to_string(++i));
-            else
-                addFrame(frame, 2.0, "frame" + to_string(++i));
-        }
-
-        //更新相机位姿
-        if (trackCurrFrame) {
-            auto target = map->getLastFrame()->getCamCenterEigen();
-            viewer.setCameraPosition(target[0], target[1] - disCamera, target[2],
-                                     target[0], target[1], target[2],
-                                     0, 0, 1);
-        }
-        lockUpdate.unlock();
-
-        //暂停
-        if (updateWait) {
-            while (!wait4keyDown);
-            wait4keyDown = false;
-        }
-
-#endif
+        viewer.updatePointCloud(cloud, id);
     }
-
-#ifdef CLOUDVIEWER_DEBUG
 
     void MapViewer::threadFunc() {
         while (!viewer.wasStopped()) {

@@ -46,8 +46,8 @@ namespace sky {
         ) :
                 modeSet(modeSet),
                 lossFunctionScaling(lossFunctionScaling) {
-            cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "BA: Initializing..." << endl;
-            printVariable(lossFunctionScaling);
+            //cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "BA: Initializing..." << endl;
+            //printVariable(lossFunctionScaling);
             ceres_config_options.minimizer_progress_to_stdout = false;
             ceres_config_options.logging_type = ceres::SILENT;
             ceres_config_options.num_threads = 4;

@@ -28,7 +28,8 @@ namespace sky {
     private:
 #ifdef CLOUDVIEWER_DEBUG
         pcl::visualization::PCLVisualizer viewer;
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudLocal;
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudMap;
         boost::thread thread;
         boost::mutex updateMutex;
         bool updateWait, wait4keyDown = false, trackCurrFrame, drawNorms;
@@ -49,7 +50,8 @@ namespace sky {
                 disCamera(disCamera),
                 drawNorms(drawNorms),
                 viewer("3D Viewer"),
-                cloud(new pcl::PointCloud<pcl::PointXYZRGB>) {
+                cloudLocal(new pcl::PointCloud<pcl::PointXYZRGB>),
+                cloudMap(new pcl::PointCloud<pcl::PointXYZRGB>) {
 #ifdef DEBUG
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
                  << "MapViewer: Initializing..." << endl;
@@ -76,10 +78,15 @@ namespace sky {
                     Config::get<double>("MapViewer.backgroundColor.g"),
                     Config::get<double>("MapViewer.backgroundColor.b")
             );
-            viewer.addPointCloud(cloud, "Triangulated Point Cloud");
+            viewer.addPointCloud(cloudLocal, "cloudLocal");
             viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                                    3,
-                                                    "Triangulated Point Cloud");
+                                                    4,
+                                                    "cloudLocal");
+            viewer.addPointCloud(cloudMap, "cloudMap");
+            viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
+                                                    2,
+                                                    "cloudMap");
+
             viewer.initCameraParameters();
             viewer.addCoordinateSystem(1.0);
             viewer.setCameraPosition(0, -disCamera, 0, 0, 0, 1);
@@ -91,12 +98,14 @@ namespace sky {
 
 #endif
 
-        void update(const Map::Ptr &map);
+        void update(const Map::Ptr &map, const Map::Ptr &localMap);
 
         ~MapViewer() {}
 
     private:
 #ifdef CLOUDVIEWER_DEBUG
+
+        void updateCloud(const Map::Ptr &map, pcl::PointCloud<pcl::PointXYZRGB>::Ptr &cloudLocal);
 
         void threadFunc();
 
