@@ -38,7 +38,7 @@ namespace sky {
             cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
                  << "Tracker: Solver3D2D failed! Showing reprojection of last keyFrame... " << endl;
 #endif
-            localMap->map->viewFrameProjInCVV(localMap->getLastFrame(),
+            localMap->localMap->viewFrameProjInCVV(localMap->getLastFrame(),
                                               "Tracker: Solver3D2D failed! LocalMap proj to refFrame");
 #endif
             return false;
@@ -79,8 +79,8 @@ namespace sky {
         boost::mutex::scoped_lock lock(localMap->mapMutex);
         auto lasFrame = localMap->getLastFrame();
         auto dis2LastFrame = disBetween(frame, lasFrame);
-        auto localMapFrameNum = localMap->map->keyFrames.size();
-        auto localMapPointNum = localMap->map->mapPoints.size();
+        auto localMapFrameNum = localMap->localMap->keyFrames.size();
+        auto localMapPointNum = localMap->localMap->mapPoints.size();
         lock.unlock();
 
 

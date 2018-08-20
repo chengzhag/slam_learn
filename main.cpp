@@ -6,8 +6,6 @@
 #include <boost/filesystem.hpp>
 
 #include <opencv2/opencv.hpp>
-//#include <opencv2/features2d/features2d.hpp>
-//#include <opencv2/xfeatures2d.hpp>
 
 #include "SLAM.h"
 
@@ -55,12 +53,7 @@ int main(int argc, char **argv) {
         sort(imagesDir.begin(), imagesDir.end());
     }
 
-    Camera::Ptr camera = Camera::Ptr(new Camera);
-
-    LocalMap::Ptr localMap(new LocalMap);
-    VO vo(camera,
-          localMap
-    );
+    SLAM slam;
 
     auto startIndex = Config::get<int>("startIndex");
 
@@ -75,7 +68,7 @@ int main(int argc, char **argv) {
 /*#ifdef CVVISUAL_DEBUGMODE
         cvv::showImage(image, CVVISUAL_LOCATION, "Adding image: " + imageDir, "");
 #endif*/
-        if (!vo.step(image)) {
+        if (!slam.step(image)) {
 #ifdef DEBUG
             cerr << "[" << boost::this_thread::get_id() << "]ERROR: " << "SLAM: VO lost! " << endl;
 #endif

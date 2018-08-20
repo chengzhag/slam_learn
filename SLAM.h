@@ -17,11 +17,31 @@
 #include "MapViewer.h"
 #include "Config.h"
 
-namespace sky{
+namespace sky {
 
     using namespace cv;
 
     class SLAM {
+    private:
+        MapViewer::Ptr mapViewer;
+
+        Map::Ptr map;
+        Camera::Ptr camera;
+        LocalMap::Ptr localMap;
+        VO vo;
+
+    public:
+        SLAM() :
+                mapViewer(new MapViewer),
+                map(new Map),
+                camera(new Camera),
+                localMap(new LocalMap(map,mapViewer)),
+                vo(camera, localMap) {}
+
+        inline bool step(const Mat &image) {
+            return vo.step(image);
+            mapViewer->update(localMap->localMap);
+        }
 
     };
 

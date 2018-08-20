@@ -21,7 +21,7 @@ namespace sky {
         this->keyFrame2 = keyFrame2;
         auto keyFrame1 = localMap->getLastFrame();
 
-        for (MapPoint::Ptr &point:localMap->map->mapPoints) {
+        for (MapPoint::Ptr &point:localMap->localMap->mapPoints) {
 
             if (isInFrame(point->pos, keyFrame1)
                 && disBetween(keyFrame1, point) <= max3Ddis) {
@@ -135,7 +135,7 @@ namespace sky {
             auto mapPoint = pointsCandi[matcher.matches[iInlier].queryIdx];
             if (add2mapPoints)
                 //包括了addFrame和addMapPoint
-                localMap->map->addObservation(keyFrame2, mapPoint, matcher.matches[iInlier].trainIdx);
+                localMap->localMap->addObservation(keyFrame2, mapPoint, matcher.matches[iInlier].trainIdx);
             else {
                 keyFrame2->addMapPoint(matcher.matches[iInlier].trainIdx, mapPoint);
             }

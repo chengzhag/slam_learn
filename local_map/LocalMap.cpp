@@ -12,8 +12,7 @@
 namespace sky {
     void LocalMap::init(const Map::Ptr &map) {
         boost::mutex::scoped_lock lock(mapMutex);
-        this->map = map;
-        mapViewer.update(this->map);
+        this->localMap = map;
         lock.unlock();
     }
 
@@ -49,20 +48,20 @@ namespace sky {
     void LocalMap::threadFunc() {
         prepareKeyFrame();
         triangulate();
-        mapViewer.update(map);
+        mapViewer->update(localMap);
 //        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 
         ba();
-        mapViewer.update(map);
+        mapViewer->update(localMap);
 //        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 
         //BA可能导致一些外点，不如把筛选过程放到BA后
         filtKeyFrames();
-        mapViewer.update(map);
+        mapViewer->update(localMap);
 //        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 
-        filtMapPoints(map);
-        mapViewer.update(map);
+        filtMapPoints(localMap);
+        mapViewer->update(localMap);
 //        boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 
 /*        prepareKeyFrame();
@@ -70,9 +69,9 @@ namespace sky {
         ba();
         //BA可能导致一些外点，不如把筛选过程放到BA后
         filtKeyFrames();
-        filtMapPoints(map);
+        filtMapPoints(localMap);
 
-        mapViewer.update(map);*/
+        mapViewer.update(localMap);*/
 
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: End adding! " << endl;
@@ -98,9 +97,9 @@ namespace sky {
         //添加关键帧和地图点
         newMapPoints.clear();
         boost::mutex::scoped_lock lock(mapMutex);
-        map->addFrame(currFrame);
+        localMap->addFrame(currFrame);
         for (auto &point:triangulateMap->mapPoints) {
-            map->addMapPoint(point);
+            localMap->addMapPoint(point);
             newMapPoints.insert(point);
         }
         lock.unlock();
@@ -145,7 +144,7 @@ namespace sky {
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: ba... " << endl;
 #endif
         BA ba({BA::Mode_Fix_First_2Frames});
-        ba.loadMap(map);
+        ba.loadMap(localMap);
         ba.ba();
         ba.writeMap();
         lock.unlock();
@@ -155,47 +154,55 @@ namespace sky {
         boost::mutex::scoped_lock lock(mapMutex);
 
         //根据当前LocalMap地图点数自适应增减maxKeyFrames
-        if (map->mapPoints.size() < minMapPoints && map->keyFrames.size() > maxKeyFrames)
+        if (localMap->mapPoints.size() < minMapPoints && localMap->keyFrames.size() > maxKeyFrames)
             ++maxKeyFrames;
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: filtKeyFrames... " << endl;
         printVariable(maxKeyFrames);
-        auto oldKeyFramesNum = map->keyFrames.size();
+        auto oldKeyFramesNum = localMap->keyFrames.size();
         printVariable(oldKeyFramesNum);
 #endif
         //筛选关键帧
         int iFrames = 0;
-        for (auto it = map->keyFrames.rbegin(); it != map->keyFrames.rend();) {
-            if (isGoodFrame(*it) > 0 && iFrames < maxKeyFrames) {
+        for (auto it = localMap->keyFrames.rbegin(); it != localMap->keyFrames.rend();) {
+            int good = isGoodFrame(*it);
+            if (good > 0 && iFrames < maxKeyFrames) {
                 ++it;
                 ++iFrames;
             } else {
-                //删除被筛选掉的关键帧在LocalMap中的观测点,保留观测关系
-                it = list<KeyFrame::Ptr>::reverse_iterator(map->keyFrames.erase((++it).base()));
-                //删除除了该帧没有其他观测帧的点
-                for (auto it = map->mapPoints.begin(); it != map->mapPoints.end();) {
-                    for (auto &keyFrame:map->keyFrames) {
-                        //除了该帧有其他观测帧
-                        if ((*it)->hasFrame(keyFrame)) {
-                            ++it;
-                            break;
-                        }
-                        //除了该帧没有其他观测帧
-                        if (keyFrame == map->keyFrames.back()) {
-                            it = map->mapPoints.erase(it);
-                        }
-                    }
-
+                if (good > 0) {
+                    //将该帧保存到map中
+                    map->addFrame(*it);
+                } else {
+                    //将不好的关键帧与地图点之间的关联断开
+                    localMap->deleteObservation(*it);
                 }
+                //删除被筛选掉的关键帧在LocalMap中的观测点,保留观测关系
+                it = list<KeyFrame::Ptr>::reverse_iterator(localMap->keyFrames.erase((++it).base()));
             }
         }
-        if (map->mapPoints.size() > minMapPoints && maxKeyFrames > minKeyFrames)
+        //删除 在当前LocalMap中没有观测帧 的点
+        for (auto itMapPoint = localMap->mapPoints.begin(); itMapPoint != localMap->mapPoints.end();) {
+            for (auto &keyFrame:localMap->keyFrames) {
+                //除了该帧有其他观测帧
+                if ((*itMapPoint)->hasFrame(keyFrame)) {
+                    ++itMapPoint;
+                    break;
+                }
+                //除了该帧没有其他观测帧
+                if (keyFrame == localMap->keyFrames.back()) {
+                    itMapPoint = localMap->mapPoints.erase(itMapPoint);
+                }
+            }
+
+        }
+        if (localMap->mapPoints.size() > minMapPoints && maxKeyFrames > minKeyFrames)
             --maxKeyFrames;
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: "
              << "LocalMap: filtKeyFrames done. "
-             << oldKeyFramesNum - map->keyFrames.size() << " filtered. "
-             << map->keyFrames.size() << " keyFrames remained."
+             << oldKeyFramesNum - localMap->keyFrames.size() << " filtered. "
+             << localMap->keyFrames.size() << " keyFrames remained."
              << endl;
 #endif
         lock.unlock();
@@ -277,7 +284,7 @@ namespace sky {
              << mapPoint->frame2indexs.size() << " frame2indexs" << endl;
 #endif*/
 
-        if (map->keyFrames.size() >= 4)
+        if (localMap->keyFrames.size() >= 4)
             if (!setHas(newMapPoints, mapPoint)
                 && mapPoint->getFrameNum() < 3)
                 return -1;
@@ -308,10 +315,10 @@ namespace sky {
             return -4;
 
 /*        //如果不被当前LocalMap中的关键帧观测，则过滤
-        for (auto &keyFrame:map->keyFrames) {
+        for (auto &keyFrame:localMap->keyFrames) {
             if (mapPoint->hasFrame(keyFrame))
                 break;
-            if (keyFrame == map->keyFrames.back())
+            if (keyFrame == localMap->keyFrames.back())
                 return false;
         }*/
 

@@ -36,6 +36,7 @@ namespace sky {
 #endif
 
     public:
+        typedef shared_ptr<MapViewer> Ptr;
 #ifdef CLOUDVIEWER_DEBUG
 
         MapViewer(bool updateWait = Config::get<int>("MapViewer.updateWait"),

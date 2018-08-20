@@ -19,24 +19,28 @@ namespace sky {
 
     private:
         float maxInlierPointDis, maxReprojErr;
-        int maxKeyFrames,minKeyFrames, minMapPoints;
+        int maxKeyFrames, minKeyFrames, minMapPoints;
         Matcher matcher;
         shared_ptr<boost::thread> thread;
         KeyFrame::Ptr refFrame, currFrame;
         Triangulater triangulater;
 
-        MapViewer mapViewer;
-
+        Map::Ptr map;
+        MapViewer::Ptr mapViewer;
     public:
         typedef shared_ptr<LocalMap> Ptr;
-        Map::Ptr map;
+        Map::Ptr localMap;
         boost::mutex mapMutex;
 
-        LocalMap(int minMapPoints = Config::get<float>("LocalMap.minMapPoints"),
+        LocalMap(Map::Ptr map,
+                 MapViewer::Ptr mapViewer,
+                 int minMapPoints = Config::get<float>("LocalMap.minMapPoints"),
                  float maxInlierPointDis = Config::get<float>("LocalMap.maxInlierPointDis"),
                  int minKeyFrames = Config::get<float>("LocalMap.minKeyFrames"),
                  float maxReprojErr = Config::get<float>("LocalMap.maxReprojErr")
         ) :
+                map(map),
+                mapViewer(mapViewer),
                 minMapPoints(minMapPoints),
                 maxInlierPointDis(maxInlierPointDis),
                 minKeyFrames(minKeyFrames),
@@ -89,7 +93,7 @@ namespace sky {
         }
 
         inline KeyFrame::Ptr getLastFrame() const {
-            return map->getLastFrame();
+            return localMap->getLastFrame();
         }
 
     private:
