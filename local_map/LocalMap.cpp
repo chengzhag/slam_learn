@@ -104,31 +104,6 @@ namespace sky {
         }
         lock.unlock();
 
-        /*//BA
-        Map::Ptr baMap(new Map);
-        baMap->addFrame(refFrame);
-        baMap->addFrame(currFrame);
-        lock.lock();
-        refFrame->forEachMapPoint(
-                [&](auto &MapPoint) {
-                    baMap->addMapPoint(MapPoint);
-                }
-        );
-        currFrame->forEachMapPoint(
-                [&](auto &MapPoint) {
-                    baMap->addMapPoint(MapPoint);
-                }
-        );
-
-        BA ba({BA::Mode_Fix_Intrinsic, BA::Mode_Fix_First_Frame});
-        ba.loadMap(baMap);
-        ba.ba();
-        ba.writeMap();
-        lock.unlock();
-
-        //三角化BA后的地图点筛选
-        filtMapPoints(triangulateMap);*/
-
 #ifdef DEBUG
         lock.lock();
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: "
@@ -143,8 +118,28 @@ namespace sky {
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: ba... " << endl;
 #endif
-        BA ba({BA::Mode_Fix_First_2Frames});
+/*        BA ba({BA::Mode_Fix_First_2Frames});
         ba.loadMap(localMap);
+        ba.ba();
+        ba.writeMap();
+        lock.unlock();*/
+
+        Map::Ptr baMap(new Map);
+        baMap->addFrame(refFrame);
+        baMap->addFrame(currFrame);
+        refFrame->forEachMapPoint(
+                [&](auto &MapPoint) {
+                    baMap->addMapPoint(MapPoint);
+                }
+        );
+        currFrame->forEachMapPoint(
+                [&](auto &MapPoint) {
+                    baMap->addMapPoint(MapPoint);
+                }
+        );
+
+        BA ba({BA::Mode_Fix_First_Frame});
+        ba.loadMap(baMap);
         ba.ba();
         ba.writeMap();
         lock.unlock();

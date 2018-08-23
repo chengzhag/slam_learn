@@ -29,15 +29,16 @@ namespace sky {
         }
 
         //加载map->keyFrames之外的关键帧
-        for (auto &mapPoint:map->mapPoints) {
-            mapPoint->forEachFrame(
-                    [&](const KeyFrame::Ptr &frame) {
-                        if (!mapHas(frame2extrinsics, frame)) {
-                            otherFrame2extrinsics[frame] = frame->getAngleAxisAndTWcMatxCV<double>();
+        if (!hasMode(Mode_Fix_Points))
+            for (auto &mapPoint:map->mapPoints) {
+                mapPoint->forEachFrame(
+                        [&](const KeyFrame::Ptr &frame) {
+                            if (!mapHas(frame2extrinsics, frame)) {
+                                otherFrame2extrinsics[frame] = frame->getAngleAxisAndTWcMatxCV<double>();
+                            }
                         }
-                    }
-            );
-        }
+                );
+            }
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "BA: Map loaded. "
              << mapPoint2poses.size() << " map points, "
@@ -90,6 +91,8 @@ namespace sky {
                                     frame2extrinsics[frame2index.first].val,  // View Rotation and Translation
                                     mapPoint2pos.second.val          // Point in 3D space
                             );
+                        } else if (this->hasMode(Mode_Fix_Points)) {
+                            return;
                         } else if (mapHas(otherFrame2extrinsics, frame2index.first)) {
                             problem.AddResidualBlock(
                                     costFunction,
