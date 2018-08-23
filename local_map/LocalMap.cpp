@@ -177,27 +177,6 @@ namespace sky {
             localMap->addMapPoint(point);
             newMapPoints.insert(point);
         }
-        lock.unlock();
-
-#ifdef DEBUG
-        lock.lock();
-        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: "
-             << triangulateMap->mapPoints.size() << " points added to localMap. " << endl;
-        lock.unlock();
-#endif
-
-    }
-
-    void LocalMap::ba() {
-        boost::mutex::scoped_lock lock(mapMutex);
-#ifdef DEBUG
-        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: ba... " << endl;
-#endif
-/*        BA ba({BA::Mode_Fix_First_2Frames});
-        ba.loadMap(localMap);
-        ba.ba();
-        ba.writeMap();
-        lock.unlock();*/
 
         Map::Ptr baMap(new Map);
         baMap->addFrame(refFrame);
@@ -217,6 +196,29 @@ namespace sky {
         ba.loadMap(baMap);
         ba.ba();
         ba.writeMap();
+
+        lock.unlock();
+
+#ifdef DEBUG
+        lock.lock();
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: "
+             << triangulateMap->mapPoints.size() << " points added to localMap. " << endl;
+        lock.unlock();
+#endif
+
+    }
+
+    void LocalMap::ba() {
+        boost::mutex::scoped_lock lock(mapMutex);
+#ifdef DEBUG
+        cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: ba... " << endl;
+#endif
+
+        BA ba({BA::Mode_Fix_First_2Frames});
+        ba.loadMap(localMap);
+        ba.ba();
+        ba.writeMap();
+
         lock.unlock();
     }
 
@@ -236,34 +238,45 @@ namespace sky {
         int iFrames = 0;
         for (auto itFrame = localMap->keyFrames.rbegin(); itFrame != localMap->keyFrames.rend();) {
             int good = isGoodFrame(*itFrame);
-            if (good > 0 && iFrames < maxKeyFrames) {
-                ++itFrame;
-                ++iFrames;
-            } else {
-                if (good > 0) {
-                    //将该帧保存到map中
-                    map->addFrame(*itFrame);
-                } else {
-                    //将不好的关键帧与地图点之间的关联断开
-                    localMap->deleteObservation(*itFrame);
-                }
-                //删除被筛选掉的关键帧在LocalMap中的观测点,保留观测关系
+            if (good < 0) {
+                //将不好的关键帧与地图点之间的关联断开
+                localMap->deleteObservation(*itFrame);
+                //删除被筛选掉的关键帧在LocalMap中的观测点
                 itFrame = decltype(localMap->keyFrames)::reverse_iterator(
                         localMap->keyFrames.erase((++itFrame).base()));
+            } else {
+                if (iFrames < maxKeyFrames) {
+                    ++itFrame;
+                    ++iFrames;
+                } else {
+                    //将该帧保存到map中
+                    map->addFrame(*itFrame);
+                    //删除被筛选掉的关键帧在LocalMap中的观测点,保留观测关系
+                    itFrame = decltype(localMap->keyFrames)::reverse_iterator(
+                            localMap->keyFrames.erase((++itFrame).base()));
+                }
             }
+
         }
-        //删除 在当前LocalMap中没有观测帧 的点
+
         for (auto itMapPoint = localMap->mapPoints.begin(); itMapPoint != localMap->mapPoints.end();) {
-            for (auto &keyFrame:localMap->keyFrames) {
-                if ((*itMapPoint)->hasFrame(keyFrame)) {
-                    ++itMapPoint;
-                    break;
-                }
-                if (keyFrame == localMap->keyFrames.back()) {
-                    map->addMapPoint(*itMapPoint);
-                    itMapPoint = localMap->mapPoints.erase(itMapPoint);
+            //删除没有观测帧的点
+            if ((*itMapPoint)->getFrameNum() == 0)
+                itMapPoint = localMap->mapPoints.erase(itMapPoint);
+                //转移有观测帧但是观测帧不在localMap中的点到map中
+            else {
+                for (auto &keyFrame:localMap->keyFrames) {
+                    if ((*itMapPoint)->hasFrame(keyFrame)) {
+                        ++itMapPoint;
+                        break;
+                    }
+                    if (keyFrame == localMap->keyFrames.back()) {
+                        map->addMapPoint(*itMapPoint);
+                        itMapPoint = localMap->mapPoints.erase(itMapPoint);
+                    }
                 }
             }
+
         }
         if (localMap->mapPoints.size() > minMapPoints && maxKeyFrames > minKeyFrames)
             --maxKeyFrames;

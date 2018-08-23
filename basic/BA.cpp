@@ -39,6 +39,7 @@ namespace sky {
                         }
                 );
             }
+
 #ifdef DEBUG
         cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "BA: Map loaded. "
              << mapPoint2poses.size() << " map points, "
@@ -57,6 +58,13 @@ namespace sky {
 
         for (auto &frame2extrinsic:frame2extrinsics)
             problem.AddParameterBlock(frame2extrinsic.second.val, 6);
+
+        for (auto &otherFrame2extrinsic:otherFrame2extrinsics)
+            problem.AddParameterBlock(otherFrame2extrinsic.second.val, 6);
+
+        for (auto &mapPoint2pos:mapPoint2poses)
+            problem.AddParameterBlock(mapPoint2pos.second.val, 3);
+
         auto itKeyFrame = map->keyFrames.begin();
         if (hasMode(Mode_Fix_First_Frame) || hasMode(Mode_Fix_First_2Frames))
             problem.SetParameterBlockConstant(frame2extrinsics[*itKeyFrame].val);
@@ -70,11 +78,9 @@ namespace sky {
             problem.SetParameterBlockConstant(frame2extrinsics[*itKeyFrame].val);
         }
 
-
         ceres::LossFunction *lossFunction = new ceres::HuberLoss(lossFunctionScaling);
         for (auto &mapPoint2pos:mapPoint2poses) {
 
-            problem.AddParameterBlock(mapPoint2pos.second.val, 3);
             if (hasMode(Mode_Fix_Points))
                 problem.SetParameterBlockConstant(mapPoint2pos.second.val);
 
@@ -94,13 +100,13 @@ namespace sky {
                         } else if (this->hasMode(Mode_Fix_Points)) {
                             return;
                         } else if (mapHas(otherFrame2extrinsics, frame2index.first)) {
+                            problem.SetParameterBlockConstant(otherFrame2extrinsics[frame2index.first].val);
                             problem.AddResidualBlock(
                                     costFunction,
                                     lossFunction,
                                     otherFrame2extrinsics[frame2index.first].val,  // View Rotation and Translation
                                     mapPoint2pos.second.val          // Point in 3D space
                             );
-                            problem.SetParameterBlockConstant(otherFrame2extrinsics[frame2index.first].val);
                         } else {
                             cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
                                  << "BA: not exist in frame2extrinsics and otherFrame2extrinsics! "
