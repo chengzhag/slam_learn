@@ -20,7 +20,7 @@ namespace sky {
     private:
         float maxInlierPointDis, maxReprojErr;
         int maxKeyFrames, minKeyFrames, minMapPoints;
-        Matcher matcher;
+        Matcher matcher, matcherReletive;
         shared_ptr<boost::thread> thread;
         KeyFrame::Ptr refFrame, currFrame;
         Triangulater triangulater;
@@ -51,7 +51,8 @@ namespace sky {
                         Config::get<float>("LocalMap.Matcher.disThresRatio"),
                         Config::get<float>("LocalMap.Matcher.disThresMin"),
                         Config::get<float>("LocalMap.Matcher.testRatio")
-                ) {
+                ),
+                matcherReletive(matcher) {
             cout << "[" << boost::this_thread::get_id() << "]DEBUG: " << "LocalMap: Initializing..." << endl;
             printVariable(minMapPoints);
             printVariable(maxInlierPointDis);

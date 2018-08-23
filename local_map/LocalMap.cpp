@@ -94,9 +94,84 @@ namespace sky {
         auto triangulateMap = triangulater.triangulate(
                 refFrame, currFrame, matcher.matches);
 
+        //关联localMap的帧
+        //获取triangulateMap中地图点的描述子
+        Mat descriptorsMap;
+        for (auto &point:triangulateMap->mapPoints) {
+            descriptorsMap.push_back(point->descriptor);
+        }
+        //匹配各帧，添加关联
+        boost::mutex::scoped_lock lock(mapMutex);
+        int numMergedPoints = 0;
+        for (auto &frame:localMap->keyFrames) {
+            //跳过refFrame因为已在三角化中添加了关联
+            if (frame == refFrame)
+                continue;
+
+            matcherReletive.match(descriptorsMap, frame->descriptors);
+
+            //测试各个匹配，添加关联
+            for (auto &match:matcherReletive.matches) {
+                auto iMapPoint = match.queryIdx;
+                auto iKeyPoint = match.trainIdx;
+                auto mapPoint = triangulateMap->mapPoints[iMapPoint];
+                //筛选重投影误差
+                cv::Point2d reprojCoor;
+                if (!proj2frame(mapPoint, frame, reprojCoor))
+                    continue;
+                auto dis = disBetween<float>(frame->getKeyPointCoor(iKeyPoint), reprojCoor);
+                if (dis > maxReprojErr)
+                    continue;
+
+                if (frame->hasMapPoint(iKeyPoint)) {
+                    //如果关键点有旧的关联，转移旧地图点关联到新地图点
+                    auto mapPointOld = frame->getMapPoint(iKeyPoint);
+                    if (mapPointOld->getFrameNum() == 0)
+                        continue;
+                    mapPointOld->forEachFrame2index([&](auto &frame2index) {
+                        localMap->addObservation(frame2index.first, mapPoint, frame2index.second);
+                    });
+                    mapPoint->refreshDescriptor(mapPointOld->descriptor, mapPointOld->getFrameNum());
+                    localMap->deleteObservation(mapPointOld);
+                    ++numMergedPoints;
+
+
+/*                    printVariable(numMergedPoints);
+                    int numNoFramePoints = 0;
+                    bool isInLocalMap = false;
+                    for (auto it = localMap->mapPoints.begin(); it != localMap->mapPoints.end(); ++it) {
+                        if (*it == mapPointOld)
+                            isInLocalMap = true;
+                        if ((*it)->getFrameNum() == 0) {
+                            ++numNoFramePoints;
+                        }
+                    }
+                    printVariable(numNoFramePoints);
+                    if (isInLocalMap == false)
+                        printVariable(isInLocalMap);*/
+
+                } else {
+                    //如果关键点无关联，添加关联，更新描述子
+                    localMap->addObservation(frame, mapPoint, iKeyPoint);
+                    mapPoint->refreshDescriptor(frame->getKeyPointDesciptor(iKeyPoint));
+                }
+            }
+        }
+        printVariable(numMergedPoints);
+
+        //删除失去关联的旧点（合并的点）
+        numMergedPoints = 0;
+        for (auto it = localMap->mapPoints.begin(); it != localMap->mapPoints.end();) {
+            if ((*it)->getFrameNum() == 0) {
+                ++numMergedPoints;
+                it = localMap->mapPoints.erase(it);
+            } else
+                ++it;
+        }
+        printVariable(numMergedPoints);
+
         //添加关键帧和地图点
         newMapPoints.clear();
-        boost::mutex::scoped_lock lock(mapMutex);
         localMap->addFrame(currFrame);
         for (auto &point:triangulateMap->mapPoints) {
             localMap->addMapPoint(point);
@@ -173,7 +248,8 @@ namespace sky {
                     localMap->deleteObservation(*itFrame);
                 }
                 //删除被筛选掉的关键帧在LocalMap中的观测点,保留观测关系
-                itFrame = list<KeyFrame::Ptr>::reverse_iterator(localMap->keyFrames.erase((++itFrame).base()));
+                itFrame = decltype(localMap->keyFrames)::reverse_iterator(
+                        localMap->keyFrames.erase((++itFrame).base()));
             }
         }
         //删除 在当前LocalMap中没有观测帧 的点
@@ -188,7 +264,6 @@ namespace sky {
                     itMapPoint = localMap->mapPoints.erase(itMapPoint);
                 }
             }
-
         }
         if (localMap->mapPoints.size() > minMapPoints && maxKeyFrames > minKeyFrames)
             --maxKeyFrames;

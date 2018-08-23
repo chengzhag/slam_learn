@@ -14,8 +14,8 @@ namespace sky {
     class Map {
     public:
         typedef shared_ptr<Map> Ptr;
-        list<MapPoint::Ptr> mapPoints;        // all landmarks
-        list<KeyFrame::Ptr> keyFrames;         // all key-keyFrames
+        vector<MapPoint::Ptr> mapPoints;        // all landmarks
+        vector<KeyFrame::Ptr> keyFrames;         // all key-keyFrames
 
         Map() {}
 

@@ -72,6 +72,12 @@ namespace sky {
 
         void refreshNorm(const KeyFrame::Ptr &observedFrame);
 
+        //更新描述子，在添加关联之后用
+        inline void refreshDescriptor(const Mat &descriptor, size_t weight = 1) {
+            this->descriptor =
+                    (this->descriptor * (getFrameNum() - weight) + descriptor * weight) / getFrameNum();
+        }
+
         inline void deleteFrame(const KeyFrame::Ptr &observedFrame) {
             frame2indexs.erase(observedFrame);
         }
@@ -88,7 +94,7 @@ namespace sky {
 
         bool getPixelCoor(const KeyFrame::Ptr &frame, cv::Point2f &pixelCoor) const;
 
-        inline auto getFrameNum() {
+        inline size_t getFrameNum() {
             return frame2indexs.size();
         }
 

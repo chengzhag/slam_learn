@@ -8,6 +8,7 @@
 namespace sky {
 
     void Matcher::match(const Mat &descriptors1, const Mat &descriptors2) {
+        matches.clear();
         float thres;
         int numMatchesRaw;
         if (testRatio == 0) {
