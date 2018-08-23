@@ -25,10 +25,7 @@ namespace sky {
         }
         //加载frameExtrinsics和cameraIntrinsics
         for (auto &frame:map->keyFrames) {
-            auto angleAxis = frame->getAngleAxisWcMatxCV<double>();
-            auto t = frame->Tcw.translation();
-            frame2extrinsics[frame] = cv::Matx23d(angleAxis(0), angleAxis(1), angleAxis(2),
-                                                  t[0], t[1], t[2]);
+            frame2extrinsics[frame] = frame->getAngleAxisAndTWcMatxCV<double>();
         }
 
         //加载map->keyFrames之外的关键帧
@@ -36,10 +33,7 @@ namespace sky {
             mapPoint->forEachFrame(
                     [&](const KeyFrame::Ptr &frame) {
                         if (!mapHas(frame2extrinsics, frame)) {
-                            auto angleAxis = frame->getAngleAxisWcMatxCV<double>();
-                            auto t = frame->Tcw.translation();
-                            otherFrame2extrinsics[frame] = cv::Matx23d(angleAxis(0), angleAxis(1), angleAxis(2),
-                                                                       t[0], t[1], t[2]);
+                            otherFrame2extrinsics[frame] = frame->getAngleAxisAndTWcMatxCV<double>();
                         }
                     }
             );
@@ -96,7 +90,7 @@ namespace sky {
                                     frame2extrinsics[frame2index.first].val,  // View Rotation and Translation
                                     mapPoint2pos.second.val          // Point in 3D space
                             );
-                        } else if(mapHas(otherFrame2extrinsics, frame2index.first)){
+                        } else if (mapHas(otherFrame2extrinsics, frame2index.first)) {
                             problem.AddResidualBlock(
                                     costFunction,
                                     lossFunction,
@@ -104,7 +98,7 @@ namespace sky {
                                     mapPoint2pos.second.val          // Point in 3D space
                             );
                             problem.SetParameterBlockConstant(otherFrame2extrinsics[frame2index.first].val);
-                        }else{
+                        } else {
                             cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
                                  << "BA: not exist in frame2extrinsics and otherFrame2extrinsics! "
                                  << endl;
@@ -145,8 +139,19 @@ namespace sky {
                 mapPoint2pos.first->setPos(mapPoint2pos.second);
             }
         //写frameExtrinsics
-        for (auto &frame2extrinsic:frame2extrinsics) {
-            frame2extrinsic.first->setTcw(frame2extrinsic.second);
+        int i = 0;
+        for (auto itKeyFrame = map->keyFrames.begin(); itKeyFrame != map->keyFrames.end(); ++itKeyFrame, ++i) {
+            if (i == 0 && (hasMode(Mode_Fix_First_Frame) || hasMode(Mode_Fix_First_2Frames)))
+                continue;
+            if (i == 1 && hasMode(Mode_Fix_First_2Frames))
+                continue;
+            auto frame = frame2extrinsics.find(*itKeyFrame);
+            if (frame != frame2extrinsics.end())
+                (*itKeyFrame)->setTcw(frame->second);
+            else
+                cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
+                     << "BA: Frame " << (*itKeyFrame).get() << " in map is not in frame2extrinsic! "
+                     << endl;
         }
     }
 

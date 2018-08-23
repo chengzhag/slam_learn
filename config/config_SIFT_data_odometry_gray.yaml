@@ -165,7 +165,7 @@ Initializer.minFrameInterval: 2
 Initializer.minMapPointNum: 50
 
 # 关键帧的最小间距
-Tracker.minKeyFrameDis: 0.25
+Tracker.minKeyFrameDis: 0.5
 # 关键帧的最大间距
 Tracker.maxKeyFrameDis: 5
 # 关键帧的最少地图点

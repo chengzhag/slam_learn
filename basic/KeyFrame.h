@@ -56,6 +56,14 @@ namespace sky {
         }
 
         template<typename T>
+        cv::Matx<T, 2, 3> getAngleAxisAndTWcMatxCV() const {
+            auto angleAxis = getAngleAxisWcMatxCV<double>();
+            auto t = Tcw.translation();
+            return cv::Matx23d(angleAxis(0), angleAxis(1), angleAxis(2),
+                                                  t[0], t[1], t[2]);
+        }
+
+        template<typename T>
         void setTcw(const cv::Matx<T, 2, 3> &angleAxisAndTranslation) {
             Tcw.so3() = SO3(angleAxisAndTranslation(0, 0),
                             angleAxisAndTranslation(0, 1),
