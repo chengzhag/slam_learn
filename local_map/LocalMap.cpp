@@ -115,6 +115,10 @@ namespace sky {
                 auto iMapPoint = match.queryIdx;
                 auto iKeyPoint = match.trainIdx;
                 auto mapPoint = triangulateMap->mapPoints[iMapPoint];
+                if (mapPoint->getFrameNum() == 0)
+                    continue;
+/*                    cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
+                         << "LocalMap: point has no frame! " << endl;*/
                 //筛选重投影误差
                 cv::Point2d reprojCoor;
                 if (!proj2frame(mapPoint, frame, reprojCoor))
@@ -135,6 +139,14 @@ namespace sky {
                     localMap->deleteObservation(mapPointOld);
                     ++numMergedPoints;
 
+/*                    //测试地图点是否在LocalMap中
+                    for (auto &point:localMap->mapPoints) {
+                        if (point == mapPointOld)
+                            break;
+                        if (point == localMap->mapPoints.back())
+                            cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
+                                 << "LocalMap: point not in LocalMap! " << endl;
+                    }*/
 
 /*                    printVariable(numMergedPoints);
                     int numNoFramePoints = 0;
@@ -159,6 +171,14 @@ namespace sky {
         }
         printVariable(numMergedPoints);
 
+        //添加关键帧和地图点
+        newMapPoints.clear();
+        localMap->addFrame(currFrame);
+        for (auto &point:triangulateMap->mapPoints) {
+            localMap->addMapPoint(point);
+            newMapPoints.insert(point);
+        }
+
         //删除失去关联的旧点（合并的点）
         numMergedPoints = 0;
         for (auto it = localMap->mapPoints.begin(); it != localMap->mapPoints.end();) {
@@ -170,13 +190,6 @@ namespace sky {
         }
         printVariable(numMergedPoints);
 
-        //添加关键帧和地图点
-        newMapPoints.clear();
-        localMap->addFrame(currFrame);
-        for (auto &point:triangulateMap->mapPoints) {
-            localMap->addMapPoint(point);
-            newMapPoints.insert(point);
-        }
 
         Map::Ptr baMap(new Map);
         baMap->addFrame(refFrame);

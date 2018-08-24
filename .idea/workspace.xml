@@ -16,8 +16,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d03b25aa-01f9-4cb3-b1c6-c95429c4b77e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic/BA.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/basic/BA.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/config_SIFT_data_odometry_gray.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/config_SIFT_data_odometry_gray.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/local_map/LocalMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/local_map/LocalMap.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -38,7 +36,7 @@
         <splitter split-orientation="horizontal" split-proportion="0.5">
           <split-first>
             <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-              <file leaf-file-name="config_SIFT_data_odometry_gray.yaml" pinned="false" current-in-tab="true">
+              <file leaf-file-name="config_SIFT_data_odometry_gray.yaml" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/config/config_SIFT_data_odometry_gray.yaml">
                   <provider selected="true" editor-type-id="text-editor">
                     <state relative-caret-position="542">
@@ -47,11 +45,11 @@
                   </provider>
                 </entry>
               </file>
-              <file leaf-file-name="Triangulater.cpp" pinned="false" current-in-tab="false">
+              <file leaf-file-name="Triangulater.cpp" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/basic/Triangulater.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="221">
-                      <caret line="69" column="32" selection-start-line="69" selection-start-column="32" selection-end-line="69" selection-end-column="32" />
+                    <state relative-caret-position="192">
+                      <caret line="75" column="30" selection-start-line="75" selection-start-column="30" selection-end-line="75" selection-end-column="30" />
                       <folding>
                         <element signature="e#46#71#0" expanded="true" />
                         <element signature="e#1505#1632#0" expanded="true" />
@@ -72,8 +70,8 @@
               <file leaf-file-name="Solver3D2D.cpp" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/basic/Solver3D2D.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="840">
-                      <caret line="56" column="74" selection-start-line="56" selection-start-column="74" selection-end-line="56" selection-end-column="74" />
+                    <state relative-caret-position="1227">
+                      <caret line="85" column="19" selection-start-line="85" selection-start-column="19" selection-end-line="85" selection-end-column="19" />
                       <folding>
                         <element signature="e#46#69#0" expanded="true" />
                       </folding>
@@ -97,11 +95,11 @@
                   </provider>
                 </entry>
               </file>
-              <file leaf-file-name="MapPoint.h" pinned="false" current-in-tab="false">
+              <file leaf-file-name="MapPoint.h" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/basic/MapPoint.h">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="1335">
-                      <caret line="89" selection-start-line="89" selection-end-line="89" />
+                    <state relative-caret-position="92">
+                      <caret line="54" column="9" selection-start-line="54" selection-start-column="9" selection-end-line="54" selection-end-column="9" />
                     </state>
                   </provider>
                 </entry>
@@ -118,8 +116,8 @@
               <file leaf-file-name="Triangulater.h" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/basic/Triangulater.h">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="645">
-                      <caret line="43" column="22" selection-start-line="43" selection-start-column="22" selection-end-line="43" selection-end-column="22" />
+                    <state relative-caret-position="363">
+                      <caret line="28" column="41" selection-start-line="28" selection-start-column="41" selection-end-line="28" selection-end-column="41" />
                     </state>
                   </provider>
                 </entry>
@@ -127,8 +125,8 @@
               <file leaf-file-name="KeyFrame.h" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/basic/KeyFrame.h">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="1575">
-                      <caret line="105" column="31" selection-start-line="105" selection-start-column="20" selection-end-line="105" selection-end-column="31" />
+                    <state relative-caret-position="892">
+                      <caret line="105" column="37" selection-start-line="105" selection-start-column="37" selection-end-line="105" selection-end-column="37" />
                       <folding>
                         <element signature="e#1497#1509#0" expanded="true" />
                       </folding>
@@ -139,17 +137,17 @@
               <file leaf-file-name="Matcher.h" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/basic/Matcher.h">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="645">
+                    <state relative-caret-position="428">
                       <caret line="43" column="69" selection-start-line="43" selection-start-column="69" selection-end-line="43" selection-end-column="69" />
                     </state>
                   </provider>
                 </entry>
               </file>
-              <file leaf-file-name="Solver3D2D.h" pinned="false" current-in-tab="true">
+              <file leaf-file-name="Solver3D2D.h" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/basic/Solver3D2D.h">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="570">
-                      <caret line="54" column="39" selection-start-line="54" selection-start-column="39" selection-end-line="54" selection-end-column="39" />
+                    <state relative-caret-position="480">
+                      <caret line="48" column="43" selection-start-line="48" selection-start-column="43" selection-end-line="48" selection-end-column="43" />
                       <folding>
                         <element signature="e#111#138#0" expanded="true" />
                       </folding>
@@ -168,8 +166,8 @@
               <file leaf-file-name="LocalMap.cpp" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/local_map/LocalMap.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="193">
-                      <caret line="180" column="8" selection-start-line="180" selection-start-column="8" selection-end-line="180" selection-end-column="8" />
+                    <state relative-caret-position="146">
+                      <caret line="171" column="37" selection-start-line="171" selection-start-column="22" selection-end-line="171" selection-end-column="37" />
                       <folding>
                         <element signature="e#46#67#0" expanded="true" />
                       </folding>
@@ -216,6 +214,18 @@
                   </provider>
                 </entry>
               </file>
+              <file leaf-file-name="Map.h" pinned="false" current-in-tab="false">
+                <entry file="file://$PROJECT_DIR$/basic/Map.h">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state relative-caret-position="270">
+                      <caret line="26" column="27" selection-start-line="26" selection-start-column="27" selection-end-line="26" selection-end-column="27" />
+                      <folding>
+                        <element signature="e#98#119#0" expanded="true" />
+                      </folding>
+                    </state>
+                  </provider>
+                </entry>
+              </file>
               <file leaf-file-name="SLAM.cpp" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/SLAM.cpp">
                   <provider selected="true" editor-type-id="text-editor">
@@ -229,11 +239,11 @@
           </split-first>
           <split-second>
             <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-              <file leaf-file-name="LocalMap.h" pinned="false" current-in-tab="true">
+              <file leaf-file-name="LocalMap.h" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/local_map/LocalMap.h">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="43">
-                      <caret line="21" column="29" selection-start-line="21" selection-start-column="26" selection-end-line="21" selection-end-column="38" />
+                    <state relative-caret-position="315">
+                      <caret line="27" column="10" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
                     </state>
                   </provider>
                 </entry>
@@ -268,25 +278,13 @@
                   </provider>
                 </entry>
               </file>
-              <file leaf-file-name="SLAM.h" pinned="false" current-in-tab="false">
+              <file leaf-file-name="SLAM.h" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/SLAM.h">
                   <provider selected="true" editor-type-id="text-editor">
                     <state relative-caret-position="630">
                       <caret line="42" column="26" selection-start-line="42" selection-start-column="26" selection-end-line="42" selection-end-column="26" />
                       <folding>
                         <element signature="e#99#126#0" expanded="true" />
-                      </folding>
-                    </state>
-                  </provider>
-                </entry>
-              </file>
-              <file leaf-file-name="Map.h" pinned="false" current-in-tab="false">
-                <entry file="file://$PROJECT_DIR$/basic/Map.h">
-                  <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="96">
-                      <caret line="15" column="36" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="36" />
-                      <folding>
-                        <element signature="e#98#119#0" expanded="true" />
                       </folding>
                     </state>
                   </provider>
@@ -312,6 +310,7 @@
       <find>cout</find>
       <find>cerr</find>
       <find>list</find>
+      <find>LocalMap: point has no frame</find>
     </findStrings>
     <replaceStrings>
       <replace>keyFrame2</replace>
@@ -346,7 +345,6 @@
         <option value="$PROJECT_DIR$/basic/Camera.h" />
         <option value="$PROJECT_DIR$/basic/Config.h" />
         <option value="$PROJECT_DIR$/basic/basic.cpp" />
-        <option value="$PROJECT_DIR$/basic/Map.cpp" />
         <option value="$PROJECT_DIR$/basic/MapPoint.cpp" />
         <option value="$PROJECT_DIR$/basic/KeyFrame.cpp" />
         <option value="$PROJECT_DIR$/basic/Solver2D2D.cpp" />
@@ -378,9 +376,10 @@
         <option value="$PROJECT_DIR$/basic/BA.h" />
         <option value="$PROJECT_DIR$/basic/MapViewer.cpp" />
         <option value="$PROJECT_DIR$/basic/KeyFrame.h" />
-        <option value="$PROJECT_DIR$/basic/Map.h" />
         <option value="$PROJECT_DIR$/basic/BA.cpp" />
         <option value="$PROJECT_DIR$/config/config_SIFT_data_odometry_gray.yaml" />
+        <option value="$PROJECT_DIR$/basic/Map.cpp" />
+        <option value="$PROJECT_DIR$/basic/Map.h" />
         <option value="$PROJECT_DIR$/local_map/LocalMap.cpp" />
       </list>
     </option>
@@ -520,12 +519,12 @@
       <workItem from="1534496735503" duration="620000" />
       <workItem from="1534499252937" duration="1355000" />
       <workItem from="1534687500853" duration="18202000" />
-      <workItem from="1535019093759" duration="2952000" />
+      <workItem from="1535019093759" duration="6862000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="440203000" />
+    <option name="totallyTimeSpent" value="444113000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -568,7 +567,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="131" />
+      <option name="time" value="132" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="CMakeRunConfiguration">
@@ -578,6 +577,21 @@
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>mapPoint</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>mapPoint.get()-&gt;frame2indexs.size()</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>frame.get()-&gt;index2mapPoints.size()</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>keyFrame2-&gt;image.at&lt;uint8_t&gt;(keyFrame2-&gt;getKeyPointCoor(iMapPoint2))</expression-string>
         <language-id>ObjectiveC</language-id>
@@ -605,21 +619,6 @@
       </expression>
       <expression>
         <expression-string>newMapPoints.size()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>frameExtrinsics.size()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>mapLastFrame-&gt;keyFrames.size()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>frame-&gt;getDis2(localMap-&gt;getLastFrame())</expression-string>
         <language-id>ObjectiveC</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -665,16 +664,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
           <caret line="27" column="9" selection-start-line="27" selection-start-column="9" selection-end-line="27" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/Map.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="14" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
-          <folding>
-            <element signature="e#46#62#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -841,16 +830,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SLAM.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="42" column="26" selection-start-line="42" selection-start-column="26" selection-end-line="42" selection-end-column="26" />
-          <folding>
-            <element signature="e#99#126#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/include/pcl-1.8/pcl/point_cloud.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="222">
@@ -876,6 +855,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="260">
           <caret line="86" column="53" selection-start-line="86" selection-start-column="53" selection-end-line="86" selection-end-column="53" />
+          <folding>
+            <element signature="e#109#125#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -890,37 +872,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1575">
           <caret line="105" column="20" selection-start-line="105" selection-start-column="20" selection-end-line="105" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/MapPoint.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1335">
-          <caret line="89" selection-start-line="89" selection-end-line="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/Triangulater.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="43" column="22" selection-start-line="43" selection-start-column="22" selection-end-line="43" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/Matcher.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="43" column="69" selection-start-line="43" selection-start-column="69" selection-end-line="43" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/KeyFrame.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1575">
-          <caret line="105" column="31" selection-start-line="105" selection-start-column="20" selection-end-line="105" selection-end-column="31" />
-          <folding>
-            <element signature="e#1497#1509#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -945,41 +896,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/basic/Map.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="15" column="36" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="36" />
-          <folding>
-            <element signature="e#98#119#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/Solver3D2D.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="840">
-          <caret line="56" column="74" selection-start-line="56" selection-start-column="74" selection-end-line="56" selection-end-column="74" />
-          <folding>
-            <element signature="e#46#69#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/Triangulater.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="69" column="32" selection-start-line="69" selection-start-column="32" selection-end-line="69" selection-end-column="32" />
-          <folding>
-            <element signature="e#46#71#0" expanded="true" />
-            <element signature="e#1505#1632#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/basic/Solver3D2D.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="54" column="39" selection-start-line="54" selection-start-column="39" selection-end-line="54" selection-end-column="39" />
+        <state relative-caret-position="480">
+          <caret line="48" column="43" selection-start-line="48" selection-start-column="43" selection-end-line="48" selection-end-column="43" />
           <folding>
             <element signature="e#111#138#0" expanded="true" />
           </folding>
@@ -993,10 +913,57 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/basic/Matcher.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="428">
+          <caret line="43" column="69" selection-start-line="43" selection-start-column="69" selection-end-line="43" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/KeyFrame.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="892">
+          <caret line="105" column="37" selection-start-line="105" selection-start-column="37" selection-end-line="105" selection-end-column="37" />
+          <folding>
+            <element signature="e#1497#1509#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/local_map/LocalMap.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="21" column="29" selection-start-line="21" selection-start-column="26" selection-end-line="21" selection-end-column="38" />
+        <state relative-caret-position="315">
+          <caret line="27" column="10" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/Map.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="31" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="31" />
+          <folding>
+            <element signature="e#46#62#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SLAM.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="42" column="26" selection-start-line="42" selection-start-column="26" selection-end-line="42" selection-end-column="26" />
+          <folding>
+            <element signature="e#99#126#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/Map.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="26" column="27" selection-start-line="26" selection-start-column="27" selection-end-line="26" selection-end-column="27" />
+          <folding>
+            <element signature="e#98#119#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1007,10 +974,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/basic/Solver3D2D.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1227">
+          <caret line="85" column="19" selection-start-line="85" selection-start-column="19" selection-end-line="85" selection-end-column="19" />
+          <folding>
+            <element signature="e#46#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/Triangulater.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="75" column="30" selection-start-line="75" selection-start-column="30" selection-end-line="75" selection-end-column="30" />
+          <folding>
+            <element signature="e#46#71#0" expanded="true" />
+            <element signature="e#1505#1632#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/Triangulater.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="363">
+          <caret line="28" column="41" selection-start-line="28" selection-start-column="41" selection-end-line="28" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/MapPoint.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="54" column="9" selection-start-line="54" selection-start-column="9" selection-end-line="54" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/local_map/LocalMap.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="180" column="8" selection-start-line="180" selection-start-column="8" selection-end-line="180" selection-end-column="8" />
+        <state relative-caret-position="146">
+          <caret line="171" column="37" selection-start-line="171" selection-start-column="22" selection-end-line="171" selection-end-column="37" />
           <folding>
             <element signature="e#46#67#0" expanded="true" />
           </folding>
