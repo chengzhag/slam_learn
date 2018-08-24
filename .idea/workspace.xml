@@ -15,8 +15,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d03b25aa-01f9-4cb3-b1c6-c95429c4b77e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local_map/LocalMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/local_map/LocalMap.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tracking/Tracker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tracking/Tracker.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/cmake-build-debugwithcvv/" />
@@ -45,11 +44,11 @@
                   </provider>
                 </entry>
               </file>
-              <file leaf-file-name="Triangulater.cpp" pinned="false" current-in-tab="true">
+              <file leaf-file-name="Triangulater.cpp" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/basic/Triangulater.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="192">
-                      <caret line="75" column="30" selection-start-line="75" selection-start-column="30" selection-end-line="75" selection-end-column="30" />
+                    <state relative-caret-position="285">
+                      <caret line="87" selection-start-line="87" selection-end-line="87" />
                       <folding>
                         <element signature="e#46#71#0" expanded="true" />
                         <element signature="e#1505#1632#0" expanded="true" />
@@ -67,11 +66,11 @@
                   </provider>
                 </entry>
               </file>
-              <file leaf-file-name="Solver3D2D.cpp" pinned="false" current-in-tab="false">
+              <file leaf-file-name="Solver3D2D.cpp" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/basic/Solver3D2D.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="1227">
-                      <caret line="85" column="19" selection-start-line="85" selection-start-column="19" selection-end-line="85" selection-end-column="19" />
+                    <state relative-caret-position="213">
+                      <caret line="127" column="34" selection-start-line="127" selection-start-column="34" selection-end-line="127" selection-end-column="34" />
                       <folding>
                         <element signature="e#46#69#0" expanded="true" />
                       </folding>
@@ -163,11 +162,11 @@
         <splitter split-orientation="horizontal" split-proportion="0.5">
           <split-first>
             <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-              <file leaf-file-name="LocalMap.cpp" pinned="false" current-in-tab="true">
+              <file leaf-file-name="LocalMap.cpp" pinned="false" current-in-tab="false">
                 <entry file="file://$PROJECT_DIR$/local_map/LocalMap.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="146">
-                      <caret line="171" column="37" selection-start-line="171" selection-start-column="22" selection-end-line="171" selection-end-column="37" />
+                    <state relative-caret-position="161">
+                      <caret line="172" selection-start-line="172" selection-end-line="172" />
                       <folding>
                         <element signature="e#46#67#0" expanded="true" />
                       </folding>
@@ -184,11 +183,11 @@
                   </provider>
                 </entry>
               </file>
-              <file leaf-file-name="Tracker.cpp" pinned="false" current-in-tab="false">
+              <file leaf-file-name="Tracker.cpp" pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/tracking/Tracker.cpp">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="135">
-                      <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
+                    <state relative-caret-position="238">
+                      <caret line="57" column="18" selection-start-line="57" selection-start-column="18" selection-end-line="57" selection-end-column="18" />
                       <folding>
                         <element signature="e#46#66#0" expanded="true" />
                       </folding>
@@ -358,13 +357,11 @@
         <option value="$PROJECT_DIR$/basic/Triangulater.h" />
         <option value="$PROJECT_DIR$/basic/Solver3D2D.h" />
         <option value="$PROJECT_DIR$/basic/ORBextractor.h" />
-        <option value="$PROJECT_DIR$/basic/Triangulater.cpp" />
         <option value="$PROJECT_DIR$/basic/ORBextractor.cpp" />
         <option value="$PROJECT_DIR$/tracking/VO.cpp" />
         <option value="$PROJECT_DIR$/config/config_ORB_rgbd_dataset_freiburg3_long_office_household.yaml" />
         <option value="$PROJECT_DIR$/config/config_ORB_data_odometry_gray.yaml" />
         <option value="$PROJECT_DIR$/config/config_SIFT_rgbd_dataset_freiburg3_long_office_household.yaml" />
-        <option value="$PROJECT_DIR$/tracking/Tracker.cpp" />
         <option value="$PROJECT_DIR$/basic/Solver3D2D.cpp" />
         <option value="$PROJECT_DIR$/tracking/Initializer.cpp" />
         <option value="$PROJECT_DIR$/main.cpp" />
@@ -381,6 +378,8 @@
         <option value="$PROJECT_DIR$/basic/Map.cpp" />
         <option value="$PROJECT_DIR$/basic/Map.h" />
         <option value="$PROJECT_DIR$/local_map/LocalMap.cpp" />
+        <option value="$PROJECT_DIR$/basic/Triangulater.cpp" />
+        <option value="$PROJECT_DIR$/tracking/Tracker.cpp" />
       </list>
     </option>
   </component>
@@ -519,12 +518,12 @@
       <workItem from="1534496735503" duration="620000" />
       <workItem from="1534499252937" duration="1355000" />
       <workItem from="1534687500853" duration="18202000" />
-      <workItem from="1535019093759" duration="6862000" />
+      <workItem from="1535019093759" duration="7563000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="444113000" />
+    <option name="totallyTimeSpent" value="444814000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -779,16 +778,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/Tracker.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
-          <folding>
-            <element signature="e#46#66#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tracking/Tracker.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -974,27 +963,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/basic/Solver3D2D.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1227">
-          <caret line="85" column="19" selection-start-line="85" selection-start-column="19" selection-end-line="85" selection-end-column="19" />
-          <folding>
-            <element signature="e#46#69#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/basic/Triangulater.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="75" column="30" selection-start-line="75" selection-start-column="30" selection-end-line="75" selection-end-column="30" />
-          <folding>
-            <element signature="e#46#71#0" expanded="true" />
-            <element signature="e#1505#1632#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/basic/Triangulater.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="363">
@@ -1009,12 +977,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/basic/Triangulater.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="87" selection-start-line="87" selection-end-line="87" />
+          <folding>
+            <element signature="e#46#71#0" expanded="true" />
+            <element signature="e#1505#1632#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic/Solver3D2D.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="127" column="34" selection-start-line="127" selection-start-column="34" selection-end-line="127" selection-end-column="34" />
+          <folding>
+            <element signature="e#46#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/local_map/LocalMap.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="171" column="37" selection-start-line="171" selection-start-column="22" selection-end-line="171" selection-end-column="37" />
+        <state relative-caret-position="161">
+          <caret line="172" selection-start-line="172" selection-end-line="172" />
           <folding>
             <element signature="e#46#67#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/Tracker.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="57" column="18" selection-start-line="57" selection-start-column="18" selection-end-line="57" selection-end-column="18" />
+          <folding>
+            <element signature="e#46#66#0" expanded="true" />
           </folding>
         </state>
       </provider>
