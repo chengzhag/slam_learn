@@ -143,6 +143,8 @@ LocalMap.maxInlierPointDis: 150
 LocalMap.minKeyFrames: 8
 # 重投影误差最大值
 LocalMap.maxReprojErr: 50
+# 筛选关键帧的条件，超过该比例的点有4个及以上观测帧则认为多余
+LocalMap.maxGoodPointRatio: 0.92
 # 首先筛选前rankRatio比例的匹配
 LocalMap.Matcher.rankRatio: 0.8
 # 特征距离阈值相对最小特征距离的比例
@@ -165,11 +167,11 @@ Initializer.minFrameInterval: 2
 Initializer.minMapPointNum: 50
 
 # 关键帧的最小间距
-Tracker.minKeyFrameDis: 0.5
+Tracker.minKeyFrameDis: 0.4
 # 关键帧的最大间距
 Tracker.maxKeyFrameDis: 5
 # 关键帧的最少地图点
-Tracker.minKeyFrameInlierNum: 15
+Tracker.minKeyFrameInlierNum: 10
 # 关键帧之间的最小间隔帧数
 Tracker.minKeyFrameInterval: 1
 # 关键帧解PnP所用地图点数相对于上一关键帧的最大比例

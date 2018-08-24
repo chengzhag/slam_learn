@@ -76,7 +76,7 @@ MapViewer.backgroundColor.r: 0.8
 MapViewer.backgroundColor.g: 0.8
 MapViewer.backgroundColor.b: 0.8
 # MapViewer进行update后是否等待按键
-MapViewer.updateWait: 1
+MapViewer.updateWait: 0
 # 镜头与当前帧的距离
 MapViewer.disCamera: 100
 # 是否自动跟踪当前帧
@@ -102,7 +102,7 @@ Solver2D2D.Matcher.disThresMin: 150
 # 如果testRatio不为0，通过knnMatch获得距离最近的两个match
 # 测试第一个match的距离是否小于第二个match的距离的testRatio倍
 # 0 <= testRati < 1
-Solver2D2D.Matcher.testRatio: 0.8
+Solver2D2D.Matcher.testRatio: 0.9
 
 # 用于解PnP选取的最多局部地图点 TODO:（暂时取消）
 Solver3D2D.max3Dnum: 500
@@ -136,24 +136,27 @@ Triangulater.maxReprojErr: 50
 # 最少关键点数
 # 如果当前局部地图关键帧数等于最大关键帧数，且关键点数小于最少关键点数，则增加最大关键帧数
 # 否则减小最大关键帧数
-LocalMap.minMapPoints: 250
+LocalMap.minMapPoints: 200
 # 地图点到每个观测帧的最大距离
 LocalMap.maxInlierPointDis: 150
 # 关键帧最大数量，超过此数量删除旧关键帧
-LocalMap.minKeyFrames: 8
+LocalMap.minKeyFrames: 6
 # 重投影误差最大值
-LocalMap.maxReprojErr: 100
+LocalMap.maxReprojErr: 75
+# 筛选关键帧的条件，超过该比例的点有4个及以上观测帧则认为多余
+LocalMap.maxGoodPointRatio: 0.92
 # 首先筛选前rankRatio比例的匹配
 LocalMap.Matcher.rankRatio: 0.8
 # 特征距离阈值相对最小特征距离的比例
 LocalMap.Matcher.disThresRatio: 10
 # 特征阈值的最小值，防止阈值过小选出的点不够
 # Matcher.disThresMin: 30
-LocalMap.Matcher.disThresMin: 100
+LocalMap.Matcher.disThresMin: 200
 # 如果testRatio不为0，通过knnMatch获得距离最近的两个match
 # 测试第一个match的距离是否小于第二个match的距离的testRatio倍
 # 0 <= testRati < 1
-LocalMap.Matcher.testRatio: 0.8
+LocalMap.Matcher.testRatio: 0.95
+
 
 # tracking
 
@@ -169,10 +172,11 @@ Tracker.minKeyFrameDis: 0.8
 # 关键帧的最大间距
 Tracker.maxKeyFrameDis: 5
 # 关键帧的最少地图点
-Tracker.minKeyFrameInlierNum: 30
+Tracker.minKeyFrameInlierNum: 15
 # 关键帧之间的最小间隔帧数
 Tracker.minKeyFrameInterval: 1
 # 关键帧解PnP所用地图点数相对于上一关键帧的最大比例
-Tracker.maxKeyFrameTrackRatio: 0.9
+Tracker.maxKeyFrameTrackRatio: 2.5
+
 
 

@@ -115,7 +115,7 @@ namespace sky {
                 auto iMapPoint = match.queryIdx;
                 auto iKeyPoint = match.trainIdx;
                 auto mapPoint = triangulateMap->mapPoints[iMapPoint];
-                if (mapPoint->getFrameNum() == 0)
+                if (mapPoint->getFrameNum() < 2)
                     continue;
 /*                    cerr << "[" << boost::this_thread::get_id() << "]ERROR: "
                          << "LocalMap: point has no frame! " << endl;*/
@@ -130,7 +130,7 @@ namespace sky {
                 if (frame->hasMapPoint(iKeyPoint)) {
                     //如果关键点有旧的关联，转移旧地图点关联到新地图点
                     auto mapPointOld = frame->getMapPoint(iKeyPoint);
-                    if (mapPointOld->getFrameNum() == 0)
+                    if (mapPointOld->getFrameNum() < 2)
                         continue;
                     mapPointOld->forEachFrame2index([&](auto &frame2index) {
                         localMap->addObservation(frame2index.first, mapPoint, frame2index.second);
@@ -182,7 +182,7 @@ namespace sky {
         //删除失去关联的旧点（合并的点）
         numMergedPoints = 0;
         for (auto it = localMap->mapPoints.begin(); it != localMap->mapPoints.end();) {
-            if ((*it)->getFrameNum() == 0) {
+            if ((*it)->getFrameNum() < 2) {
                 ++numMergedPoints;
                 it = localMap->mapPoints.erase(it);
             } else
@@ -249,7 +249,7 @@ namespace sky {
 #endif
         //筛选关键帧
         int iFrames = 0;
-        for (auto itFrame = localMap->keyFrames.rbegin(); itFrame != localMap->keyFrames.rend();) {
+        for (auto itFrame = localMap->keyFrames.rbegin() + 1; itFrame != localMap->keyFrames.rend();) {
             int good = isGoodFrame(*itFrame);
             if (good < 0) {
                 //将不好的关键帧与地图点之间的关联断开
@@ -274,7 +274,7 @@ namespace sky {
 
         for (auto itMapPoint = localMap->mapPoints.begin(); itMapPoint != localMap->mapPoints.end();) {
             //删除没有观测帧的点
-            if ((*itMapPoint)->getFrameNum() == 0)
+            if ((*itMapPoint)->getFrameNum() < 2)
                 itMapPoint = localMap->mapPoints.erase(itMapPoint);
                 //转移有观测帧但是观测帧不在localMap中的点到map中
             else {
@@ -304,6 +304,15 @@ namespace sky {
     }
 
     int LocalMap::isGoodFrame(const KeyFrame::Ptr &keyFrame) const {
+        int numGoodPoints = 0;
+        keyFrame->forEachMapPoint([&](auto &mapPoint) {
+            if (mapPoint->getFrameNum() >= 4)
+                ++numGoodPoints;
+        });
+        float goodPointRatio = (float) numGoodPoints / keyFrame->getMapPointsNum();
+        //printVariable(goodPointRatio);
+        if (goodPointRatio > maxGoodPointRatio)
+            return -1;
 /*        float reprojErr = 0;
         int mapPointsNum = 0;
         keyFrame->forEachMapPoint([&](auto &mapPoint) {

@@ -18,7 +18,7 @@ namespace sky {
     class LocalMap {
 
     private:
-        float maxInlierPointDis, maxReprojErr;
+        float maxInlierPointDis, maxReprojErr, maxGoodPointRatio;
         int maxKeyFrames, minKeyFrames, minMapPoints;
         Matcher matcher, matcherReletive;
         shared_ptr<boost::thread> thread;
@@ -37,7 +37,8 @@ namespace sky {
                  int minMapPoints = Config::get<float>("LocalMap.minMapPoints"),
                  float maxInlierPointDis = Config::get<float>("LocalMap.maxInlierPointDis"),
                  int minKeyFrames = Config::get<float>("LocalMap.minKeyFrames"),
-                 float maxReprojErr = Config::get<float>("LocalMap.maxReprojErr")
+                 float maxReprojErr = Config::get<float>("LocalMap.maxReprojErr"),
+                 float maxGoodPointRatio = Config::get<float>("LocalMap.maxGoodPointRatio")
         ) :
                 map(map),
                 mapViewer(mapViewer),
@@ -46,6 +47,7 @@ namespace sky {
                 minKeyFrames(minKeyFrames),
                 maxKeyFrames(minKeyFrames),
                 maxReprojErr(maxReprojErr),
+                maxGoodPointRatio(maxGoodPointRatio),
                 matcher(
                         Config::get<float>("LocalMap.Matcher.rankRatio"),
                         Config::get<float>("LocalMap.Matcher.disThresRatio"),
@@ -58,6 +60,7 @@ namespace sky {
             printVariable(maxInlierPointDis);
             printVariable(minKeyFrames);
             printVariable(maxReprojErr);
+            printVariable(maxGoodPointRatio);
 
             printVariable(matcher.rankRatio);
             printVariable(matcher.disThresRatio);

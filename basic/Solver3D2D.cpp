@@ -106,7 +106,7 @@ namespace sky {
         }
         Mat r, t;
         solvePnPRansac(points3DPnP, points2DPnP, keyFrame2->camera->getKMatxCV(),
-                       cv::noArray(), r, t, false, 100, 8.0, 0.99,
+                       cv::noArray(), r, t, false, 300, 15, 0.9,
                        indexInliers);
         Mat R;
         cv::Rodrigues(r, R);
